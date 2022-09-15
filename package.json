@@ -1,11 +1,6 @@
 {
 	"name": "blaze-web-clone",
 	"description": "Official Blaze Web",
-	"keywords": [
-		"payload",
-		"cms",
-		"nextjs"
-	],
 	"version": "0.0.1",
 	"private": false,
 	"license": "GPL-2.0",
