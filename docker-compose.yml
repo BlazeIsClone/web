@@ -9,7 +9,7 @@ services:
     container_name: blaze-web-payload
     restart: always
     ports:
-      - 3500:3000
+      - 3000:3000
     depends_on:
       - mongodb
     env_file:
