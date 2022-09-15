@@ -13,7 +13,7 @@
 		"postbuild:next": "next export -o ./www",
 		"build:server": "tsc --project tsconfig.server.json",
 		"build:payload": "payload build",
-		"build": "npm run start:deamon && npm run build:next && npm run down",
+		"build": "npm run start:deamon && npm run build:next",
 		"dev": "node dev.js",
 		"serve": "cross-env NODE_ENV=production node dist/index.js"
 	},
