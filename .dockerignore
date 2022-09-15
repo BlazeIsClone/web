@@ -1,0 +1,14 @@
+# Config
+.vscode/
+
+# Dependencies
+node_modules/
+
+# Logs
+npm-debug.log
+
+# Builds
+dist/
+
+# Cache
+.next

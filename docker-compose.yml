@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  payload:
+    image: api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blaze-web-payload
+    restart: always
+    ports:
+      - 3500:3000
+    depends_on:
+      - mongodb
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    stdin_open: true
+    tty: true
+
+  mongodb:
+    image: mongo:5.0.12
+    restart: always
+    container_name: blaze-web-mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+
+volumes:
+  mongodb:
+    name: payload-db
