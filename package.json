@@ -8,8 +8,8 @@
 	],
 	"version": "0.0.1",
 	"private": false,
-	"license": "MIT",
-	"author": "TRBL",
+	"license": "GPL-2.0",
+	"author": "BlazeIsClone",
 	"scripts": {
 		"start": "docker-compose up",
 		"down": "docker-compose down",
@@ -50,7 +50,7 @@
 		"eslint-plugin-node": "^11.1.0",
 		"eslint-plugin-react": "^7.18.0",
 		"eslint-plugin-react-hooks": "^2.3.0",
-		"husky": "^8.0.0",
+		"husky": "^8.0.1",
 		"ts-node": "^10.8.0"
 	}
 }
