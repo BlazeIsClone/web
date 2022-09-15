@@ -1,6 +1,6 @@
 {
-	"name": "payload-nextjs-server",
-	"description": "A boilerplate project for NextJS with Payload CMS",
+	"name": "blaze-web-clone",
+	"description": "Official Blaze Web",
 	"keywords": [
 		"payload",
 		"cms",
@@ -8,19 +8,19 @@
 	],
 	"version": "0.0.1",
 	"private": false,
-	"license": "MIT",
-	"author": "TRBL",
+	"license": "GPL-2.0",
+	"author": "BlazeIsClone",
 	"scripts": {
 		"start": "docker-compose up",
+		"start:deamon": "docker-compose up -d",
 		"down": "docker-compose down",
 		"build:next": "next build",
 		"postbuild:next": "next export -o ./www",
 		"build:server": "tsc --project tsconfig.server.json",
 		"build:payload": "payload build",
-		"build": "cross-env NODE_ENV=production npm run build:server && cross-env NEXT_BUILD=true node dist/index.js",
+		"build": "npm run start:deamon && npm run build:next && npm run down",
 		"dev": "node dev.js",
-		"serve": "cross-env NODE_ENV=production node dist/index.js",
-		"prepare": "husky install"
+		"serve": "cross-env NODE_ENV=production node dist/index.js"
 	},
 	"dependencies": {
 		"@babel/register": "^7.17.0",
@@ -50,7 +50,6 @@
 		"eslint-plugin-node": "^11.1.0",
 		"eslint-plugin-react": "^7.18.0",
 		"eslint-plugin-react-hooks": "^2.3.0",
-		"husky": "^8.0.0",
 		"ts-node": "^10.8.0"
 	}
 }
