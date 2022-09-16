@@ -83,7 +83,7 @@ const Page: React.FC = () => {
 			<header className={classes.header}>
 				<h1>Blaze Hello 👋</h1>
 				<hr />
-				NextJS + Payload{' '}
+				NextJS + Payload + Threejs{' '}
 			</header>
 			<canvas ref={canvas} className={classes.scene}></canvas>
 		</main>
