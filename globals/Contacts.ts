@@ -1,7 +1,7 @@
 import { GlobalConfig } from 'payload/types';
 
 const Contact: GlobalConfig = {
-	slug: 'contact',
+	slug: 'contacts',
 	fields: [
 		{
 			name: 'eamil',

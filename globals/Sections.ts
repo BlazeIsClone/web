@@ -7,7 +7,7 @@ const fields: Field[] = [
 		required: true,
 	},
 	{
-		name: 'id',
+		name: 'section-id',
 		type: 'text',
 		required: true,
 	},

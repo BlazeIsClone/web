@@ -15,20 +15,36 @@ export const Project: CollectionConfig = {
 			required: true,
 		},
 		{
-			name: 'date',
-			type: 'date',
-			required: true,
+			name: 'status',
+			type: 'select',
+			hasMany: false,
+			options: [
+				{
+					label: 'Planned',
+					value: 'planned',
+				},
+				{
+					label: 'In Progress',
+					value: 'inProgress',
+				},
+				{
+					label: 'Published',
+					value: 'published',
+				},
+				{
+					label: 'Archived',
+					value: 'archived',
+				},
+			],
 		},
 		{
 			name: 'image',
 			type: 'upload',
 			relationTo: 'media',
-			required: true,
 		},
 		{
 			name: 'link',
 			type: 'text',
-			required: true,
 		},
 	],
 };

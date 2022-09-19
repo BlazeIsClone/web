@@ -8,7 +8,7 @@ export type Type = {
 };
 
 export const Intrest: CollectionConfig = {
-	slug: 'intrests',
+	slug: 'interests',
 	admin: {
 		useAsTitle: 'type',
 	},

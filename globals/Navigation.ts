@@ -7,10 +7,14 @@ const Navigation: GlobalConfig = {
 			name: 'items',
 			type: 'array',
 			required: true,
-			maxRows: 8,
 			fields: [
 				{
 					name: 'section',
+					type: 'text',
+					required: true,
+				},
+				{
+					name: 'section-id',
 					type: 'text',
 					required: true,
 				},
