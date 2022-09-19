@@ -23,3 +23,11 @@ Build static files.
 ```bash
 npm run build
 ```
+
+<br/>
+
+Destroy can clear container data.
+
+```bash
+npm run down
+```
