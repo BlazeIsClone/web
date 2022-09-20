@@ -1,16 +1,6 @@
 import { GetStaticProps } from 'next';
 import payload from 'payload';
-import {
-	Contacts,
-	Interest,
-	Metadata,
-	Navigation,
-	Note,
-	Project,
-	Sections,
-	Social,
-	Tool,
-} from 'types';
+import { Contacts, Metadata, Navigation, Sections } from 'types';
 
 export const getStaticProps: GetStaticProps = async () => {
 	const contacts = await payload.findGlobal<Contacts>({
@@ -29,25 +19,26 @@ export const getStaticProps: GetStaticProps = async () => {
 		slug: 'sections',
 	});
 
-	const interests = await payload.find<Interest>({
+	const interests = await payload.find({
 		collection: 'interests',
 		sort: '+createdAt',
 	});
 
-	const notes = await payload.find<Note>({
+	const notes = await payload.find({
 		collection: 'notes',
 		sort: '+createdAt',
 	});
 
-	const projects = await payload.find<Project>({
+	const projects = await payload.find({
 		collection: 'projects',
 		sort: '+createdAt',
 	});
-	const tools = await payload.find<Tool>({
+
+	const tools = await payload.find({
 		collection: 'tools',
 	});
 
-	const socials = await payload.find<Social>({
+	const socials = await payload.find({
 		collection: 'socials',
 	});
 

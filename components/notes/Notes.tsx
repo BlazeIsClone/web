@@ -7,10 +7,10 @@ export const Notes: React.FC<Props> = ({ data, collection }) => (
 	<section id={data['section-id']} className={styles.notes}>
 		<h2>{data.headline}</h2>
 		{collection.docs.map((notes: Note) => (
-			<div key={notes.id}>
+			<a key={notes.id} href={notes.link}>
 				<h3>{notes.title}</h3>
 				<div>{notes.date.toString()}</div>
-			</div>
+			</a>
 		))}
 	</section>
 );

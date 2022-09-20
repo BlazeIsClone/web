@@ -10,10 +10,10 @@ export const Interests: React.FC<Props> = ({ data, collection }) => {
 				<div key={interests.id}>
 					<div>{interests.type}</div>
 					{interests.interest.map(item => (
-						<div key={item.id}>
+						<a key={item.id} href={item.link}>
 							<h4>{item.title}</h4>
 							<img src={item.image?.url} />
-						</div>
+						</a>
 					))}
 				</div>
 			))}

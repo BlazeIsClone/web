@@ -7,11 +7,11 @@ export const Projects: React.FC<Props> = ({ data, collection }) => (
 	<section id={data['section-id']} className={styles.projects}>
 		<h2>{data.headline}</h2>
 		{collection.docs.map((project: Project) => (
-			<div key={project.id}>
+			<a key={project.id} href={project.link}>
 				<h3>{project.title}</h3>
 				<img src={project.image?.url} />
 				<h5>{project.status}</h5>
-			</div>
+			</a>
 		))}
 	</section>
 );

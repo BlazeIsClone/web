@@ -1,3 +1,4 @@
+import getConfig from 'next/config';
 import React from 'react';
 import { Tool } from 'types';
 import styles from './Tools.module.scss';

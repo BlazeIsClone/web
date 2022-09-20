@@ -11,6 +11,7 @@ import {
 	Tools,
 	Socials,
 	Email,
+	Header,
 } from 'components';
 
 export const Page: React.FC<Props> = ({
@@ -26,6 +27,7 @@ export const Page: React.FC<Props> = ({
 }) => (
 	<main className={styles.page}>
 		<Seo data={metadata} />
+		<Header data={navigation} />
 		<Hero data={sections.hero} />
 		<About data={sections.about} />
 		<Interests data={sections.intrests} collection={interests} />
