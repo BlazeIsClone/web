@@ -1,6 +1,5 @@
+import { Metadata } from 'types';
+
 export interface Props {
-	title?: string;
-	description?: string;
-	ogImage?: string;
-	keywords?: string;
+	data: Metadata;
 }

@@ -41,28 +41,30 @@ export interface Media {
 export interface Sections {
   id: string;
   hero: {
-    title: string;
     'section-id': string;
+    headline: {
+      [k: string]: unknown;
+    }[];
   };
   about: {
-    title: string;
     'section-id': string;
+    content: string;
   };
   intrests: {
-    title: string;
     'section-id': string;
+    headline: string;
   };
   projects: {
-    title: string;
     'section-id': string;
+    headline: string;
   };
-  journal: {
-    title: string;
+  notes: {
     'section-id': string;
+    headline: string;
   };
   tools: {
-    title: string;
     'section-id': string;
+    headline: string;
   };
 }
 /**
@@ -92,7 +94,7 @@ export interface Contacts {
 export interface Interest {
   id: string;
   type?: string;
-  intrest: {
+  interest: {
     title: string;
     image: string | Media;
     link?: string;
@@ -141,7 +143,7 @@ export interface Tool {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "social".
+ * via the `definition` "socials".
  */
 export interface Social {
   id: string;

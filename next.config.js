@@ -3,7 +3,7 @@ const withTM = require('next-transpile-modules')(['three']);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	publicRuntimeConfig: {
-		SERVER_URL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
+		PUBLIC_HOSTNAME: process.env.PUBLIC_HOSTNAME,
 	},
 	swcMinify: true,
 };

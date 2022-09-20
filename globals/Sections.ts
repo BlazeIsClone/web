@@ -25,7 +25,14 @@ const Section: GlobalConfig = {
 			name: 'hero',
 			type: 'group',
 			required: true,
-			fields: [idField, headlineField],
+			fields: [
+				idField,
+				{
+					name: 'headline',
+					type: 'richText',
+					required: true,
+				},
+			],
 		},
 		{
 			name: 'about',

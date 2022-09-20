@@ -4,47 +4,28 @@ import { useRouter } from 'next/router';
 import { Props } from './Seo.types';
 
 const {
-	publicRuntimeConfig: { SERVER_URL },
+	publicRuntimeConfig: { PUBLIC_HOSTNAME },
 } = getConfig();
 
-const defaultDescription =
-	'Boilerplate for combining Payload CMS and NextJS into a single Node server';
-const defaultTitle = 'Payload CMS + NextJS Custom Server';
-const titleSuffix = ' | Payload CMS';
-const defaultOGImage = `${SERVER_URL}/images/og-image.jpg`;
-const defaultKeywords = 'NextJS, Payload CMS, boilerplate';
-
-export const Seo: React.FC<Props> = ({
-	title,
-	description,
-	ogImage,
-	keywords,
-}) => {
+export const Seo: React.FC<Props> = ({ data }) => {
 	const { asPath } = useRouter();
 
-	const getTitle = () => {
-		if (title) return title + titleSuffix;
-		return defaultTitle + titleSuffix;
-	};
+	const getTitle = () => data.meta.title;
 
 	return (
 		<NextHead>
 			<title>{getTitle()}</title>
-			<link rel="icon" type="image/x-icon" href="/favicon.svg" />
-			<meta name="description" content={description || defaultDescription} />
-			<meta name="keywords" content={keywords || defaultKeywords} />
 			<meta name="viewport" content="width=device-width, initial-scale=1" />
-			<meta property="og:url" content={`${SERVER_URL}${asPath}`} />
-			<meta property="og:title" content={title || defaultTitle} />
-			<meta
-				property="og:description"
-				content={description || defaultDescription}
-			/>
-			<meta property="twitter:title" content={title || defaultTitle} />
-			<meta name="twitter:site" content="@payloadcms" />
+			<link rel="icon" type="image/x-icon" href="/favicon.svg" />
+
+			<meta name="description" content={data.meta.description} />
+			<meta property="og:url" content={`${PUBLIC_HOSTNAME}${asPath}`} />
+			<meta property="og:title" content={data.meta.title} />
+			<meta property="og:description" content={data.meta.description} />
+			<meta property="twitter:title" content={data.meta.title} />
 			<meta name="twitter:card" content="summary_large_image" />
-			<meta name="twitter:image" content={ogImage || defaultOGImage} />
-			<meta property="og:image" content={ogImage || defaultOGImage} />
+			<meta name="twitter:image" content={data.meta.image?.url} />
+			<meta property="og:image" content={data.meta.image?.url} />
 		</NextHead>
 	);
 };

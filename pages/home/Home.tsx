@@ -13,17 +13,27 @@ import {
 	Email,
 } from 'components';
 
-export const Page: React.FC<Props> = () => (
+export const Page: React.FC<Props> = ({
+	navigation,
+	interests,
+	projects,
+	contacts,
+	metadata,
+	sections,
+	socials,
+	tools,
+	notes,
+}) => (
 	<main className={styles.page}>
-		<Seo />
-		<Hero />
-		<About />
-		<Interests />
-		<Projects />
-		<Notes />
-		<Tools />
-		<Socials />
-		<Email />
+		<Seo data={metadata} />
+		<Hero data={sections.hero} />
+		<About data={sections.about} />
+		<Interests data={sections.intrests} collection={interests} />
+		<Projects data={sections.projects} collection={projects} />
+		<Notes data={sections.notes} collection={notes} />
+		<Tools data={sections.tools} collection={tools} />
+		<Socials collection={socials} />
+		<Email data={contacts.eamil} />
 		<Background />
 	</main>
 );

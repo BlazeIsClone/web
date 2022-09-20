@@ -21,7 +21,7 @@ export const Intrest: CollectionConfig = {
 			type: 'text',
 		},
 		{
-			name: 'intrest',
+			name: 'interest',
 			type: 'array',
 
 			fields: [

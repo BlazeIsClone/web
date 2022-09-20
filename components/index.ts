@@ -8,3 +8,4 @@ export * from './projects';
 export * from './seo';
 export * from './socials';
 export * from './tools';
+export * from './richText';
