@@ -1,17 +1,22 @@
 import { Field, GlobalConfig } from 'payload/types';
 
-const fields: Field[] = [
-	{
-		name: 'title',
-		type: 'text',
-		required: true,
-	},
-	{
-		name: 'section-id',
-		type: 'text',
-		required: true,
-	},
-];
+const idField: Field = {
+	name: 'section-id',
+	type: 'text',
+	required: true,
+};
+
+const headlineField: Field = {
+	name: 'headline',
+	type: 'text',
+	required: true,
+};
+
+const bodyField: Field = {
+	name: 'content',
+	type: 'textarea',
+	required: true,
+};
 
 const Section: GlobalConfig = {
 	slug: 'sections',
@@ -20,37 +25,37 @@ const Section: GlobalConfig = {
 			name: 'hero',
 			type: 'group',
 			required: true,
-			fields,
+			fields: [idField, headlineField],
 		},
 		{
 			name: 'about',
 			type: 'group',
 			required: true,
-			fields,
+			fields: [idField, bodyField],
 		},
 		{
 			name: 'intrests',
 			type: 'group',
 			required: true,
-			fields,
+			fields: [idField, headlineField],
 		},
 		{
 			name: 'projects',
 			type: 'group',
 			required: true,
-			fields,
+			fields: [idField, headlineField],
 		},
 		{
-			name: 'journal',
+			name: 'notes',
 			type: 'group',
 			required: true,
-			fields,
+			fields: [idField, headlineField],
 		},
 		{
 			name: 'tools',
 			type: 'group',
 			required: true,
-			fields,
+			fields: [idField, headlineField],
 		},
 	],
 };
