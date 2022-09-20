@@ -1,8 +1,8 @@
 //---- Base Colors
 
-$primary-color: var(--primary-color);
-$secondary-color: var(--secondary-color);
-$primary-nutral-color: var(--body-color);
+$primary-color: white;
+$secondary-color: limegreen;
+$primary-nutral-color: white;
 
 $primary-color-variant: hsla(39, 100%, 50%, 0.4);
 $secondary-color-variant: #257d91;
@@ -20,8 +20,8 @@ $secondary-surface-color: #ebeef3;
 
 //---- On Colors
 
-$on-primary-color: var(--on-primary-color);
-$on-secondary-color: var(--on-secondary-color);
+$on-primary-color: white;
+$on-secondary-color: white;
 
 $on-background-color: #fff;
 $on-surface-color: #000;
