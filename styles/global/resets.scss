@@ -1,0 +1,47 @@
+@use 'styles/config/variables' as var;
+@use 'styles/config/functions' as *;
+@use 'styles/config/mixins' as *;
+@use 'styles/global/extends' as *;
+
+body {
+	font-family: var.$primary-font;
+	color: var.$primary-nutral-color;
+	position: relative;
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var.$primary-font;
+	}
+
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+	@extend .no-select;
+}
+
+video {
+	object-fit: cover;
+}
+
+::selection {
+	color: var.$on-primary-color;
+	background: var.$primary-color;
+}
+
+a {
+	text-decoration: none;
+	color: unset;
+
+	&:hover {
+		color: unset;
+	}
+}

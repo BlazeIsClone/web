@@ -1,6 +1,6 @@
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
-import classes from '../../css/page.module.css';
+import styles from './Background.module.scss';
 
 const Cube: React.FC = () => {
 	const mesh = useRef(null);
@@ -20,7 +20,7 @@ const Cube: React.FC = () => {
 };
 
 export const Background: React.FC = () => (
-	<div className={classes.scene}>
+	<div className={styles.scene}>
 		<Canvas>
 			<Cube />
 			<ambientLight intensity={0.1} />
