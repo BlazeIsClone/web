@@ -66,6 +66,9 @@ export interface Sections {
     'section-id': string;
     headline: string;
   };
+  email: {
+    image: string | Media;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

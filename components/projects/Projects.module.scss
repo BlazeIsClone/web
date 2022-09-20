@@ -1,3 +1,14 @@
 .projects {
-	content: '';
+	text-align: center;
+
+	.row {
+		justify-content: center !important;
+
+		img {
+			display: none;
+		}
+		.card {
+			text-align: left;
+		}
+	}
 }

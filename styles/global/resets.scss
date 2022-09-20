@@ -3,6 +3,10 @@
 @use 'styles/config/mixins' as *;
 @use 'styles/global/extends' as *;
 
+html {
+	scroll-behavior: smooth;
+}
+
 body {
 	font-family: var.$primary-font;
 	color: var.$primary-nutral-color;
@@ -25,6 +29,7 @@ body {
 img {
 	max-width: 100%;
 	height: auto;
+	display: block;
 	@extend .no-select;
 }
 

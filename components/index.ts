@@ -10,3 +10,6 @@ export * from './socials';
 export * from './tools';
 export * from './richText';
 export * from './header';
+export * from './typography';
+export * from './currentTime';
+export * from './surface';

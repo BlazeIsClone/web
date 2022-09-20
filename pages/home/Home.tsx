@@ -30,12 +30,12 @@ export const Page: React.FC<Props> = ({
 		<Header data={navigation} />
 		<Hero data={sections.hero} />
 		<About data={sections.about} />
-		<Interests data={sections.intrests} collection={interests} />
 		<Projects data={sections.projects} collection={projects} />
+		<Socials collection={socials} />
+		<Interests data={sections.intrests} collection={interests} />
 		<Notes data={sections.notes} collection={notes} />
 		<Tools data={sections.tools} collection={tools} />
-		<Socials collection={socials} />
-		<Email data={contacts.eamil} />
+		<Email email={contacts.eamil} data={sections.email} />
 		<Background />
 	</main>
 );

@@ -12,6 +12,8 @@ const Media: CollectionConfig = {
 	},
 	upload: {
 		adminThumbnail: 'card',
+		staticURL: '/public/media',
+		staticDir: 'public/media',
 	},
 	fields: [
 		{

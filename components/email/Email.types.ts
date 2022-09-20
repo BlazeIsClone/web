@@ -1,3 +1,6 @@
+import { Sections } from 'types';
+
 export interface Props {
-	data: string;
+	email: string;
+	data: Sections['email'];
 }

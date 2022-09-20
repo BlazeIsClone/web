@@ -1,43 +1,91 @@
-@use 'styles/config/variables' as var;
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	font-family: var.$primary-font;
+@font-face {
+	font-family: MaisonNeue-Extended;
+	src: local(MaisonNeueExtended-Book),
+		url(/fonts/MaisonNeueExtended-Book.woff2) format('woff2');
+	font-weight: normal;
+	font-style: normal;
+	font-stretch: normal;
 }
 
-h1 {
+@font-face {
+	font-family: MaisonNeue-Extended;
+	src: local(MaisonNeueExtended-Medium),
+		url(/fonts/MaisonNeueExtended-Medium.woff2) format('woff2');
+	font-weight: 500;
 	font-style: normal;
-	font-weight: 900;
-	font-size: clamp(2rem, 10vw, 3rem);
-	line-height: 1.2em;
+	font-stretch: normal;
 }
 
-h2 {
-	font-size: clamp(1rem, 10vw, 3rem);
+@font-face {
+	font-family: MaisonNeue-Extended;
+	src: local(MaisonNeueExtended-Bold),
+		url(/fonts/MaisonNeueExtended-Bold.woff2) format('woff2');
+	font-weight: bold;
 	font-style: normal;
+	font-stretch: normal;
+}
+
+@mixin Display-1 {
+	font-family: MaisonNeue-Extended;
+	font-size: 64px;
+	font-weight: bold;
+}
+
+@mixin Display-2 {
+	font-family: MaisonNeue-Extended;
+	font-size: 48px;
+}
+
+@mixin Headline-1 {
+	font-family: MaisonNeue-Extended;
+	font-size: 40px;
+	font-weight: 500;
+}
+
+@mixin Headline-2 {
+	font-family: MaisonNeue-Extended;
+	font-size: 32px;
+	font-weight: bold;
+}
+
+@mixin Headline-3 {
+	font-family: MaisonNeue-Extended;
+	font-size: 32px;
+	font-weight: 500;
+}
+
+@mixin Headline-4 {
+	font-family: MaisonNeue-Extended;
+	font-size: 24px;
+	font-weight: 500;
+}
+
+@mixin Headline-5 {
+	font-family: MaisonNeue-Extended;
+	font-size: 24px;
 	font-weight: normal;
 }
 
-h3 {
-	font-style: normal;
-	font-weight: 600;
+@mixin Headline-6 {
+	font-family: MaisonNeue-Extended;
+	font-size: 24px;
+}
+
+@mixin Paragraph-Big {
+	font-family: MaisonNeue-Extended;
+	font-size: 20px;
+	font-weight: 500;
+	line-height: 1.25;
+}
+
+@mixin Paragraph-Bold {
+	font-family: MaisonNeue-Extended;
 	font-size: 16px;
-	line-height: 125%;
-	margin: 0;
+	font-weight: bold;
+	line-height: 1.25;
 }
 
-h4 {
-	font-style: normal;
-	font-weight: normal;
-	font-size: 14px;
-	line-height: 125%;
-	margin: 0;
-}
-
-p {
-	font-style: normal;
+@mixin Paragraph {
+	font-family: MaisonNeue-Extended;
+	font-size: 16px;
 }

@@ -1,10 +1,15 @@
 .header {
+	padding: 65px 0;
 	.nav {
 		display: flex;
-		justify-content: space-around;
+		justify-content: center;
 
 		li {
 			list-style: none;
+			text-transform: uppercase;
+			&:not(:last-child) {
+				margin-right: 58px;
+			}
 		}
 	}
 }

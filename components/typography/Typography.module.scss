@@ -1,0 +1,101 @@
+@use 'styles/config/variables' as var;
+@use 'styles/global/typography' as *;
+
+.display1 {
+	@include Display-1;
+	font-size: clamp(2rem, 10vw, 3rem);
+	line-height: 1.2em;
+}
+
+.display2 {
+	@include Display-2;
+	font-size: clamp(1rem, 10vw, 3rem);
+}
+
+.headline1 {
+	@include Headline-1;
+	line-height: 125%;
+	margin: 0;
+}
+
+.headline2 {
+	@include Headline-2;
+	line-height: 125%;
+}
+
+.headline3 {
+	@include Headline-3;
+	line-height: 125%;
+}
+
+.headline4 {
+	@include Headline-4;
+}
+
+.headline5 {
+	@include Headline-5;
+	margin: 0;
+}
+
+.headline6 {
+	@include Headline-6;
+}
+
+.paragraphBig {
+	@include Paragraph-Big;
+}
+
+.paragraphBold {
+	@include Paragraph-Bold;
+}
+
+.paragraph {
+	@include Paragraph;
+}
+
+.richText {
+	h1 {
+		@include Display-1;
+		font-size: clamp(2rem, 10vw, 3rem);
+	}
+
+	h2 {
+		@include Display-2;
+		font-size: clamp(1rem, 10vw, 3rem);
+	}
+
+	h3 {
+		@include Headline-1;
+		line-height: 125%;
+	}
+
+	h4 {
+		@include Headline-2;
+		line-height: 125%;
+	}
+
+	h4 {
+		@include Headline-3;
+		line-height: 125%;
+	}
+
+	h5 {
+		@include Headline-4;
+	}
+
+	h5 {
+		@include Headline-5;
+	}
+
+	h5 {
+		@include Headline-6;
+	}
+
+	.paragraphBig {
+		@include Paragraph-Big;
+	}
+
+	.paragraphBold {
+		@include Paragraph-Bold;
+	}
+}

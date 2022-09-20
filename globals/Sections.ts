@@ -64,6 +64,19 @@ const Section: GlobalConfig = {
 			required: true,
 			fields: [idField, headlineField],
 		},
+		{
+			name: 'email',
+			type: 'group',
+			required: true,
+			fields: [
+				{
+					name: 'image',
+					type: 'upload',
+					relationTo: 'media',
+					required: true,
+				},
+			],
+		},
 	],
 };
 
