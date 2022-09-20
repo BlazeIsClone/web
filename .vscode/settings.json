@@ -1,7 +1,8 @@
 {
-  "search.exclude": {
-    "**/.git": true,
-    "**/node_modules": true,
-    "**/build": true
-  }
+	"search.exclude": {
+		"**/.git": true,
+		"**/node_modules": true,
+		"**/build": true
+	},
+	"typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -1,6 +1,5 @@
 import React from 'react';
-import NotFound from '../components/NotFound';
 
-const Custom404: React.FC = () => <NotFound />;
+const Custom404: React.FC = () => <h1>404 - Page Not Found</h1>;
 
 export default Custom404;

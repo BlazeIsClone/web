@@ -13,8 +13,13 @@
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"isolatedModules": true,
-		"incremental": true
+		"incremental": true,
+		"baseUrl": ".",
+		"paths": {
+			"types": ["./types"],
+			"components": ["./components"]
+		}
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "blocks/Image/sizes.js"],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "types", "components"],
 	"exclude": ["node_modules"]
 }

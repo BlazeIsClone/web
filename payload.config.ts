@@ -1,6 +1,7 @@
 import { buildConfig } from 'payload/config';
 import seo from '@payloadcms/plugin-seo';
 import dotenv from 'dotenv';
+import { resolve } from 'path';
 
 import Interests from './collections/Interests';
 import Note from './collections/Note';
@@ -28,4 +29,7 @@ export default buildConfig({
 			generateURL: () => 'https://blazeclone.xyz',
 		}),
 	],
+	typescript: {
+		outputFile: resolve(__dirname, './types/generated-types.ts'),
+	},
 });

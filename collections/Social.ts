@@ -1,7 +1,7 @@
 import { CollectionConfig } from 'payload/types';
 
 export const Social: CollectionConfig = {
-	slug: 'social',
+	slug: 'socials',
 	admin: {
 		useAsTitle: 'title',
 	},
