@@ -7,7 +7,7 @@ export type Type = {
 	image?: MediaType;
 };
 
-export const Intrest: CollectionConfig = {
+export const Interest: CollectionConfig = {
 	slug: 'interests',
 	admin: {
 		useAsTitle: 'type',
@@ -45,4 +45,4 @@ export const Intrest: CollectionConfig = {
 	],
 };
 
-export default Intrest;
+export default Interest;

@@ -22,11 +22,13 @@ export const getStaticProps: GetStaticProps = async () => {
 	const interests = await payload.find({
 		collection: 'interests',
 		sort: '+createdAt',
+		pagination: false,
 	});
 
 	const notes = await payload.find({
 		collection: 'notes',
 		sort: '+createdAt',
+		pagination: false,
 	});
 
 	const projects = await payload.find({
@@ -36,10 +38,12 @@ export const getStaticProps: GetStaticProps = async () => {
 
 	const tools = await payload.find({
 		collection: 'tools',
+		pagination: false,
 	});
 
 	const socials = await payload.find({
 		collection: 'socials',
+		pagination: false,
 	});
 
 	return {

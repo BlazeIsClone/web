@@ -14,7 +14,12 @@ const Cube: React.FC = () => {
 	return (
 		<mesh ref={mesh}>
 			<boxGeometry args={[2, 2, 2]} />
-			<meshStandardMaterial />
+			<meshPhysicalMaterial
+				roughness={0}
+				transmission={1}
+				opacity={1}
+				metalness={0.1}
+			/>
 		</mesh>
 	);
 };

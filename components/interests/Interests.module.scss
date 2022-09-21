@@ -1,3 +1,32 @@
 .interests {
-	content: '';
+	text-align: center;
+	ul {
+		display: flex;
+		list-style: none;
+		width: fit-content;
+		margin: 0 auto;
+
+		li {
+			&:not(:last-child) {
+				margin-right: 58px;
+			}
+
+			button {
+				background-color: white;
+				background: none;
+				color: white;
+				border: 0;
+				padding: 10px 25px;
+
+				.type {
+					font-weight: 100;
+					text-transform: uppercase;
+					cursor: pointer;
+				}
+			}
+		}
+	}
+	.row {
+		justify-content: center !important;
+	}
 }

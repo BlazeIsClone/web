@@ -10,6 +10,7 @@
 .display2 {
 	@include Display-2;
 	font-size: clamp(1rem, 10vw, 3rem);
+	margin-bottom: 65px;
 }
 
 .headline1 {
