@@ -3,60 +3,53 @@ import payload from 'payload';
 import { Contacts, Metadata, Navigation, Sections } from 'types';
 
 export const getStaticProps: GetStaticProps = async () => {
-	const contacts = await payload.findGlobal<Contacts>({
-		slug: 'contacts',
-	});
+	const { NEXT_PUBLIC_SERVER_URL } = process.env;
 
-	const metadata = await payload.findGlobal<Metadata>({
-		slug: 'metadata',
-	});
+	const sort = 'sort=+createdAt';
+	const pagination = 'limit=256';
+	let payload: object[] = [];
 
-	const navigation = await payload.findGlobal<Navigation>({
-		slug: 'navigation',
-	});
-
-	const sections = await payload.findGlobal<Sections>({
-		slug: 'sections',
-	});
-
-	const interests = await payload.find({
-		collection: 'interests',
-		sort: '+createdAt',
-		pagination: false,
-	});
-
-	const notes = await payload.find({
-		collection: 'notes',
-		sort: '+createdAt',
-		pagination: false,
-	});
-
-	const projects = await payload.find({
-		collection: 'projects',
-		sort: '+createdAt',
-	});
-
-	const tools = await payload.find({
-		collection: 'tools',
-		pagination: false,
-	});
-
-	const socials = await payload.find({
-		collection: 'socials',
-		pagination: false,
-	});
+	await Promise.all([
+		fetch(`${NEXT_PUBLIC_SERVER_URL}/api/globals/contacts`).then(res =>
+			res.json()
+		),
+		fetch(`${NEXT_PUBLIC_SERVER_URL}/api/globals/metadata`).then(res =>
+			res.json()
+		),
+		fetch(`${NEXT_PUBLIC_SERVER_URL}/api/globals/navigation`).then(res =>
+			res.json()
+		),
+		fetch(`${NEXT_PUBLIC_SERVER_URL}/api/globals/sections`).then(res =>
+			res.json()
+		),
+		fetch(`${NEXT_PUBLIC_SERVER_URL}/api/interests?${sort}&${pagination}`).then(
+			res => res.json()
+		),
+		fetch(`${NEXT_PUBLIC_SERVER_URL}/api/notes?${sort}&${pagination}`).then(
+			res => res.json()
+		),
+		fetch(`${NEXT_PUBLIC_SERVER_URL}/api/projects?${pagination}`).then(res =>
+			res.json()
+		),
+		fetch(`${NEXT_PUBLIC_SERVER_URL}/api/socials?${pagination}`).then(res =>
+			res.json()
+		),
+		fetch(`${NEXT_PUBLIC_SERVER_URL}/api/tools?${pagination}`).then(res =>
+			res.json()
+		),
+	]).then(response => payload.push(...response));
 
 	return {
 		props: {
-			navigation,
-			interests,
-			metadata,
-			contacts,
-			sections,
-			projects,
-			socials,
-			tools,
-			notes,
+			contacts: payload[0] || {},
+			metadata: payload[1] || {},
+			navigation: payload[2] || {},
+			sections: payload[3] || {},
+			interests: payload[4] || {},
+			notes: payload[5] || {},
+			projects: payload[6] || {},
+			socials: payload[7] || {},
+			tools: payload[8] || {},
 		},
 	};
 };

@@ -20,6 +20,10 @@ const bodyField: Field = {
 
 const Section: GlobalConfig = {
 	slug: 'sections',
+	access: {
+		read: (): boolean => true,
+		update: (): boolean => true,
+	},
 	fields: [
 		{
 			name: 'hero',

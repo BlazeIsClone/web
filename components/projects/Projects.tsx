@@ -14,7 +14,7 @@ export const Projects: React.FC<Props> = ({ data, collection }) => (
 				{collection.docs.map((project: Project) => (
 					<Col lg={4}>
 						<Surface key={project.id}>
-							<a href={project.link} className={styles.card}>
+							<a href={project.link} target={'_blank'} className={styles.card}>
 								<h3>{project.title}</h3>
 								<img src={project.image?.url} />
 								<h5>{project.status}</h5>

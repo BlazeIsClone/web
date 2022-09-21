@@ -8,9 +8,9 @@
 	"scripts": {
 		"start": "docker-compose up",
 		"start:deamon": "docker-compose up -d",
-		"down": "docker-compose down -v",
-		"build:next": "next build",
-		"postbuild:next": "next export -o ./www",
+		"down": "docker-compose down",
+		"build:next": "NEXT_BUILD=true next build",
+		"postbuild:next": "cross-env NODE_ENV=production next export -o ./www",
 		"build:server": "tsc --project tsconfig.server.json",
 		"build:payload": "payload build",
 		"build": "npm run start:deamon && npm run build:next",

@@ -10,7 +10,7 @@ export const Notes: React.FC<Props> = ({ data, collection }) => (
 		<Typography type="display-2">{data.headline}</Typography>
 		{collection.docs.map((notes: Note) => (
 			<Surface key={notes.id} className={styles.card}>
-				<a key={notes.id} href={notes.link}>
+				<a key={notes.id} href={notes.link} target={'_blank'}>
 					<h3>{notes.title}</h3>
 					<div>{notes.date.toString()}</div>
 				</a>

@@ -11,7 +11,11 @@ export const Socials: React.FC<Props> = ({ collection }) => (
 	<section className={styles.socials}>
 		<Marquee gradient={false} className={styles.row} pauseOnHover={true}>
 			{collection.docs.map((social: Social) => (
-				<a key={social.id} href={social.link} className={styles.item}>
+				<a
+					key={social.id}
+					href={social.link}
+					target={'_blank'}
+					className={styles.item}>
 					<img src={social.image?.url} />
 					<Typography type="headline-5" className={styles.title}>
 						{social.title}

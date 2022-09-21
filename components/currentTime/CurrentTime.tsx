@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Typography } from 'components';
 import { Props } from './CurrentTime.types';
-import styles from './Template.module.scss';
+import styles from './CurrentTime.module.scss';
 
 export const CurrentTime: React.FC<Props> = ({ className }) => {
 	const [date, setDate] = useState(new Date());

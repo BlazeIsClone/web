@@ -11,7 +11,7 @@ export const Interests: React.FC<Props> = ({ data, collection }) => (
 		<Container>
 			<Typography type="display-2">{data.headline}</Typography>
 
-			<Tabs defaultIndex={1}>
+			<Tabs>
 				<TabList>
 					{collection?.docs?.map((interests: Interest, idx) => (
 						<Tab key={idx}>
@@ -29,7 +29,7 @@ export const Interests: React.FC<Props> = ({ data, collection }) => (
 							{interests.interest.map((item, idx) => (
 								<Col key={idx} lg={3}>
 									<Surface>
-										<a href={item.link}>
+										<a href={item.link} target={'_blank'}>
 											<img src={item.image?.url} />
 											<h4>{item.title}</h4>
 										</a>
