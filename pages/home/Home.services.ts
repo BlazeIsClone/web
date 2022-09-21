@@ -1,6 +1,4 @@
 import { GetStaticProps } from 'next';
-import payload from 'payload';
-import { Contacts, Metadata, Navigation, Sections } from 'types';
 
 export const getStaticProps: GetStaticProps = async () => {
 	const { NEXT_PUBLIC_SERVER_URL } = process.env;

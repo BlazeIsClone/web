@@ -9,6 +9,7 @@ const nextConfig = {
 	typescript: {
 		ignoreBuildErrors: true,
 	},
+	pageExtensions: ['page.tsx'],
 };
 
 module.exports = withTM(nextConfig);
