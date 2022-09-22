@@ -13,3 +13,4 @@ export * from './header';
 export * from './typography';
 export * from './currentTime';
 export * from './surface';
+export * from './media';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tool } from 'types';
 import Marquee from 'react-fast-marquee';
-import { Typography, Surface } from 'components';
+import { Typography, Surface, Media } from 'components';
 
 import styles from './Tools.module.scss';
 import { Props } from './Tools.types';
@@ -20,7 +20,7 @@ export const Tools: React.FC<Props> = ({ data, collection }) => (
 						target={'_blank'}
 						className={styles.card}>
 						<Surface>
-							<img src={tool.image?.url} />
+							<Media image={tool.image} />
 						</Surface>
 					</a>
 				))}
@@ -36,7 +36,7 @@ export const Tools: React.FC<Props> = ({ data, collection }) => (
 						target={'_blank'}
 						className={styles.card}>
 						<Surface>
-							<img src={tool.image?.url} />
+							<Media image={tool.image} />
 						</Surface>
 					</a>
 				))}

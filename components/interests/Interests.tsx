@@ -2,7 +2,7 @@ import { Interest } from 'types';
 import { Col, Container, Row } from 'react-grid-system';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 
-import { Typography, Surface } from 'components';
+import { Typography, Surface, Media } from 'components';
 import styles from './Interests.module.scss';
 import { Props } from './Interests.types';
 
@@ -29,8 +29,11 @@ export const Interests: React.FC<Props> = ({ data, collection }) => (
 							{interests.interest.map((item, idx) => (
 								<Col key={idx} lg={3}>
 									<Surface>
-										<a href={item.link} target={'_blank'}>
-											<img src={item.image?.url} />
+										<a
+											href={item.link}
+											target={'_blank'}
+											className={styles.item}>
+											<Media image={item.image} />
 											<h4>{item.title}</h4>
 										</a>
 									</Surface>

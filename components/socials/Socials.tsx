@@ -1,11 +1,11 @@
 import React from 'react';
-import { Row } from 'react-grid-system';
 import Marquee from 'react-fast-marquee';
-import { Typography } from 'components';
+import { Typography, Media } from 'components';
 
 import { Social } from 'types';
 import styles from './Socials.module.scss';
 import { Props } from './Socials.types';
+import { Collection } from 'types';
 
 export const Socials: React.FC<Props> = ({ collection }) => (
 	<section className={styles.socials}>
@@ -16,7 +16,7 @@ export const Socials: React.FC<Props> = ({ collection }) => (
 					href={social.link}
 					target={'_blank'}
 					className={styles.item}>
-					<img src={social.image?.url} />
+					<Media image={social.image} />
 					<Typography type="headline-5" className={styles.title}>
 						{social.title}
 					</Typography>

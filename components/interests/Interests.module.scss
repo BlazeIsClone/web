@@ -28,5 +28,11 @@
 	}
 	.row {
 		justify-content: center !important;
+
+		.item {
+			img {
+				display: inline;
+			}
+		}
 	}
 }

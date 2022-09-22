@@ -1,7 +1,7 @@
 import React from 'react';
 import { Project } from 'types';
 import { Col, Container, Row } from 'react-grid-system';
-import { Typography, Surface } from 'components';
+import { Typography, Surface, Media } from 'components';
 
 import styles from './Projects.module.scss';
 import { Props } from './Projects.types';
@@ -16,7 +16,7 @@ export const Projects: React.FC<Props> = ({ data, collection }) => (
 						<Surface key={project.id}>
 							<a href={project.link} target={'_blank'} className={styles.card}>
 								<h3>{project.title}</h3>
-								<img src={project.image?.url} />
+								<Media image={project.image} />
 								<h5>{project.status}</h5>
 							</a>
 						</Surface>
