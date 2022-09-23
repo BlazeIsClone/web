@@ -7,14 +7,17 @@ import styles from './Interests.module.scss';
 import { Props } from './Interests.types';
 
 export const Interests: React.FC<Props> = ({ data, collection }) => (
-	<section id={data['section-id']} className={styles.interests}>
+	<section
+		id={data['section-id']}
+		className={styles.interests}
+		data-scroll-section>
 		<Container>
 			<Typography type="display-2">{data.headline}</Typography>
 
 			<Tabs>
 				<TabList>
 					{collection?.docs?.map((interests: Interest, idx) => (
-						<Tab key={idx}>
+						<Tab key={idx} selectedClassName={styles.activeTab}>
 							<button>
 								<Typography type="headline-6" className={styles.type}>
 									{interests.type}

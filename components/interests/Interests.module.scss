@@ -14,7 +14,7 @@
 			button {
 				background-color: white;
 				background: none;
-				color: white;
+				color: grey;
 				border: 0;
 				padding: 10px 25px;
 
@@ -22,6 +22,11 @@
 					font-weight: 100;
 					text-transform: uppercase;
 					cursor: pointer;
+				}
+			}
+			&.activeTab {
+				button {
+					color: white;
 				}
 			}
 		}

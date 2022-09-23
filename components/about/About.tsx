@@ -13,10 +13,12 @@ const CurrentTime = dynamic(
 );
 
 export const About: React.FC<Props> = ({ data }) => (
-	<section id={data['section-id']} className={styles.about}>
-		<Container>
-			<Typography type="headline-3">{data.content}</Typography>
-			<CurrentTime />
-		</Container>
+	<section id={data['section-id']} className={styles.about} data-scroll-section>
+		<div data-scroll data-scroll-speed={'5'}>
+			<Container>
+				<Typography type="headline-3">{data.content}</Typography>
+				<CurrentTime />
+			</Container>
+		</div>
 	</section>
 );

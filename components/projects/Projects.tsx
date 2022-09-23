@@ -7,7 +7,10 @@ import styles from './Projects.module.scss';
 import { Props } from './Projects.types';
 
 export const Projects: React.FC<Props> = ({ data, collection }) => (
-	<section id={data['section-id']} className={styles.projects}>
+	<section
+		id={data['section-id']}
+		className={styles.projects}
+		data-scroll-section>
 		<Container>
 			<Typography type="display-2">{data.headline}</Typography>
 			<Row className={styles.row}>

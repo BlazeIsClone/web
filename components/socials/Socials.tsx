@@ -8,7 +8,7 @@ import { Props } from './Socials.types';
 import { Collection } from 'types';
 
 export const Socials: React.FC<Props> = ({ collection }) => (
-	<section className={styles.socials}>
+	<section className={styles.socials} data-scroll-section>
 		<Marquee gradient={false} className={styles.row} pauseOnHover={true}>
 			{collection.docs.map((social: Social) => (
 				<a
