@@ -13,39 +13,42 @@ export const Interests: React.FC<Props> = ({ data, collection }) => (
 		data-scroll-section>
 		<Container>
 			<Typography type="display-2">{data.headline}</Typography>
-
-			<Tabs>
-				<TabList>
+			<div data-scroll data-scroll-speed={1}>
+				<Tabs>
+					<TabList>
+						{collection?.docs?.map((interests: Interest, idx) => (
+							<Tab key={idx} selectedClassName={styles.activeTab}>
+								<button>
+									<Typography type="headline-6" className={styles.type}>
+										{interests.type}
+									</Typography>
+								</button>
+							</Tab>
+						))}
+					</TabList>
 					{collection?.docs?.map((interests: Interest, idx) => (
-						<Tab key={idx} selectedClassName={styles.activeTab}>
-							<button>
-								<Typography type="headline-6" className={styles.type}>
-									{interests.type}
-								</Typography>
-							</button>
-						</Tab>
+						<TabPanel key={idx}>
+							<Row className={styles.row}>
+								{interests.interest.map((item, idx) => (
+									<Col key={idx} lg={3}>
+										<div data-scroll data-scroll-speed={idx}>
+											<Surface>
+												<a
+													href={item.link}
+													target={'_blank'}
+													className={styles.item}>
+													<Media image={item.image} />
+													<h4>{item.title}</h4>
+												</a>
+											</Surface>
+										</div>
+									</Col>
+								))}
+							</Row>
+						</TabPanel>
 					))}
-				</TabList>
-				{collection?.docs?.map((interests: Interest, idx) => (
-					<TabPanel key={idx}>
-						<Row className={styles.row}>
-							{interests.interest.map((item, idx) => (
-								<Col key={idx} lg={3}>
-									<Surface>
-										<a
-											href={item.link}
-											target={'_blank'}
-											className={styles.item}>
-											<Media image={item.image} />
-											<h4>{item.title}</h4>
-										</a>
-									</Surface>
-								</Col>
-							))}
-						</Row>
-					</TabPanel>
-				))}
-			</Tabs>
+				</Tabs>
+			</div>
 		</Container>
 	</section>
 );

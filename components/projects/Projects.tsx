@@ -16,13 +16,18 @@ export const Projects: React.FC<Props> = ({ data, collection }) => (
 			<Row className={styles.row}>
 				{collection.docs.map((project: Project, idx) => (
 					<Col lg={4} key={idx}>
-						<Surface key={project.id}>
-							<a href={project.link} target={'_blank'} className={styles.card}>
-								<h3>{project.title}</h3>
-								<Media image={project.image} />
-								<h5>{project.status}</h5>
-							</a>
-						</Surface>
+						<div data-scroll data-scroll-speed={idx + 1}>
+							<Surface key={project.id}>
+								<a
+									href={project.link}
+									target={'_blank'}
+									className={styles.card}>
+									<h3>{project.title}</h3>
+									<Media image={project.image} />
+									<h5>{project.status}</h5>
+								</a>
+							</Surface>
+						</div>
 					</Col>
 				))}
 			</Row>

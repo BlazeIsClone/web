@@ -21,10 +21,13 @@
 	"dependencies": {
 		"@babel/register": "^7.17.0",
 		"@payloadcms/plugin-seo": "^1.0.8",
+		"@react-three/drei": "^9.32.0",
 		"@react-three/fiber": "^8.7.4",
+		"@react-three/postprocessing": "^2.6.2",
 		"dotenv": "^16.0.0",
 		"escape-html": "^1.0.3",
 		"express": "^4.18.0",
+		"leva": "^0.9.31",
 		"locomotive-scroll": "^4.1.4",
 		"next": "^12.1.0",
 		"payload": "^1.0.7",

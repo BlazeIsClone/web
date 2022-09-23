@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import type { AppProps } from 'next/app';
 import { LocomotiveScrollProvider } from 'react-locomotive-scroll';
+import { Leva } from 'leva';
 
 import 'styles/vendors/index.css';
 import 'styles/global/index.scss';
@@ -20,6 +21,7 @@ const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => {
 			onLocationChange={(scroll: any) =>
 				scroll.scrollTo(0, { duration: 0, disableLerp: true })
 			}>
+			<Leva hidden />
 			<div data-scroll-container ref={containerRef}>
 				<Component {...pageProps} />
 			</div>

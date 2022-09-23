@@ -15,7 +15,9 @@ export const Socials: React.FC<Props> = ({ collection }) => (
 					key={social.id}
 					href={social.link}
 					target={'_blank'}
-					className={styles.item}>
+					className={styles.item}
+					data-scroll
+					data-scroll-speed={1}>
 					<Media image={social.image} />
 					<Typography type="headline-5" className={styles.title}>
 						{social.title}
