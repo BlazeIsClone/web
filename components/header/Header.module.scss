@@ -1,5 +1,6 @@
 .header {
 	padding: 65px 0;
+
 	.nav {
 		display: flex;
 		justify-content: center;
@@ -8,9 +9,15 @@
 			list-style: none;
 			text-transform: uppercase;
 			cursor: pointer;
+			padding: 15px;
 
 			&:not(:last-child) {
 				margin-right: 58px;
+			}
+
+			&:hover {
+				color: black;
+				background: white;
 			}
 		}
 	}

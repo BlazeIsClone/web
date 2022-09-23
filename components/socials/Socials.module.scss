@@ -7,6 +7,14 @@
 		display: flex;
 
 		.item {
+			&:hover {
+				background: white;
+				color: black;
+				img {
+					filter: invert(1);
+				}
+			}
+
 			padding: 30px;
 			display: flex;
 			align-items: center;

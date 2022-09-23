@@ -31,15 +31,17 @@ export const Interests: React.FC<Props> = ({ data, collection }) => (
 							<Row className={styles.row}>
 								{interests.interest.map((item, idx) => (
 									<Col key={idx} lg={3}>
-										<div data-scroll data-scroll-speed={idx}>
+										<div data-scroll data-scroll-speed={-1}>
 											<Surface>
-												<a
-													href={item.link}
-													target={'_blank'}
-													className={styles.item}>
-													<Media image={item.image} />
-													<h4>{item.title}</h4>
-												</a>
+												<div data-scroll data-scroll-speed={1}>
+													<a
+														href={item.link}
+														target={'_blank'}
+														className={styles.item}>
+														<Media image={item.image} />
+														<h4>{item.title}</h4>
+													</a>
+												</div>
 											</Surface>
 										</div>
 									</Col>

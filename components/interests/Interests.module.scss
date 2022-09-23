@@ -6,7 +6,7 @@
 		display: flex;
 		list-style: none;
 		width: fit-content;
-		margin: 0 auto;
+		margin: 0 auto 40px;
 
 		li {
 			&:not(:last-child) {
@@ -25,16 +25,35 @@
 					text-transform: uppercase;
 					cursor: pointer;
 				}
+
+				&:hover {
+					background: white;
+					color: black;
+
+					img {
+						filter: invert(1);
+					}
+				}
 			}
 			&.activeTab {
 				button {
 					color: white;
+
+					&:hover {
+						background: white;
+						color: black;
+
+						img {
+							filter: invert(1);
+						}
+					}
 				}
 			}
 		}
 	}
 	.row {
 		justify-content: center !important;
+		padding-top: 50px;
 
 		.item {
 			img {
