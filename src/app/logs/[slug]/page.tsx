@@ -1,17 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { notFound } from "next/navigation";
 import { CustomMDX } from "@/components/mdx";
 import { formatDate, getBlogPosts } from "@/app/logs/utils";
 import { baseUrl } from "@/app/sitemap";
 
 export async function generateStaticParams() {
-  let posts = getBlogPosts();
+  const posts = getBlogPosts();
 
   return posts.map((post) => ({
     slug: post.slug,
   }));
 }
 
-export function generateMetadata({ params }) {
+export function generateMetadata({ params }: any) {
   const post = getBlogPosts().find((post) => post.slug === params.slug);
   if (!post) {
     return;
@@ -51,7 +53,7 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function Blog({ params }) {
+export default function Blog({ params }: any) {
   const post = getBlogPosts().find((post) => post.slug === params.slug);
 
   if (!post) {
