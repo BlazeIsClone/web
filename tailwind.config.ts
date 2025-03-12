@@ -12,6 +12,17 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        secondary: ["Roboto Mono", "monospace"],
+      },
+      keyframes: {
+        blink: {
+          "50%": { opacity: "0" },
+        },
+      },
+      animation: {
+        blink: "blink 1s step-end infinite",
+      },
     },
   },
   plugins: [],

@@ -17,23 +17,32 @@ function ArrowIcon() {
 
 export default function Footer() {
   return (
-    <footer className="mb-16">
-      <ul className="font-sm mt-8 flex flex-col space-x-0 space-y-2 text-neutral-600 md:flex-row md:space-x-4 md:space-y-0 dark:text-neutral-300">
+    <footer className="mt-8 mb-16 border-t border-gray-300">
+      <ul className="text-sm mt-8 flex flex-col space-x-0 space-y-2 md:flex-row md:space-x-8 md:space-y-0 ">
         <li>
           <a
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            className="flex items-center transition-all"
             rel="noopener noreferrer"
             target="_blank"
             href="https://github.com/BlazeIsClone"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7">GitHub</p>
+            <p className="ml-3 h-6">github/blazeisclone</p>
+          </a>
+        </li>
+        <li>
+          <a
+            className="flex items-center transition-all"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="mailto:sandevabeykoon123@gmail.com"
+          >
+            <ArrowIcon />
+            <p className="ml-3 h-6">sandevabeykoon123@gmail.com</p>
           </a>
         </li>
       </ul>
-      <p className="mt-8 text-xs text-neutral-600 dark:text-neutral-300">
-        © {new Date().getFullYear()} GPL-2.0 Licensed
-      </p>
+      <p className="mt-8 text-xs">© {new Date().getFullYear()} GPL-2.0</p>
     </footer>
   );
 }

@@ -23,7 +23,7 @@ export function Header() {
                 <Link
                   key={path}
                   href={path}
-                  className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle relative"
+                  className="transition-all flex align-middle relative"
                 >
                   {name}
                 </Link>
