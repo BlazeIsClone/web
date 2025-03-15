@@ -24,15 +24,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${robotoMono.className} antialiased max-w-xl mx-4 mt-8 lg:mx-auto`}
+        className={`${robotoMono.className} antialiased max-w-2xl mx-4 mt-8 lg:mx-auto`}
       >
-        <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
-          <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
-            <Header />
-            {children}
-            <Footer />
-          </main>
-        </body>
+        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
+          <Header />
+          {children}
+          <Footer />
+        </main>
       </body>
     </html>
   );
