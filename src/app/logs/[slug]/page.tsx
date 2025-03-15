@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { CustomMDX } from "@/components/mdx";
 import { formatDate, getBlogPosts } from "@/app/logs/utils";
 import { baseUrl } from "@/app/sitemap";
+import Link from "next/link";
 
 export async function generateStaticParams() {
   const posts = getBlogPosts();
@@ -76,7 +77,7 @@ export default function Blog({ params }: any) {
             image: post.metadata.image
               ? `${baseUrl}${post.metadata.image}`
               : `/og?title=${encodeURIComponent(post.metadata.title)}`,
-            url: `${baseUrl}/blog/${post.slug}`,
+            url: `${baseUrl}/logs/${post.slug}`,
             author: {
               "@type": "Person",
               name: "My Portfolio",
@@ -84,9 +85,11 @@ export default function Blog({ params }: any) {
           }),
         }}
       />
-      <h1 className="title font-semibold text-xl tracking-tighter">
-        {post.metadata.title}
-      </h1>
+      <Link href={`/logs/${post.slug}`}>
+        <h1 className="title font-semibold text-xl tracking-tighter">
+          {post.metadata.title}
+        </h1>
+      </Link>
       <div className="flex justify-between items-center mt-2 mb-8 text-sm">
         <p className="text-sm">{formatDate(post.metadata.publishedAt)}</p>
       </div>
