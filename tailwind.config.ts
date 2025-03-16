@@ -30,6 +30,12 @@ const config: Config = {
         DEFAULT: {
           css: {
             maxWidth: null,
+            img: {
+              width: "100%",
+            },
+            li: {
+              fontSize: "15px",
+            },
             h2: {
               fontSize: "20px",
             },

@@ -1,0 +1,67 @@
+---
+title: "Building an On-Premise Server"
+publishedAt: "2025-03-16"
+summary: "Building an on-premise bare metal server from hardware to hypervisor setup, networking, and running workloads"
+---
+
+I wanted to venture into Kubernetes, so I kicked off on Google Kubernetes Engine (GKE) and the 300 USD credits they give you as a head start.
+Well two months in I happen to run out of it all, naturally during the learning process I happened to abuse their node autoscaler with a
+multi region cluster but nonetheless It soon got me to realize how expensive it was to run even a couple node cluster with a little spec.
+
+### Hardware
+
+The choices for the spec and hardware was pretty simple, whatever that's lying around was the perfect candidate.
+I still had to source a couple of components though which naturally weren’t a big deal as they were a few generations behind.
+
+- CPU: Intel i3-4130 (2 CPUs / 4 threads)
+- Memory: DDR3 8GB (1333MHz)
+- Storage: 120GB SSD
+- Motherboard: Asus Micro-ATX H81
+- PSU: 400W
+- UPS: AWP AID1200 1200VA
+- Network: 100Mbps (Cloudflare Argo Tunnel)
+- Utils: Power cable, SATA cable, Ethernet cable
+
+## v1.0 (blaze-alpha)
+
+Initially booted on 14th Dec 2024, it was running Debian 11 naturally without a window manager.
+Got a copy of [Debian 11 Standard Edition ISO](https://cdimage.debian.org/cdimage/archive/11.6.0/amd64/iso-cd), burned it with [Etcher](https://etcher.balena.io) onto a pen drive.
+First time I installed it without the network updates and well I pretty much couldn’t install any packages to even SSH into the damn thing.
+
+![server open case](/images/server-opencase.webp)
+
+During the first couple of days I had to pickup on how local DNS worked and how IPs got assigned on my local DHCP server. Then I installed open SSH and shoot I can connect shell from anywhere within my home network.
+
+## v2.0 (blaze-nova)
+
+A couple of weeks later we leveled up and now our bare metal server is a Hypervisor using [Proxmox](https://proxmox.com/en/).
+
+![proxmox dashboard](/images/proxmox.webp)
+
+Proxmox is a big deal for me because now I can spin up multiple virtual machines and run them paralel.
+Plus we get to configure each VM’s spec. Behind the scenes Proxmox also uses debian and KVM for virtualization.
+It gets even neater because we can spin up containers too which use [LXC](https://linuxcontainers.org/).
+I use a bunch of preconfigured community containers from their [Helper Scripts](https://tteck.github.io/Proxmox), for instance running Cloudflare Argo tunnel.
+
+### Deploying a Web App
+
+Since I don’t happen to have a static IP I used Cloudflare Argo Tunnels to expose my server to the internet.
+Which happens to be very straightforward. Just run their agent in one of my VM’s and I was good to go.
+It’s simply like a VPN on simple terms we tunnel our network to the closest Cloudflare Global Network gateway.
+It’s more secure than using a static IP. We don't have a unique IP that's bound forever, plus Cloudflare has their own WAF on Application Layer 7 that comes with their Zero Trust network.
+Some people find this to be concerning because since they run these security features on the application layer they have the authority to sniff out our data over their network,
+it’s a double edged sword anyways since they need to readout our data to make sure they are not sketchy.
+
+![argo tunnel diagram](/images/argo-tunnel.webp)
+
+First application I hosted was a NextJS starter, cloned it onto one of my VM’s slapped on with [PM2](https://pm2.keymetrics.io/) which takes care of running the NodeJS process.
+And too soon enough we were live after configuring the port binding on Cloudflare Tunnel Config from their dashboard.
+
+### Full Anonymity
+
+Cloudflare Argo tunnels makes our hosted server completely anonymous, we don't have a physical IP address that points to the origin server,
+rather Cloudflare edge servers expose our server by port via secure tunnels to our hypervisor.
+Again it’s exposing a virtual machine running on our hypervisor which means no physical hardware information can be traced back.
+There is one possible entry point via the local network which can be infiltrated through but this will require that person to be in proximity to our server location.
+The next is the domain, Iceland has domain registrars which hold domain leases on their behalf so we can technically get them to reserve us a domain for this they accept crypto currencies.
+For all of this we’ll need an email address with an inbox for that we’ll have to stick with disposable email provider.
