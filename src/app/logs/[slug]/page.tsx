@@ -80,7 +80,7 @@ export default function Blog({ params }: any) {
             url: `${baseUrl}/logs/${post.slug}`,
             author: {
               "@type": "Person",
-              name: "My Portfolio",
+              name: "Sandev Abeykoon",
             },
           }),
         }}

@@ -1,14 +1,14 @@
 import { getBlogPosts } from "@/app/logs/utils";
 
-export const baseUrl = "http://localhost";
+export const baseUrl = "https://blaze64.xyz";
 
 export default async function sitemap() {
   const blogs = getBlogPosts().map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
+    url: `${baseUrl}/logs/${post.slug}`,
     lastModified: post.metadata.publishedAt,
   }));
 
-  const routes = ["", "/blog"].map((route) => ({
+  const routes = ["", "/logs"].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date().toISOString().split("T")[0],
   }));
