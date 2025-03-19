@@ -24,11 +24,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${robotoMono.className} antialiased max-w-2xl mx-4 mt-8 lg:mx-auto`}
+        className={`${robotoMono.className} antialiased min-h-[100vh] max-w-2xl pt-4 sm:border-r`}
       >
-        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
+        <main className="flex-auto min-w-0 flex flex-col">
           <Header />
-          {children}
+          <div className="px-4">{children}</div>
           <Footer />
         </main>
       </body>

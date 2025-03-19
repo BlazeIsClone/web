@@ -11,7 +11,7 @@ const navItems = {
 
 export function Header() {
   return (
-    <aside className="mb-12 tracking-tight">
+    <aside className="border-b mb-12 px-4 pb-4 tracking-tight">
       <div className="lg:sticky lg:top-20">
         <nav
           className="flex flex-row items-start relative px-0 pb-0 fade md:overflow-auto scroll-pr-6 md:relative"
