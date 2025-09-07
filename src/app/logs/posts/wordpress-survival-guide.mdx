@@ -1,0 +1,57 @@
+---
+title: "WordPress Survival Guide"
+publishedAt: "2025-08-05"
+summary: "A practical field guide to running WordPress securely in the real world"
+---
+
+Late 2023. One of my clients wakes up, checks their site… and to their surprise, it’s redirecting to some random Japanese site. Google search results? Full of gibberish titles and hijacked meta descriptions. It's total chaos.
+
+![seo spam screenshot](/images/japanese-seo-spam.webp)
+
+On the call, things got worse fast: every other site on that VPS was starting to show the same mess.
+At that point, we had only one card to play, roll back to the latest snapshot. The next few days were pure SEO damage control and that was no fun at all.
+
+The root cause? A single WordPress site had an outdated plugin, unpatched for ages, got popped by a vulnerability. That malware didn’t stop at one site and it spread through the whole server.
+
+The real villain wasn’t WordPress itself, yes WordPress is no holly spirit that is known for robust security but that doesn't mean it's inheritly insecure.
+
+After the nightmare, we completely rebuilt the stack. Here’s what’s now in place:
+
+#### 1. Network Hardening
+
+- UFW firewall is locked down with only the ports we actually need.
+- SSH is limited and brute-force attempts are blocked via Fail2Ban (SSH, Nginx Basic Auth, MySQL).
+- Direct HTTP access via IP is gone — only HTTPS allowed.
+
+#### 2. Application Isolation
+
+- Each WordPress site runs under its own user. Plugins can’t touch other sites’ files.
+- AppArmor is on with custom rules for Nginx and MySQL — remote code execution is basically dead.
+- Filesystem permissions are hardened with ACLs for fine-grained control.
+
+![site isolation diagram](/images/site-isolation-diagram.webp)
+
+Basically: if one site goes down, it doesn’t drag everyone else into the fire.
+
+- Survival Rules (a.k.a. Lessons Learned the Hard Way)
+- Don’t trust plugins. Only install stuff that’s maintained and has a decent track record.
+- Backups are useless unless tested. Do restore drills. Seriously.
+- Logs don’t lie. Ship them off the box, run integrity checks, set up alerts.
+- Always have shields. CDN, WAF, reverse proxy and let them eat the first hit.
+
+### Remote Code Execution: The Real Threat
+
+One thing became crystal clear after that incident and RCE is WordPress number one nightmare. Outdated plugins or sloppy permissions let attackers run code on your server and once that happens, one site can infect everything else.
+
+Our new architecture specifically targets RCE:
+
+- AppArmor with custom rules for Nginx and PHP blocks malicious code from running.
+- Site-level isolation ensures plugins or compromised code on one site can’t touch others.
+- Hardened file system permissions (ACLs) give each site its own sandbox.
+
+With these layers, even if a plugin tries to run something nasty, it never leaves its own sandbox. That’s the main reason our stack survived without another 3 AM disaster call for the past 2 years.
+
+### The Takeaway
+
+WordPress isn’t the problem. It’s how you run it.
+Keep it patched, keep it isolated, and keep your guardrails up or you’ll eventually end up in the same nightmare call I did
