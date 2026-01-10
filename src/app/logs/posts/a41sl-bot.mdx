@@ -1,0 +1,63 @@
+---
+title: "A41SL Discord Bot"
+publishedAt: "2025-03-15"
+summary: "All For One Bot is an open-source discord server bot built for All For One SL™ discord server."
+---
+
+On the day of Aug 2nd, 2020 I happen to write my frist lines of backend code.
+
+```javascript
+const discord = require("discord.js");
+
+const client = new discord.Client();
+const token = "NzM5MzM5MDcyOTkyMTgyMzE0.XyZBKw.XXX";
+
+client.on("ready", () => {
+  console.log("Blaze Bot Is Online");
+});
+
+client.on("message", (msg) => {
+  if (msg.content == "hi") {
+    msg.reply("bb i luv u");
+  }
+});
+
+client.on("message", async (message) => {
+  if (!message.guild) return;
+
+  if (message.content === "/waren") {
+    if (message.member.voice.channel) {
+      const connection = await message.member.voice.channel.join();
+      const dispatcher = connection.play("http://198.178.123.8:8404/;", {
+        volume: 0.5,
+      });
+    } else {
+      message.reply("no");
+    }
+  }
+});
+
+client.login(token);
+```
+
+Back then It was not about writing code for me, I wanted to bring something to life and this project got me so invested that I happen to make 1K commits for within 2 years.
+Going back, I never thought that this is going to be the start of my career.
+
+### Context: A41SL Discord Server
+
+It was the year 2018 and a group of 4 like minded friends happen to join a voice channel to play their favourite games, Fortnite and League of Legends. Slowly that 4 started becoming more and we became a community of friends and "friends of friends".
+Back in the day we used to listen to music together in a voice channel, post random memes in a text channel or just spend time moderating our community. There we plenty of public Discord bots to choose from, but there were no all in one package that we thought was both easy to use and customimze.
+So I set out to build the A41SL Bot.
+
+[github.com/BlazeIsClone/a41sl](https://github.com/BlazeIsClone/a41sl)
+
+Built with Node.js and Express, the application leverages discord.js to interface seamlessly with the Discord API.
+
+Some of the stats dating back:
+
+- peaked at 100 stars on GitHub
+- 1K commits
+- 970 deployments
+- 19 forks
+- 11 issues
+- 3 contributors
