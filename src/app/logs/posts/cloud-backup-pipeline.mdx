@@ -1,0 +1,23 @@
+---
+title: "Cloud Backup Pipeline"
+publishedAt: "2026-01-04"
+summary: "Cloud backup pipeline using reusable GitHub workflows."
+---
+
+Uses AWS-compatible S3 storage to store application databases and filesystem backup snapshots and retains only a specified count of backups to prevent storage overflow. The pipeline pushes metrics to a MySQL database which can be scaped for monitoring.
+
+### Capabilities
+
+- MySQL database backups via mysqldump.
+- File system backups using UNIX zip.
+- AWS S3 Compatible Object Storage backups.
+
+### Technologies
+
+- GitHub Actions: handles workflow exceution and automation steps.
+- AWS CLI: Used to access and manage the cloud object storage.
+- AWS S3 Compatible Object Storage: Storage warehouse for archiving the backups and can hold years of storage.
+
+[https://github.com/maya-hive/cloud-backup-pipeline](https://github.com/maya-hive/cloud-backup-pipeline)
+
+![Architecture](/images/cloud-backup-pipeline.webp)
