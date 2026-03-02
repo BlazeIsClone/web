@@ -1,0 +1,50 @@
+---
+title: "Automating Cloud with Ansible"
+publishedAt: "2026-02-08"
+summary: "Hardening PHP & Moving to IaC, A deep dive into modernizing legacy architectures"
+---
+
+#### Why We Still Love the VPS
+
+Deploying on a VPS gives us total control over the kernel, the networking stack, and the filesystem. It’s predictable, cost-effective, and when managed correctly it's incredibly performant. However, the downside of a VPS has always been the "manual labor" of keeping it online. That’s exactly why Cloud Config exists.
+
+#### The Cloud Config
+
+Instead of SSH ing into a box and running commands by hand, we use Infrastructure as Code (IaC).
+
+Built on top of Ansible, Cloud Config treats our servers like software. We define the state we want, firewalls, PHP versions, and Nginx configs and Ansible makes it a reality. This transforms a standard Linux box into a standardized, hardened production environment in minutes.
+
+![cloud config modules](/images/cloud-config-modules.webp)
+
+#### The Beginning
+
+What started as a way to automate server setups has evolved into a concrete architectural standard. We officially migrated the base from Ubuntu 22.04 to Debian 13 (Trixie).
+
+Why move? While Ubuntu is great, Debian’s community-driven nature and longer release cycles offer the kind of "boring stability" that web servers crave.
+
+#### The Cloud Philosophy
+
+On paper, any compute provider works. In practice, I’m leaning toward DigitalOcean and AWS EC2. I’ve noted some IPv6 quirks with Google Compute Engine, so for now, the path of least resistance is the priority.
+
+#### The Network & Security Layer
+
+I’ve swapped out Apache for Nginx. It’s faster, scales better, and configured it to be "stealthy." By default, Nginx blabs its version number in headers—I've masked that to show a generic ID like hive-production-websrv-apollo-23.
+
+The Security Checklist:
+
+- SSL: A+ rating on Qualys. We’re using Let’s Encrypt with CertBot, but added a CAA record in DNS to ensure only Let’s Encrypt can issue certs for our domains.
+- Firewall: UFW is active, and Fail2Ban is standing guard to boot anyone trying to brute-force SSH or MySQL.
+- Isolation: This is the big one. Every site has its own Linux user. Also implemented AppArmor profiles to prevent remote code execution—a lesson learned from a previous malware headache.
+
+#### Swapping MySQL for MariaDB
+
+I’ve officially moved to MariaDB v10. MySQL is fine, but their "Community Edition" feels a bit stripped down compared to the Enterprise version. MariaDB gives us those "enterprise-grade" features (scalability and security) out of the box without the paywall.
+
+#### Developer Experience (DX)
+
+I wanted to fix the "permission denied" nightmare when multiple devs work on the same server.
+
+- SSH: Keys are mandatory. No passwords.
+- Permissions: I’m using ACLs (Access Control Lists). Files created by one dev stay accessible to the developers group. It sounds simple, but it saves hours of troubleshooting.
+
+![cloud config guide](/images/cloud-config-guide.webp)
