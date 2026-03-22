@@ -28,13 +28,26 @@ On paper, any compute provider works. In practice, I’m leaning toward DigitalO
 
 #### The Network & Security Layer
 
-I’ve swapped out Apache for Nginx. It’s faster, scales better, and configured it to be "stealthy." By default, Nginx blabs its version number in headers—I've masked that to show a generic ID like hive-production-websrv-apollo-23.
+We swapped out Apache for Nginx. It’s faster, scales better, and configured it to be "stealthy." By default, Nginx blabs its version number in headers—I've masked that to show a generic ID like hive-production-websrv-apollo-23.
 
 The Security Checklist:
 
 - SSL: A+ rating on Qualys. We’re using Let’s Encrypt with CertBot, but added a CAA record in DNS to ensure only Let’s Encrypt can issue certs for our domains.
 - Firewall: UFW is active, and Fail2Ban is standing guard to boot anyone trying to brute-force SSH or MySQL.
 - Isolation: This is the big one. Every site has its own Linux user. Also implemented AppArmor profiles to prevent remote code execution—a lesson learned from a previous malware headache.
+
+We take security very seriously and ensure that we do everything we can to protect data. Below is a brief overview of some of the steps we take to ensure your server's security
+
+![vps security diagram](/images/vps-security.webp)
+
+We emulate project or application level isolation via multiple layers of security practices, this includes user groups, ACLs and AppArmor.
+During a attack or a malware infection this architecture ensures that the treat is contained within the bounds of the application and will not potentially impact any other applications or even the system at large.
+
+![filesystem permissions](/images/filesystem-permissions.webp)
+
+SSH key-based authentication is mandatory for any user account, for this, the user is required to set an SSH key onto their GitHub account.
+The user will also be assigned to group developers and will have access to all the sites within the server.
+Previously we encountered an issue where if a user were to edit a file then another user would not be able to read or write to it, this has now been resolved and any files or directories that are created within a site will be kept owned by the developers group so that all the users that are in that group will continue to have their privileges.
 
 #### Swapping MySQL for MariaDB
 
