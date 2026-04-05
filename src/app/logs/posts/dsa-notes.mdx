@@ -4,6 +4,23 @@ publishedAt: "2026-04-05"
 summary: "Notes on data structures and computer algorithms"
 ---
 
+### Arrays
+
+An array is a collection of items stored at contiguous (unbreakable) memory locations.
+
+```js
+const a = new ArrayBuffer(6);
+const a8 = new Uint8Array(a);
+
+// ArrayBuffer { [Uint8Contents]: <00 00 00 00 00 00>, [byteLength]: 6 }
+```
+
+In JavaScript, arrays aren't primitives but are instead Array objects with special characteristics.
+
+```js
+const a = []; // This isn't an actual array.
+```
+
 ### Linear Search
 
 Linear search is the most straightforward way to find a specific value in a collection of data.
