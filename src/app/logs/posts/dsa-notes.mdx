@@ -1,0 +1,22 @@
+---
+title: "Data Structures and Algorithms"
+publishedAt: "2026-04-05"
+summary: "Notes on data structures and computer algorithms"
+---
+
+### Linear Search
+
+Linear search is the most straightforward way to find a specific value in a collection of data.
+We find our needle by walking through the array and checking for the needle with a conditional statement.
+Worst case time complexity would be O(n).
+
+```ts
+function linear_search(heystack: number[], needle: number): boolean {
+  for (let i = 0; i < heystack.length; i++) {
+    if (heystack[i] === needle) {
+      return true;
+    }
+  }
+  return false;
+}
+```
