@@ -41,9 +41,26 @@ function linear_search(heystack: number[], needle: number): boolean {
 ### Binary Search
 
 Binary search is faster than linear search except for small arrays. However, the array must be sorted first to be able to apply binary search.
+Worst case time complexity would be O(log n).
 
 ```ts
 function binary_search_list(haystack: number[], needle: number): boolean {
-  //
+  let lo = 0;
+  let hi = haystack.length;
+
+  do {
+    const m = Math.floor(lo + (hi - lo) / 2);
+    const v = haystack[m];
+
+    if (v === needle) {
+      return true;
+    } else if (v > needle) {
+      hi = m;
+    } else {
+      lo = m + 1;
+    }
+  } while (lo < hi);
+
+  return false;
 }
 ```
