@@ -1,10 +1,24 @@
 ---
 title: "Data Structures and Algorithms"
-publishedAt: "2026-04-05"
+publishedAt: "2026-03-20"
 summary: "Notes on data structures and computer algorithms"
 ---
 
-### Arrays
+Data structures are specific ways of organizing and storing data in a computer so it can be accessed and modified efficiently. Algorithms are instructions and formulas for solving problems.
+
+## Data Structures
+
+We structure data in different ways depending on what data we have, and what we want to do with it.
+
+### Primitive Data Structures
+
+Basic data structures provided by programming languages to represent single values, such as integers, floating-point numbers, characters, and booleans.
+
+### Abstract Data Structures
+
+Higher level data structures that are built using primitive data types and provide more complex and specialized operations.
+
+#### 1. Arrays
 
 An array is a collection of items stored at contiguous (unbreakable) memory locations.
 
@@ -21,7 +35,15 @@ In JavaScript, arrays aren't primitives but are instead Array objects with speci
 const a = []; // This isn't an actual array.
 ```
 
-### Linear Search
+## Algorithms
+
+An algorithm is a set of step-by-step instructions to solve a given problem or achieve a specific goal.
+
+### Searching Algorithms
+
+Searching algorithms are essential tools in computer science used to locate specific items within a collection of data.
+
+#### 1. Linear Search
 
 Linear search is the most straightforward way to find a specific value in a collection of data.
 We find our needle by walking through the array and checking for the needle with a conditional statement.
@@ -38,13 +60,13 @@ function linear_search(heystack: number[], needle: number): boolean {
 }
 ```
 
-### Binary Search
+#### 2. Binary Search
 
 Binary search is faster than linear search except for small arrays. However, the array must be sorted first to be able to apply binary search.
 Worst case time complexity would be O(log n).
 
 ```ts
-function binary_search_list(haystack: number[], needle: number): boolean {
+function binary_search(haystack: number[], needle: number): boolean {
   let lo = 0;
   let hi = haystack.length;
 
@@ -62,5 +84,45 @@ function binary_search_list(haystack: number[], needle: number): boolean {
   } while (lo < hi);
 
   return false;
+}
+```
+
+#### 3. Two Crystal Balls
+
+There are two identical crystal balls and one needs to find out which is the maximum floor in a 100 story building from where the balls can fall before they break.
+In the most efficient way, what will be the maximum number of drops required to find the right floor in any possible scenario.
+
+This can be represented in a sorted array of 100 elements:
+
+```js
+[0, 0, 0, 0, 0, ..., 0, 1, 1, 1, 1, 1, 1, 1, ..., 1]
+```
+
+So each time we find 1, it will break, and will only have 1 ball left.
+So we can only find the 1 twice (break 2 balls).
+
+We can’t use the binary search since we can only find the 1 twice.
+
+```ts
+function crystal_balls(breaks: boolean[]): number {
+  const jmpAmount = Math.floor(Math.sqrt(breaks.length));
+
+  let i = jmpAmount;
+
+  for (; i < breaks.length; i += jmpAmount) {
+    if (breaks[i]) {
+      break;
+    }
+  }
+
+  i -= jmpAmount;
+
+  for (let j = 0; j < jmpAmount && i < breaks.length; ++j, ++i) {
+    if (breaks[i]) {
+      return i;
+    }
+  }
+
+  return -1;
 }
 ```
