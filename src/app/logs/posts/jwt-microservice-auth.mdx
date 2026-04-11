@@ -4,6 +4,9 @@ publishedAt: "2026-04-11"
 summary: "Use JWTs to authenticate separate API Microservice"
 ---
 
-## The Identity Provider
-
-to be continued...
+To handle user data we can implement an Identity Provider Service (IDP) which is responsible for signing JWTs with asymmetrical keys (rs256) and storing user information.
+The Identity Provider also has an open endpoint which will expose the public key in the form of a JWK (JSON Web Key) which is used to sign and to validate issued keys by any other service (ideally the external service would cache the JWK to reduce traffic to the IDP).
+But This also poses another issue, that is we will have to implement more code to validate the tokens with the JWK endpoint. This is where an API Gateway comes in, The API gateway sits between the frontend client and the API server acting as a checkpoint.
+The API Gateway caches the JWK using the IDP endpoint and validates all the incoming requests.
+This means we would only have to implement features like JWK validation, rate-limiting, and SSL only to the API Gateway and we will not have to rely on the internal services for implementing these.
+Plus another improvement to the API Gateway would be to write the decoded JWT data onto the headers so the API Gateway can pass the decoded data for example: x-jwt-email: person@email.com directly to the internal services.
