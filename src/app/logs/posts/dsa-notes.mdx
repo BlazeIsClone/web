@@ -53,6 +53,61 @@ interface LinkedList<T> {
 }
 ```
 
+#### 3. Queue
+
+A queue is a FIFO (First In, First Out) structure, where elements are inserted at the tail and removed from the head of the list, similar to waiting in a line.
+Both pushing and popping elements from a queue are constant time O(1) operations, as they only involve updating pointers and do not require traversing the entire list.
+
+```ts
+type Node<T> = {
+  value: T;
+  next?: Node<T>;
+};
+
+class Queue<T> {
+  public length: number;
+  private head?: Node<T>;
+  private tail?: Node<T>;
+
+  constructor() {
+    this.head = this.tail = undefined;
+    this.length = 0;
+  }
+
+  enqueue(item: T): void {
+    const node = { value: item } as Node<T>;
+
+    this.length++;
+    if (!this.tail) {
+      this.tail = this.head = node;
+    }
+
+    this.tail.next = node;
+    this.tail = node;
+  }
+
+  deque(): T | undefined {
+    if (!this.head) {
+      return undefined;
+    }
+
+    this.length--;
+
+    const head = this.head;
+    this.head = this.head.next;
+
+    // free memory
+    head.next = undefined;
+
+    return head.value;
+  }
+
+  peek(): T | undefined {
+    return this.head?.value;
+  }
+}
+```
+
 ## Algorithms
 
 An algorithm is a set of step-by-step instructions to solve a given problem or achieve a specific goal.
