@@ -108,6 +108,15 @@ class Queue<T> {
 }
 ```
 
+#### 4. Stack
+
+A stack is a singly linked list where elements are added and removed only from the head, following a Last-In-First-Out (LIFO) principle, similar to a stack of plates where the last item added is the first one removed.
+To push an element in a stack, you point the new element's 'next' pointer to the current head, and then update the head to point to the new element.
+
+Stack operations are efficient because they involve constant time pointer manipulations, which do not depend on the number of items in the list or the size of the values.
+
+> Function calls are conceptually similar to a stack, with each function call being 'pushed' onto the call stack and 'popped' off when the function completes. The memory used for these calls is literally called the 'stack'.
+
 ## Algorithms
 
 An algorithm is a set of step-by-step instructions to solve a given problem or achieve a specific goal.
