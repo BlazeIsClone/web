@@ -117,6 +117,57 @@ Stack operations are efficient because they involve constant time pointer manipu
 
 > Function calls are conceptually similar to a stack, with each function call being 'pushed' onto the call stack and 'popped' off when the function completes. The memory used for these calls is literally called the 'stack'.
 
+```ts
+type Node<T> = {
+  value: T;
+  prev?: Node<T>;
+};
+
+class Stack<T> {
+  public length: number;
+  private head?: Node<T>;
+
+  constructor() {
+    this.head = undefined;
+    this.length = 0;
+  }
+
+  push(item: T): void {
+    const node = { value: item } as Node<T>;
+
+    this.length++;
+
+    if (!this.head) {
+      this.head = node;
+      return;
+    }
+
+    node.prev = this.head;
+    this.head = node;
+  }
+
+  pop(): T | undefined {
+    this.length = Math.max(0, this.length - 1);
+
+    if (this.length === 0) {
+      const head = this.head;
+      this.head = undefined;
+
+      return head?.value;
+    }
+
+    const head = this.head as Node<T>;
+    this.head = head.prev;
+
+    return head.value;
+  }
+
+  peek(): T | undefined {
+    return this.head?.value;
+  }
+}
+```
+
 ## Algorithms
 
 An algorithm is a set of step-by-step instructions to solve a given problem or achieve a specific goal.
