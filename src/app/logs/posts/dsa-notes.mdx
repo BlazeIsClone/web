@@ -168,6 +168,43 @@ class Stack<T> {
 }
 ```
 
+#### 5. Array List
+
+A dynamic, growable array under the hood It creates a new array with a larger capacity (often doubled), then copies existing elements to the new array, allowing for dynamic growth.
+
+Standard operations include push (adding to the end) and pop (removing from the end), which are stack-like operations with O(1) time complexity when the array has not exceeded its capacity.
+
+Inserting or deleting from the front or middle requires shifting all subsequent elements, resulting in an O(N) time complexity.
+
+```ts
+class ArrayList<T> {
+  private items: T[] = [];
+
+  public push(element: T): void {
+    this.items.push(element);
+  }
+
+  public get(index: number): T {
+    if (index < 0 || index >= this.items.length) {
+      throw new Error("Index out of bounds");
+    }
+    return this.items[index];
+  }
+
+  public pop(index: number): T | undefined {
+    return this.items.splice(index, 1)[0];
+  }
+
+  public size(): number {
+    return this.items.length;
+  }
+
+  public isEmpty(): boolean {
+    return this.items.length === 0;
+  }
+}
+```
+
 ## Algorithms
 
 An algorithm is a set of step-by-step instructions to solve a given problem or achieve a specific goal.
