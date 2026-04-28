@@ -205,6 +205,68 @@ class ArrayList<T> {
 }
 ```
 
+#### 6. Ring Buffer
+
+A ring buffer is a data structure where operations like pushing, popping, shifting, and unshifting are O(1), using modulo arithmetic to wrap around an array. It maintains order by using head and tail indices that can move circularly within a fixed-size array.
+
+When a ring buffer needs to resize, it creates a new larger buffer, starting at the head and copying elements in order. The head will be set to 0, and the tail will be set to the current length, allowing for additional capacity and continued circular operations.
+
+A ring buffer can be used in log batching scenarios, where logs need to maintain order while being written. It allows for efficient logging by periodically flushing a batch of logs without blocking the main service, and without requiring complex mutex synchronization.
+
+```ts
+class RingBuffer<T> {
+  private buffer: (T | null)[];
+  private capacity: number;
+  private head: number = 0;
+  private tail: number = 0;
+  private size: number = 0;
+
+  constructor(capacity: number) {
+    this.capacity = capacity;
+    this.buffer = new Array(capacity).fill(null);
+  }
+
+  push(item: T): boolean {
+    if (this.isFull()) {
+      return false;
+    }
+
+    this.buffer[this.tail] = item;
+    this.tail = (this.tail + 1) % this.capacity;
+    this.size++;
+
+    return true;
+  }
+
+  pop(): T | null {
+    if (this.isEmpty()) {
+      return null;
+    }
+
+    const item = this.buffer[this.head];
+
+    // Clean up reference for GC
+    this.buffer[this.head] = null;
+    this.head = (this.head + 1) % this.capacity;
+    this.size--;
+
+    return item;
+  }
+
+  isEmpty(): boolean {
+    return this.size === 0;
+  }
+
+  isFull(): boolean {
+    return this.size === this.capacity;
+  }
+
+  getSize(): number {
+    return this.size;
+  }
+}
+```
+
 ## Algorithms
 
 An algorithm is a set of step-by-step instructions to solve a given problem or achieve a specific goal.
