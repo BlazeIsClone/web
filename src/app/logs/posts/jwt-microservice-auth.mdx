@@ -4,11 +4,18 @@ publishedAt: "2026-04-11"
 summary: "Use JWTs to authenticate separate API Microservice"
 ---
 
-To handle user data we can implement an Identity Provider Service (IDP) which is responsible for signing JWTs with asymmetrical keys (RS256) and storing user information.
-The Identity Provider also has an open endpoint which exposes the public key in the form of a JWK (JSON Web Key), which is used to validate issued tokens by any other service. Ideally the external service would cache the JWK to reduce traffic to the IDP.
+> Microservice architecture is an approach to developing applications as a suite of small, individually deployable services.
 
-This also poses another issue, we will have to implement more code to validate the tokens with the JWK endpoint. This is where an API Gateway comes in. The API Gateway sits between the frontend client and the API server, acting as a checkpoint.
-The API Gateway caches the JWK using the IDP endpoint and validates all incoming requests.
-This means we only have to implement features like JWK validation, rate-limiting, and SSL on the API Gateway and will not have to rely on internal services for these.
+### JSON Web Tokens
 
-Another improvement to the API Gateway would be to write the decoded JWT data onto the request headers, so the gateway can pass decoded data such as `x-jwt-email: person@email.com` directly to the internal services.
+JSON Web Token (JWT, pronounced "jot") is a compact, self-contained way to transmit information between services as a JSON object — commonly used in HTTP Authorization headers for token-based authentication.
+
+The solution I came up with to handle user data is an Identity Provider Service (IDP). The IDP is responsible for signing JWTs with asymmetric keys (RS256) and storing user information. The Identity Provider also exposes a public endpoint that returns the public key as a JWK (JSON Web Key), which can be used to validate tokens issued by the IDP. Ideally, external services would cache the JWK to reduce traffic back to the IDP.
+
+But this poses another issue — we would have to implement token validation logic in every internal service. This is where an API Gateway comes in. The API Gateway sits between the frontend client and the API servers, acting as a checkpoint. It caches the JWK from the IDP endpoint and validates all incoming requests, meaning features like JWK validation, rate-limiting, and SSL termination only need to be implemented once at the gateway level rather than across every internal service. An added improvement is to have the API Gateway decode the JWT and forward the claims as headers — for example, `x-jwt-email: person@email.com` — so internal services can consume user data without needing to touch the token themselves.
+
+I found inspiration for this implementation from various sources and this was one of the first system designs I've completed building, so let me know if there are any loopholes or improvements worth exploring.
+
+### Identity Provider
+
+The Identity and access management provider (IDP for short) acts as a gatekeeper in between Anthane's services to regulate access to only authorized users. One of its primary goals is to be a Single Sign On (SSO) service where users wouldn't have to go through the login screen each time they try to access services.
