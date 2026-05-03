@@ -1,10 +1,36 @@
 ---
-title: "Distributed System Architecture"
+title: "Distributed Systems"
 publishedAt: "2026-05-02"
 summary: "Scalling systems with distributed architecture patterns"
 ---
 
-Todo...Patterns like event driven architecture, domain driven models and distributed systems treadoffs and practices.
+To understand distributed systems we need to move away from the "single computer" mindset and embracing the messy reality of loosly linked networks that transports are data through messy lines of Fiber and CAT cables.
+
+Distributed systems are notoriously hard to implement because they are required to handle partial failures, unreliable networks, and data inconsistency.
+
+Over the years engineers have come up with practices and concepts to make these systems be more reliable at scale.
+
+## 1. CAP Theorem
+
+The foundation of distributed database design. It states that in a distributed system, you can only provide two of the following three guarantees at once:
+
+- **Consistency (C)**: Every read receives the most recent write or an error.
+
+- **Availability (A)**: Every request receives a (non-error) response, without the guarantee that it contains the most recent write.
+
+- **Partition Tolerance (P)**: The system continues to operate despite an arbitrary number of messages being dropped or delayed by the network between nodes.
+
+**The Reality**: Partition Tolerance is not optional in distributed systems, networks will fail, meaning "Partition Tolerance" is required. Therefore, we must choose between Consistency and Availability.
+
+## 2. PACELC Theorem
+
+An extension of CAP that accounts for what happens during normal operation.
+
+...
+
+## Notes
+
+Patterns like event driven architecture, domain driven models and distributed systems treadoffs and practices.
 
 ACID Compliance with service to service interactions.
 
