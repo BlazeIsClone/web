@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { formatDate, getBlogPosts } from "@/app/logs/utils";
 
-export function BlogPosts() {
+interface Props {
+  maxPosts?: number;
+}
+
+export function BlogPosts({ maxPosts }: Props) {
   const allBlogs = getBlogPosts();
 
   return (
@@ -15,6 +19,7 @@ export function BlogPosts() {
           }
           return 1;
         })
+        .slice(0, maxPosts ?? allBlogs.length)
         .map((post) => (
           <Link
             key={post.slug}

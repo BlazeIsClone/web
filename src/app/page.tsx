@@ -18,7 +18,7 @@ export default function Page() {
         {`I build cool things for the web and I am always open to exciting challenges. Welcome to my field journal!`}
       </p>
       <div className="my-8">
-        <BlogPosts />
+        <BlogPosts maxPosts={10} />
       </div>
     </section>
   );
