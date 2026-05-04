@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navItems = {
   "/": {
@@ -10,6 +13,8 @@ const navItems = {
 };
 
 export function Header() {
+  const pathname = usePathname();
+
   return (
     <aside className="border-b mb-12 px-4 pb-4 tracking-tight">
       <div className="lg:sticky lg:top-20">
@@ -19,13 +24,23 @@ export function Header() {
         >
           <div className="flex flex-row space-x-5">
             {Object.entries(navItems).map(([path, { name }]) => {
+              const isActive =
+                path === "/" ? pathname === path : pathname.startsWith(path);
+
+              const label =
+                path === "/logs" && pathname.startsWith("/logs/")
+                  ? pathname
+                  : name;
+
               return (
                 <Link
                   key={path}
                   href={path}
-                  className="transition-all flex align-middle relative"
+                  className={`transition-all flex align-middle relative ${
+                    !isActive && "text-neutral-500"
+                  }`}
                 >
-                  {name}
+                  {label}
                 </Link>
               );
             })}
