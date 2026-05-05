@@ -10,15 +10,17 @@ Distributed systems are notoriously hard to implement because they are required 
 
 Over the years engineers have come up with practices and concepts to make these systems be more reliable at scale.
 
+![Network Topology](/images/networking-topology.webp)
+
 ## 1. CAP Theorem
 
 The foundation of distributed database design. It states that in a distributed system, you can only provide two of the following three guarantees at once:
 
-- **Consistency (C)**: Every read receives the most recent write or an error.
+- **(C) Consistency**: Every read receives the most recent write or an error.
 
-- **Availability (A)**: Every request receives a (non-error) response, without the guarantee that it contains the most recent write.
+- **(A) Availability**: Every request receives a (non-error) response, without the guarantee that it contains the most recent write.
 
-- **Partition Tolerance (P)**: The system continues to operate despite an arbitrary number of messages being dropped or delayed by the network between nodes.
+- **(P) Partition Tolerance**: The system continues to operate despite an arbitrary number of messages being dropped or delayed by the network between nodes.
 
 **The Reality**: Partition Tolerance is not optional in distributed systems, networks will fail, meaning "Partition Tolerance" is required. Therefore, we must choose between Consistency and Availability.
 
@@ -26,7 +28,17 @@ The foundation of distributed database design. It states that in a distributed s
 
 An extension of CAP that accounts for what happens during normal operation.
 
-...
+- **(P) Partition**: If a network partition occurs, do you choose Availability (A) or Consistency (C)?
+
+- **(A) Availability**: Prioritize system availability over data consistency during a partition.
+
+- **(C) Consistency**: Prioritize strong consistency over availability during a partition.
+
+- **(E) Else**: If no partition exists (normal operation), do you choose Latency (L) or Consistency (C)?
+
+- **(L) Latency**: Prioritize low latency (fast response) over strict consistency during normal operations.
+
+- **(C) Consistency**: Prioritize strong consistency over low latency during normal operations.
 
 ## Notes
 
