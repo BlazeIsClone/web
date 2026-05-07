@@ -8,11 +8,13 @@ To understand distributed systems we need to move away from the "single computer
 
 Distributed systems are notoriously hard to implement because they are required to handle partial failures, unreliable networks, and data inconsistency.
 
+## The Foundations
+
 Over the years engineers have come up with practices and concepts to make these systems be more reliable at scale.
 
 ![Network Topology](/images/networking-topology.webp)
 
-## 1. CAP Theorem
+### 1. CAP Theorem
 
 The foundation of distributed database design. It states that in a distributed system, you can only provide two of the following three guarantees at once:
 
@@ -24,7 +26,7 @@ The foundation of distributed database design. It states that in a distributed s
 
 **The Reality**: Partition Tolerance is not optional in distributed systems, networks will fail, meaning "Partition Tolerance" is required. Therefore, we must choose between Consistency and Availability.
 
-## 2. PACELC Theorem
+### 2. PACELC Theorem
 
 An extension of CAP that accounts for what happens during normal operation.
 
@@ -39,6 +41,22 @@ An extension of CAP that accounts for what happens during normal operation.
 - **(L) Latency**: Prioritize low latency (fast response) over strict consistency during normal operations.
 
 - **(C) Consistency**: Prioritize strong consistency over low latency during normal operations.
+
+## Implementation Patterns
+
+The following two patterns are the "how to" for managing data across multiple nodes, directly influenced by the trade-offs of the above theories.
+
+#### 1. Two-Phase Commit (2PC) — The "CP" Approach
+
+2PC is a blocking protocol used to achieve atomic transactions across multiple resources.
+
+#### 2. Saga Pattern — The "AP" Approach
+
+A Saga manages a distributed transaction as a sequence of local transactions. Each step updates its own database and triggers the next step.
+
+###### 1. Choreography (Event-Based)
+
+###### 2. Orchestration (Command-Based)
 
 ## Notes
 
