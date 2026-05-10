@@ -384,6 +384,49 @@ function bubble_sort(arr: number[]): void {
 }
 ```
 
+#### 1. Quick Sort
+
+Quick sort is a highly efficient, divide-and-conquer sorting algorithm that partitions an array into smaller sub-arrays around a "pivot" element.
+
+```ts
+function partition(arr: number[], lo: number, hi: number): number {
+  const pivot = arr[hi];
+
+  let idx = lo - 1;
+
+  for (let i = lo; i < hi; ++i) {
+    if (arr[i] <= pivot) {
+      idx++;
+      const tmp = arr[i];
+      arr[i] = arr[idx];
+      arr[idx] = tmp;
+    }
+  }
+
+  idx++;
+  arr[hi] = arr[idx];
+  arr[idx] = pivot;
+
+  return idx;
+}
+
+function qs(arr: number[], lo: number, hi: number): void {
+  if (lo >= hi) {
+    return arr;
+  }
+
+  const pivotIdx = partition(arr, lo, hi);
+  qs(arr, lo, pivotIdx - 1);
+  qs(arr, pivotIdx + 1, hi);
+}
+
+function quick_sort(arr: number[]): number[] {
+  qs(arr, 0, arr.length - 1);
+
+  return arr;
+}
+```
+
 ### Recursion
 
 Technique where a function calls itself to solve a problem by breaking it down into smaller, similar sub-problems.
