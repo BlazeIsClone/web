@@ -1,3 +1,7 @@
+"use client";
+
+import posthog from "posthog-js";
+
 function ArrowIcon() {
   return (
     <svg
@@ -25,6 +29,9 @@ export default function Footer() {
             rel="noopener noreferrer"
             target="_blank"
             href="https://github.com/BlazeIsClone"
+            onClick={() =>
+              posthog.capture("footer_link_clicked", { link: "github" })
+            }
           >
             <ArrowIcon />
             <p className="ml-3 h-6">github/blazeisclone</p>
@@ -36,6 +43,9 @@ export default function Footer() {
             rel="noopener noreferrer"
             target="_blank"
             href="mailto:sandevabeykoon123@gmail.com"
+            onClick={() =>
+              posthog.capture("footer_link_clicked", { link: "email" })
+            }
           >
             <ArrowIcon />
             <p className="ml-3 h-6">sandevabeykoon123@gmail.com</p>

@@ -7,6 +7,7 @@ export default function Page() {
         <h1
           className="text-xl font-semibold tracking-tighter outline-offset-4 outline-gray-400"
           contentEditable
+          suppressContentEditableWarning
         >
           $ {`Hello!, I'm Sandev Abeykoon`}
         </h1>

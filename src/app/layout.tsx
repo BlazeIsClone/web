@@ -1,5 +1,4 @@
 import { Roboto_Mono } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 
 import { Header } from "@/components/header";
@@ -33,9 +32,6 @@ export default function RootLayout({
           <Footer />
         </main>
       </body>
-      {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID} />
-      )}
     </html>
   );
 }

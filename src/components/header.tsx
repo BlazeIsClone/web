@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import posthog from "posthog-js";
 
 const navItems = {
   "/": {
@@ -39,6 +40,12 @@ export function Header() {
                   className={`transition-all flex align-middle relative ${
                     !isActive && "text-neutral-500"
                   }`}
+                  onClick={() =>
+                    posthog.capture("nav_link_clicked", {
+                      path,
+                      label: name,
+                    })
+                  }
                 >
                   {label}
                 </Link>
