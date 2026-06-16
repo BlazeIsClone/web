@@ -7,7 +7,7 @@ import Footer from "@/components/footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sandev Abeykoon - DevOps",
+  title: "Sandev Abeykoon - Dev Log",
   description: "I build cool things for the web.",
 };
 
