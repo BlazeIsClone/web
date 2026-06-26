@@ -1,6 +1,6 @@
 import { getBlogPosts } from "@/app/logs/utils";
 
-export const baseUrl = "https://blaze64.xyz";
+export const baseUrl = "https://blaze64.dev";
 
 export default async function sitemap() {
   const blogs = getBlogPosts().map((post) => ({
