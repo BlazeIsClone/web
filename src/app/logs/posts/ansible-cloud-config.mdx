@@ -26,6 +26,13 @@ Why move? While Ubuntu is great, Debian’s community-driven nature and longer r
 
 On paper, any compute provider works. In practice, I’m leaning toward DigitalOcean and AWS EC2. I’ve noted some IPv6 quirks with Google Compute Engine, so for now, the path of least resistance is the priority.
 
+#### Ansible
+
+In 2026 Ansible is adopted by many Fortune 500 companies, Uber operates across five global regions, their infrastructure encompasses around 5,000 devices.
+They use Ansible automation to manage critical segments and standardize configuration management for everything from generic switches to external gateways, and firewalls from different vendors, among others.
+
+[How Ansible® Automation Powers the Uber Corporate Network at a Global Scale](https://www.uber.com/lk/en/blog/ansible-automation-powers)
+
 #### The Network & Security Layer
 
 We swapped out Apache for Nginx. It’s faster, scales better, and configured it to be "stealthy." By default, Nginx blabs its version number in headers—I've masked that to show a generic ID like hive-production-websrv-apollo-23.
