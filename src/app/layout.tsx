@@ -8,9 +8,33 @@ import { baseUrl } from "@/app/sitemap";
 
 import "./globals.css";
 
+const title = "Sandev Abeykoon - Dev Log";
+const description = "I build cool things for the web.";
+const ogImage = `${baseUrl}/og-image.jpg`;
+
 export const metadata: Metadata = {
-  title: "Sandev Abeykoon - Dev Log",
-  description: "I build cool things for the web.",
+  metadataBase: new URL(baseUrl),
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    url: baseUrl,
+    type: "website",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: [ogImage],
+  },
 };
 
 const personSchema: WithContext<Person> = {
