@@ -19,14 +19,12 @@ The real villain wasn’t WordPress itself, yes WordPress is no holly spirit tha
 
 After the nightmare, we completely rebuilt the stack. Here’s what’s now in place:
 
-#### 1. Network Hardening
-
+### 1. Network Hardening
 - UFW firewall is locked down with only the ports we actually need.
 - SSH is limited and brute-force attempts are blocked via Fail2Ban (SSH, Nginx Basic Auth, MySQL).
 - Direct HTTP access via IP is gone — only HTTPS allowed.
 
-#### 2. Application Isolation
-
+### 2. Application Isolation
 - Each WordPress site runs under its own user. Plugins can’t touch other sites’ files.
 - AppArmor is on with custom rules for Nginx and MySQL — remote code execution is basically dead.
 - Filesystem permissions are hardened with ACLs for fine-grained control.
@@ -41,8 +39,7 @@ Basically: if one site goes down, it doesn’t drag everyone else into the fire.
 - Logs don’t lie. Ship them off the box, run integrity checks, set up alerts.
 - Always have shields. CDN, WAF, reverse proxy and let them eat the first hit.
 
-### Remote Code Execution: The Real Threat
-
+## Remote Code Execution: The Real Threat
 One thing became crystal clear after that incident and RCE is WordPress number one nightmare. Outdated plugins or sloppy permissions let attackers run code on your server and once that happens, one site can infect everything else.
 
 Our new architecture specifically targets RCE:
@@ -53,7 +50,6 @@ Our new architecture specifically targets RCE:
 
 With these layers, even if a plugin tries to run something nasty, it never leaves its own sandbox. That’s the main reason our stack survived without another 3 AM disaster call for the past 2 years.
 
-### The Takeaway
-
+## The Takeaway
 WordPress isn’t the problem. It’s how you run it.
 Keep it patched, keep it isolated, and keep your guardrails up or you’ll eventually end up in the same nightmare call I did

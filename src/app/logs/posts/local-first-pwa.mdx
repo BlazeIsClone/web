@@ -20,8 +20,7 @@ So we designed the catalog around a simple architectural:
 
 > Load the inventory once, keep it close to the user, filter it locally, and ask the server only when something has changed.
 
-### Performance as sales infrastructure
-
+## Performance as sales infrastructure
 Traditional inventory websites often assume the network sits in the middle of every interaction. The user selects a filter, the client sends a request, the server applies the filter, and the UI updates when the response comes back.
 
 That model is reasonable for many public websites. It is less reasonable for a sales tool used throughout the day on shared showroom iPads.
@@ -30,8 +29,7 @@ A sales agent does not experience filtering as a backend query. They experience 
 
 Instead of treating the device as a thin client, we let it hold the inventory and do most of the interactive work itself.
 
-### Thinking Local First
-
+## Thinking Local First
 The most important decision was also the simplest, fetch the full inventory in one request.
 
 ```ts
@@ -49,8 +47,7 @@ Loading the full inventory upfront creates a larger initial payload. But the cat
 
 The payoff is that every filter interaction feels instant. The network is removed from the critical path of the sales conversation.
 
-### Making repeat visits immediate
-
+## Making repeat visits immediate
 The obvious risk of loading the full inventory is startup time.
 
 A large payload might be acceptable once, but it cannot become a tax every time an agent opens the catalog. A showroom tablet should not feel like it is starting from zero every session.
@@ -75,8 +72,7 @@ This is what makes the upfront payload practical. The catalog pays the cost once
 
 IndexedDB is important here because the inventory is too large and too valuable for `localStorage`. Vehicle records include metadata, pricing, categorization, image URLs, status fields, and other catalog data. IndexedDB gives the app larger asynchronous storage without blocking the main thread.
 
-### Streaming realtime inventory updates
-
+## Streaming realtime inventory updates
 Local first browsing creates a freshness problem. If inventory is cached for performance, what happens when a vehicle sells, changes status, or becomes unavailable? A fast catalog is not useful if it confidently shows stale information.
 
 The naive answer was polling, ask the server every few seconds or minutes whether anything changed. But we saw that this would create unnecessary network hops and burn our Server Less Cloud budget.
@@ -101,8 +97,7 @@ TanStack Query handles fetching, caching, deduping, updating the UI, and reconci
 
 **With this architecture the catalog can be aggressive about local performance without becoming careless about accuracy.**
 
-### What changed
-
+## What changed
 The takeaway is that architecture should always thrive to match the environment where the product is used.
 
 That is why the catalog is built around a local first browsing experience. Load the inventory once. Keep it on the device. Filter it locally. Cache as much as possible. Use a server signal to refresh when something changes.

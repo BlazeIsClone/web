@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import type { BlogPosting, WithContext } from "schema-dts";
+import type { BlogPosting, BreadcrumbList, WithContext } from "schema-dts";
 import { CustomMDX } from "@/components/mdx";
 import { formatDate, getBlogPosts } from "@/app/logs/utils";
 import { baseUrl } from "@/app/sitemap";
@@ -65,6 +65,8 @@ export default async function Blog({ params }: any) {
     notFound();
   }
 
+  const postUrl = `${baseUrl}/logs/${post.slug}`;
+
   const postSchema: WithContext<BlogPosting> = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -75,11 +77,40 @@ export default async function Blog({ params }: any) {
     image: post.metadata.image
       ? `${baseUrl}${post.metadata.image}`
       : `${baseUrl}/og-image.jpg`,
-    url: `${baseUrl}/logs/${post.slug}`,
+    url: postUrl,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": postUrl,
+    },
     author: {
       "@type": "Person",
       name: "Sandev Abeykoon",
     },
+  };
+
+  const breadcrumbSchema: WithContext<BreadcrumbList> = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: baseUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Logs",
+        item: `${baseUrl}/logs`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.metadata.title,
+        item: postUrl,
+      },
+    ],
   };
 
   return (
@@ -88,6 +119,11 @@ export default async function Blog({ params }: any) {
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(postSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <Link href={`/logs/${post.slug}`}>
         <h1 className="title font-semibold text-xl tracking-tighter">
