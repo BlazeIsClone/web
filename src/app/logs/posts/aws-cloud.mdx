@@ -1,26 +1,37 @@
 ---
-title: "Building On AWS Cloud"
+title: "Falling Down the AWS Rabbit Hole"
 publishedAt: "2026-04-02"
-summary: "My hands on experience learning and building in AWS"
+summary: "How getting curious about AWS turned into an actual Solutions Architect certification"
 ---
 
-When we think of a typical AWS architecture we would assume something like the following diagram but then we realize it's just hosting a WordPress website.
+## Why AWS Looked Overbuilt
+
+A typical AWS reference architecture diagram can look like this, even when it's for something as ordinary as a WordPress site.
 
 ![AWS WordPress Architecture](/images/aws-wordpress-architecture.webp)
 
-Looks scary right but we could assume we are not just hosting a WordPress Blog but a high traffic news website that gets frequent traffic spikes and high volume traffic.
-We also need to meet complience requirements and maintain maximum security. That's where AWS can truly deliver value to meet our business expectations.
+For a long time that's how I read AWS. An intimidating diagram wrapped around what was really just server hosting. I figured most of it was bespoke infrastructure configuration hidden behind a UI, and you were paying more for the privilege of clicking buttons instead of SSH-ing into a box. Getting curious enough to actually dig into how AWS works changed that, and that curiosity eventually pulled me through the [AWS Certified Solutions Architect – Associate](https://aws.amazon.com/certification/certified-solutions-architect-associate/) certification. At enterprise scale, a lot of what looks like unnecessary complexity turns out to be solving real problems.
 
-### The Cloud
+## High Availability
 
-Cloud platforms such as Amazon Web Services, it is fairly common for virtual machine instances to become unavailable without warning, as the platform is designed to prioritize flexibility and elasticity over single-machine reliability. Hence there is a move towards systems that can tolerate the loss of entire machines, by using software fault-tolerance techniques in preference to hardware redundancy.
-Such systems also have operational advantages: a single-server system requires planned downtime if you need to reboot the machine (to apply operating system security patches, for example), whereas a system that can tolerate machine failure can be patched one node at a time, without downtime of the entire system.
+On AWS it's common for a VM instance to become unavailable without warning. The platform prioritizes flexibility and elasticity over any single machine staying up, so you build systems that can tolerate losing an entire instance through software fault-tolerance rather than hardware redundancy. A single server needs planned downtime to patch the OS. A system built to tolerate machine failure can be patched one node at a time without taking anything down. Doesn't matter much until you're the one keeping something alive through a host failure at 3am.
 
-### AWS Global Infrastructure
+## How AWS Prices Compute
 
-AWS claims to have the most secure, reliable, and extensive global cloud infrastructure that spans across 123 Availability Zones within 39 Geographic Regions with announced plans for 7 more Availability Zones and 2 more AWS Regions in the Kingdom of Saudi Arabia, and Chile.
+The other thing that clicked was how compute pricing matches how unpredictable a workload actually is. On-Demand covers the traffic spike you can't forecast. Reserved Instances and Savings Plans exist because if you already know a workload runs steadily for a year, committing upfront is a lot cheaper than paying On-Demand the whole time. Spot Instances are there for workloads that can tolerate interruption in exchange for a steep discount. Different workloads carry different risk, and treating them all the same is how teams end up overpaying.
 
-### Notes
+## Compliance and Shared Responsibility
 
-1. Game Servers - Where global infrastructure is vital to make sure that players don't fall into an unfair disadvantage because of latency.
-2. Health Care - Complience with data regulations both in transit and at rest.
+Compliance was the part I underestimated. Geographic restrictions and data residency sound like a checkbox until you're an enterprise guaranteeing EU customer data never leaves EU soil, or a healthcare company meeting regulations on data in transit and at rest. AWS splits responsibility for this down the middle. AWS covers security *of* the cloud: physical data centers, hardware, the global network, the virtualization layer. You cover security *in* the cloud: IAM configuration, encryption, security groups, whatever you actually build on top of it. "We're on AWS" was never a real answer to "is this secure."
+
+## Global Infrastructure and Latency
+
+AWS runs 123 Availability Zones across 39 regions, with more coming to Saudi Arabia and Chile. On paper that's just a number. It matters the moment you're building something latency-sensitive, and gaming is the clearest case — a player routed through a region on the other side of the planet is at a real disadvantage that has nothing to do with skill.
+
+[AWS Global Accelerator](https://aws.amazon.com/global-accelerator/) is where this gets interesting. Normal internet traffic hops between ISPs and transit providers until it eventually reaches your region. Global Accelerator uses anycast IPs to pull traffic onto AWS's own backbone at the nearest edge location instead, then routes it internally the rest of the way. The messy, unpredictable part of the trip gets cut down to a single hop. Combined with AZs spread across enough regions that "nearest edge" is actually close for most players, that's a hard setup to replicate without either AWS's edge footprint or its private network. For competitive matchmaking specifically, I haven't seen another cloud provider match it.
+
+## The Credential
+
+None of this is really about AWS having better technology than running your own servers — a lot of the underlying pieces existed before the cloud did. What changed my mind was seeing how AWS packages decades of enterprise infrastructure problems into services a small team can actually operate, without needing a dedicated ops org for each one.
+
+[![AWS Certified Solutions Architect – Associate badge](/images/aws-saa-badge.webp)](https://www.credly.com/badges/9fdfe798-e0db-49d2-9b42-29c6b92a421b/linked_in_profile)
