@@ -4,6 +4,9 @@ export const metadata = {
   title: "Sandev Abeykoon - Field Logs",
   description:
     "Insights, experiments, and stories to follow along with my journey",
+  alternates: {
+    canonical: "/logs",
+  },
 };
 
 export default function Page() {
