@@ -6,16 +6,62 @@ summary: "Use JWTs to authenticate separate API Microservice"
 
 > Microservice architecture is an approach to developing applications as a suite of small, individually deployable services.
 
-### JSON Web Tokens
+## JSON Web Tokens
 
 JSON Web Token (JWT, pronounced "jot") is a compact, self-contained way to transmit information between services as a JSON object — commonly used in HTTP Authorization headers for token-based authentication.
 
 The solution I came up with to handle user data is an Identity Provider Service (IDP). The IDP is responsible for signing JWTs with asymmetric keys (RS256) and storing user information. The Identity Provider also exposes a public endpoint that returns the public key as a JWK (JSON Web Key), which can be used to validate tokens issued by the IDP. Ideally, external services would cache the JWK to reduce traffic back to the IDP.
 
-But this poses another issue — we would have to implement token validation logic in every internal service. This is where an API Gateway comes in. The API Gateway sits between the frontend client and the API servers, acting as a checkpoint. It caches the JWK from the IDP endpoint and validates all incoming requests, meaning features like JWK validation, rate-limiting, and SSL termination only need to be implemented once at the gateway level rather than across every internal service. An added improvement is to have the API Gateway decode the JWT and forward the claims as headers — for example, `x-jwt-email: person@email.com` — so internal services can consume user data without needing to touch the token themselves.
+I built [the IDP itself](https://github.com/anthane-git/identity-api) using NestJS and TypeScript, with Prisma as the ORM, `argon2` for password hashing, and `passport-jwt` for authentication strategies. Swagger generates the API docs automatically, and Docker handles both dev and production environments. The setup keeps things lean but fully documented.
 
-I found inspiration for this implementation from various sources and this was one of the first system designs I've completed building, so let me know if there are any loopholes or improvements worth exploring.
+One of the key architectural decisions was using two separate RSA key pairs, each 4096-bit. I generated these with `openssl genrsa` — one pair for signing access tokens, another for refresh tokens. Both use RS256. This separation means that if one key were ever compromised, the scope of exposure is limited. Access tokens expire after 30 minutes; refresh tokens after 7 days. The refresh token is stored as an httpOnly cookie, which the browser sends automatically but never exposes to JavaScript. The access token, meanwhile, is returned in the response body so the client can hold it in memory or localStorage — this is a deliberate trade-off: access tokens are short-lived and can be cached client-side without the same security risk.
 
-### Identity Provider
+## The API Gateway Pattern
 
-The Identity and access management provider (IDP for short) acts as a gatekeeper in between Anthane's services to regulate access to only authorized users. One of its primary goals is to be a Single Sign On (SSO) service where users wouldn't have to go through the login screen each time they try to access services.
+But here's the thing: if every internal service validates JWTs independently, you're duplicating a lot of logic. This is where an API Gateway comes in. The API Gateway sits between the frontend client and the API servers, acting as a checkpoint. It caches the JWK from the IDP endpoint and validates all incoming requests, meaning features like JWK validation, rate-limiting, and SSL termination only need to be implemented once at the gateway level rather than across every internal service. I leaned on [this Stack Overflow thread](https://stackoverflow.com/questions/56147281/use-jwt-to-authenticate-separate-api-microservice) while working through this part — the idea of caching the JWK at the gateway instead of hitting the IDP on every request came directly from that discussion.
+
+An added improvement is to have the API Gateway decode the JWT and forward the claims as headers — for example, `x-jwt-email: person@email.com` — so internal services can consume user data without needing to touch the token themselves. This turns the gateway into a trust boundary: if the request made it past the gateway, the downstream service knows it's legitimate.
+
+## Consuming the IDP
+
+On the frontend side, every service in the Anthane ecosystem talks to the IDP through a shared package, [`@anthane/core-services`](https://github.com/anthane-git/core-services) — an Axios wrapper published to npm rather than reimplemented per project. The client instance itself is simple:
+
+```ts
+export const client = axios.create({
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
+});
+
+client.interceptors.request.use(onRequest, onRequestError);
+client.interceptors.response.use(onResponse, onResponseError);
+```
+
+`withCredentials: true` is doing a lot of the work here — it's what lets the browser attach the httpOnly refresh-token cookie automatically on every request back to the IDP, without any client-side code ever touching it directly.
+
+The request interceptor is where it gets interesting. Rather than storing the access token anywhere client-side and attaching it from memory, every outgoing request calls `/auth/refresh-token` first and grabs a fresh access token off the refresh cookie:
+
+```ts
+export const onRequest = async (request) => {
+  try {
+    const response = await refreshToken();
+    if (response.status === 200) {
+      request.headers = {
+        Authorization: `Bearer ${response.data.access_token}`,
+      };
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      window.location.href = routes.identityProvider.login;
+    }
+  }
+  return request;
+};
+```
+
+That's a real trade-off worth naming: the access token never sits in JS-reachable memory or localStorage, which shrinks what an XSS payload could steal, at the cost of an extra round trip to the IDP before every API call. The response interceptor backs the same flow — a `401` triggers one retry through the refresh flow before giving up and redirecting to the login screen with a `redirect_uri` pointing back to wherever the user was, which is what makes the SSO experience feel seamless instead of dumping people at a blank login page.
+
+Worth flagging as-is rather than as a mistake I caught later: the retry guard in that response interceptor (`let refresh = false`) is scoped inside the function, so it resets on every call instead of persisting across requests — it doesn't actually stop two requests that 401 at the same moment from each firing their own refresh call. Small detail, but the kind of thing that matters more once there's real concurrent traffic instead of a single tab making one request at a time.
+
+## Identity Provider
+
+The Identity and Access Management provider (IDP for short) acts as a gatekeeper between Anthane's services to regulate access to only authorized users. One of its primary goals is to be a Single Sign-On (SSO) service where users wouldn't have to go through the login screen each time they try to access services. The IDP sits upstream of everything — it's the source of truth for who can access what, and every downstream service trusts the tokens it issues (verified through the cached public key). This architecture means authentication logic lives in one place, token expiration is enforced consistently, and revocation becomes a gateway-level concern rather than something each service needs to handle independently.
