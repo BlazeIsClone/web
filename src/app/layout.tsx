@@ -9,7 +9,8 @@ import { baseUrl } from "@/app/sitemap";
 import "./globals.css";
 
 const title = "Sandev Abeykoon - Dev Log";
-const description = "I build cool things for the web.";
+const description =
+  "Field notes from Sandev Abeykoon, a full-stack engineer who works with everything computers and servers — cloud infrastructure, distributed systems, and whatever else breaks along the way.";
 const ogImage = `${baseUrl}/og-image.jpg`;
 
 export const metadata: Metadata = {
@@ -51,6 +52,14 @@ const personSchema: WithContext<Person> = {
   sameAs: [
     "https://github.com/BlazeIsClone",
     "mailto:sandevabeykoon123@gmail.com",
+  ],
+  knowsAbout: [
+    "Distributed Systems",
+    "Cloud Infrastructure",
+    "AWS",
+    "Progressive Web Apps",
+    "Microservice Authentication",
+    "DevOps",
   ],
 };
 

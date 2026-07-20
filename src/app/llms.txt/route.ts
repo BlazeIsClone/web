@@ -11,7 +11,7 @@ export async function GET() {
   const lines = [
     "# Sandev Abeykoon - Dev Log",
     "",
-    "> Field notes from Sandev Abeykoon, a full-stack engineer — deep dives on distributed systems, cloud infrastructure, PWAs, and microservice auth.",
+    "> Field notes from Sandev Abeykoon, a full-stack engineer who works with everything computers and servers — cloud infrastructure, distributed systems, and whatever else breaks along the way.",
     "",
     "## Logs",
     "",
