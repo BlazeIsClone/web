@@ -42,13 +42,13 @@ export default function Footer() {
             className="flex items-center transition-all"
             rel="noopener noreferrer"
             target="_blank"
-            href="mailto:sandevabeykoon123@gmail.com"
+            href="mailto:sandev@blaze64.dev"
             onClick={() =>
               posthog.capture("footer_link_clicked", { link: "email" })
             }
           >
             <ArrowIcon />
-            <p className="ml-3 h-6">sandevabeykoon123@gmail.com</p>
+            <p className="ml-3 h-6">sandev@blaze64.dev</p>
           </a>
         </li>
       </ul>

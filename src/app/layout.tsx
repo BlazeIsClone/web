@@ -49,10 +49,7 @@ const personSchema: WithContext<Person> = {
   description:
     "I build cool things for the web and I am always open to exciting challenges.",
   url: baseUrl,
-  sameAs: [
-    "https://github.com/BlazeIsClone",
-    "mailto:sandevabeykoon123@gmail.com",
-  ],
+  sameAs: ["https://github.com/BlazeIsClone", "mailto:sandev@blaze64.dev"],
   knowsAbout: [
     "Distributed Systems",
     "Cloud Infrastructure",
