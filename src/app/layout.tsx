@@ -10,7 +10,7 @@ import "./globals.css";
 
 const title = "Sandev Abeykoon - Dev Log";
 const description =
-  "Field notes from Sandev Abeykoon, a full-stack engineer who works with everything computers and servers — cloud infrastructure, distributed systems, and whatever else breaks along the way.";
+  "Field notes from Sandev Abeykoon, a full-stack engineer covering cloud infrastructure, distributed systems, and whatever else breaks along the way.";
 const ogImage = `${baseUrl}/og-image.jpg`;
 
 export const metadata: Metadata = {
