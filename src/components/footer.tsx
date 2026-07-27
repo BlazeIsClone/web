@@ -40,8 +40,6 @@ export default function Footer() {
         <li>
           <a
             className="flex items-center transition-all"
-            rel="noopener noreferrer"
-            target="_blank"
             href="mailto:sandev@blaze64.dev"
             onClick={() =>
               posthog.capture("footer_link_clicked", { link: "email" })
