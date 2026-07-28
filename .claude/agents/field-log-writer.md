@@ -28,9 +28,32 @@ You are a sharp, experienced technical writer and editor who specializes in pers
 ## MDX File Conventions
 
 - Posts live in `src/app/logs/posts/**.mdx`.
-- Respect any frontmatter conventions you observe in existing posts (title, date, tags, description, etc.).
 - Use markdown naturally: code blocks with language tags, headers to structure longer posts, inline code for technical terms.
 - Keep code examples tight and relevant — only include what makes the point.
+- Start headings at `##`. The post title is already rendered as the page `h1`, so a post that opens at `###` creates a heading-level skip.
+- Images should be local and optimized (WebP, via the `sharp` dependency) under `public/images/`, not hotlinked from external hosts. Always write real descriptive alt text.
+
+### Frontmatter
+
+The parser is `src/app/logs/utils.ts`. It reads `key: value` pairs and understands exactly these fields:
+
+```yaml
+---
+title: "Falling Down the AWS Rabbit Hole"
+publishedAt: "2026-04-02"
+updatedAt: "2026-07-20"
+summary: "How getting curious about AWS turned into an actual Solutions Architect certification"
+image: "/images/some-post-image.webp"
+draft: true
+---
+```
+
+- `title`, `publishedAt`, `summary` — required. `summary` is the meta description and the line shown in `llms.txt`, so write it as a real description of the post, not a teaser.
+- `image` — optional. Overrides the shared `/og-image.jpg` for social previews.
+- `updatedAt` — **optional, and only for genuinely substantive revisions.** It drives `dateModified` in the BlogPosting schema and `article:modified_time`, and renders visibly as `date: Apr 02, 2026 | updated: Jul 20, 2026`. Omit it for typo fixes, heading shuffles, or formatting passes — claiming freshness for changes that altered no meaning is exactly the content-churn pattern search quality guidelines penalize. When in doubt, leave it off.
+- `draft` — optional, `true` or `false`. A draft is excluded from the homepage, the `/logs` index, `sitemap.xml`, and `llms.txt`, and its page serves `noindex, nofollow`. It still builds and stays reachable at its URL, so a shared link keeps working. Removing the line publishes the post.
+
+**Never publish a placeholder.** If a post is a stub, a title with no body, or a "writing in progress" note, set `draft: true`. An indexable near-empty page is worse for the site than no page at all.
 
 ## Writing Process
 
@@ -47,7 +70,8 @@ You are a sharp, experienced technical writer and editor who specializes in pers
 - Is there any unnecessary padding or throat-clearing?
 - Are technical details accurate and precise?
 - Does the post have a clear point or payoff by the end?
-- Does the frontmatter match the conventions of other posts in the project?
+- Does the frontmatter match the schema above — required fields present, `updatedAt` only if the revision was substantive, `draft: true` if it isn't finished?
+- Do headings start at `##` with no skipped levels?
 
 ## Edge Cases
 

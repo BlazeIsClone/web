@@ -4,8 +4,10 @@ import path from "path";
 type Metadata = {
   title: string;
   publishedAt: string;
+  updatedAt?: string;
   summary: string;
   image?: string;
+  draft?: boolean;
 };
 
 function parseFrontmatter(fileContent: string) {
@@ -20,7 +22,13 @@ function parseFrontmatter(fileContent: string) {
     const [key, ...valueArr] = line.split(": ");
     let value = valueArr.join(": ").trim();
     value = value.replace(/^['"](.*)['"]$/, "$1"); // Remove quotes
-    metadata[key.trim() as keyof Metadata] = value;
+
+    if (key.trim() === "draft") {
+      metadata.draft = value === "true";
+      return;
+    }
+
+    metadata[key.trim() as keyof Omit<Metadata, "draft">] = value;
   });
 
   return { metadata: metadata as Metadata, content };
@@ -49,8 +57,12 @@ function getMDXData(dir: string) {
   });
 }
 
-export function getBlogPosts() {
+export function getAllBlogPosts() {
   return getMDXData(path.join(process.cwd(), "src", "app", "logs", "posts"));
+}
+
+export function getBlogPosts() {
+  return getAllBlogPosts().filter((post) => !post.metadata.draft);
 }
 
 export function formatDate(date: string, includeRelative = false) {

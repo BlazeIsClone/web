@@ -46,10 +46,14 @@ const personSchema: WithContext<Person> = {
   "@type": "Person",
   name: "Sandev Abeykoon",
   jobTitle: "Full-Stack Engineer",
-  description:
-    "I build cool things for the web and I am always open to exciting challenges.",
+  description,
   url: baseUrl,
-  sameAs: ["https://github.com/BlazeIsClone", "mailto:sandev@blaze64.dev"],
+  sameAs: [
+    "https://github.com/BlazeIsClone",
+    "https://www.linkedin.com/in/sandev-abeykoon/",
+    "https://stackoverflow.com/users/13940160/sandev-abeykoon",
+    "mailto:sandev@blaze64.dev",
+  ],
   knowsAbout: [
     "Distributed Systems",
     "Cloud Infrastructure",

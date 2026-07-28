@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 import type { BlogPosting, BreadcrumbList, WithContext } from "schema-dts";
 import { CustomMDX } from "@/components/mdx";
-import { formatDate, getBlogPosts } from "@/app/logs/utils";
+import { formatDate, getAllBlogPosts } from "@/app/logs/utils";
 import { baseUrl } from "@/app/sitemap";
 import Link from "next/link";
 
 export async function generateStaticParams() {
-  const posts = getBlogPosts();
+  const posts = getAllBlogPosts();
 
   return posts.map((post) => ({
     slug: post.slug,
@@ -15,7 +15,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: any) {
   const { slug } = await params;
-  const post = getBlogPosts().find((post) => post.slug === slug);
+  const post = getAllBlogPosts().find((post) => post.slug === slug);
   if (!post) {
     return;
   }
@@ -23,14 +23,17 @@ export async function generateMetadata({ params }: any) {
   const {
     title,
     publishedAt: publishedTime,
+    updatedAt: modifiedTime,
     summary: description,
     image,
+    draft,
   } = post.metadata;
   const ogImage = image ? `${baseUrl}${image}` : `${baseUrl}/og-image.jpg`;
 
   return {
     title,
     description,
+    robots: draft ? { index: false, follow: false } : undefined,
     alternates: {
       canonical: `/logs/${post.slug}`,
     },
@@ -39,6 +42,7 @@ export async function generateMetadata({ params }: any) {
       description,
       type: "article",
       publishedTime,
+      modifiedTime,
       url: `${baseUrl}/logs/${post.slug}`,
       images: [
         {
@@ -59,7 +63,7 @@ export async function generateMetadata({ params }: any) {
 
 export default async function Blog({ params }: any) {
   const { slug } = await params;
-  const post = getBlogPosts().find((post) => post.slug === slug);
+  const post = getAllBlogPosts().find((post) => post.slug === slug);
 
   if (!post) {
     notFound();
@@ -72,7 +76,7 @@ export default async function Blog({ params }: any) {
     "@type": "BlogPosting",
     headline: post.metadata.title,
     datePublished: post.metadata.publishedAt,
-    dateModified: post.metadata.publishedAt,
+    dateModified: post.metadata.updatedAt ?? post.metadata.publishedAt,
     description: post.metadata.summary,
     image: post.metadata.image
       ? `${baseUrl}${post.metadata.image}`
@@ -131,11 +135,17 @@ export default async function Blog({ params }: any) {
         </h1>
       </Link>
       <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm">date: {formatDate(post.metadata.publishedAt)}</p>
+        <p className="text-sm">
+          date: {formatDate(post.metadata.publishedAt)}
+          {post.metadata.updatedAt
+            ? ` | updated: ${formatDate(post.metadata.updatedAt)}`
+            : ""}
+        </p>
       </div>
       <article className="prose">
         <CustomMDX source={post.content} />
       </article>
+      <p className="mt-8 text-sm">by Sandev Abeykoon</p>
     </section>
   );
 }
