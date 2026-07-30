@@ -8,7 +8,7 @@ import { baseUrl } from "@/app/sitemap";
 
 import "./globals.css";
 
-const title = "Sandev Abeykoon - Dev Log";
+const title = "Sandev Abeykoon - Full-Stack Engineer";
 const description =
   "Field notes from Sandev Abeykoon, a full-stack engineer covering cloud infrastructure, distributed systems, and whatever else breaks along the way.";
 const ogImage = `${baseUrl}/og-image.jpg`;
