@@ -1,8 +1,10 @@
 import { BlogPosts } from "@/components/posts";
+import { graph, JsonLd, person } from "@/seo";
 
 export default function Page() {
   return (
     <section>
+      <JsonLd schema={graph(person)} />
       <div className="mb-6 flex items-center gap-2">
         <h1
           className="text-xl font-semibold tracking-tighter outline-offset-4 outline-gray-400"

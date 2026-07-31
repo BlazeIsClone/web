@@ -11,6 +11,9 @@ const navItems = {
   "/logs": {
     name: "/logs",
   },
+  "/whoami": {
+    name: "/whoami",
+  },
 };
 
 export function Header() {

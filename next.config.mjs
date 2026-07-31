@@ -16,6 +16,15 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/about",
+        destination: "/whoami",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

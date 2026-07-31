@@ -1,5 +1,5 @@
 import { getBlogPosts } from "@/app/logs/utils";
-import { baseUrl } from "@/app/sitemap";
+import { pageUrl, routes, siteName } from "@/seo";
 
 export async function GET() {
   const posts = getBlogPosts().sort((a, b) =>
@@ -9,15 +9,19 @@ export async function GET() {
   );
 
   const lines = [
-    "# Sandev Abeykoon - Dev Log",
+    `# ${siteName}`,
     "",
     "> Field notes from Sandev Abeykoon, a full-stack engineer who works with everything computers and servers — cloud infrastructure, distributed systems, and whatever else breaks along the way.",
+    "",
+    "## About",
+    "",
+    `- [About Sandev Abeykoon](${pageUrl(routes.whoami)}): Full-stack engineer and AWS Certified Solutions Architect – Associate. Background, tooling, and how to get in touch.`,
     "",
     "## Logs",
     "",
     ...posts.map(
       (post) =>
-        `- [${post.metadata.title}](${baseUrl}/logs/${post.slug}): ${post.metadata.summary}`
+        `- [${post.metadata.title}](${pageUrl(routes.post(post.slug))}): ${post.metadata.summary}`
     ),
   ];
 

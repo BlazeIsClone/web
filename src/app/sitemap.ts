@@ -1,17 +1,25 @@
 import { getBlogPosts } from "@/app/logs/utils";
-
-export const baseUrl = "https://blaze64.dev";
+import { baseUrl, lastUpdated, pageUrl, routes } from "@/seo";
 
 export default async function sitemap() {
   const blogs = getBlogPosts().map((post) => ({
-    url: `${baseUrl}/logs/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
+    url: pageUrl(routes.post(post.slug)),
+    lastModified: post.metadata.updatedAt ?? post.metadata.publishedAt,
   }));
 
-  const routes = ["", "/logs"].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString().split("T")[0],
+  const latestPost = blogs
+    .map((blog) => blog.lastModified)
+    .sort()
+    .at(-1);
+
+  const listings = [routes.home, routes.logs].map((route) => ({
+    url: pageUrl(route),
+    lastModified: latestPost,
   }));
 
-  return [...routes, ...blogs];
+  return [
+    ...listings,
+    { url: `${baseUrl}${routes.whoami}`, lastModified: lastUpdated.whoami },
+    ...blogs,
+  ];
 }

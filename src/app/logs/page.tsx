@@ -1,37 +1,43 @@
-import type { Blog, WithContext } from "schema-dts";
+import type { Metadata } from "next";
 import { BlogPosts } from "@/components/posts";
-import { baseUrl } from "@/app/sitemap";
+import {
+  baseUrl,
+  breadcrumb,
+  copy,
+  graph,
+  JsonLd,
+  pageMetadata,
+  pageUrl,
+  personRef,
+  routes,
+} from "@/seo";
 
-export const metadata = {
-  title: "Sandev Abeykoon - Field Logs",
-  description:
-    "Insights, experiments, and stories to follow along with my journey",
-  alternates: {
-    canonical: "/logs",
-  },
-};
+const url = pageUrl(routes.logs);
 
-const blogSchema: WithContext<Blog> = {
-  "@context": "https://schema.org",
-  "@type": "Blog",
-  name: "Sandev Abeykoon - Field Logs",
-  description:
-    "Insights, experiments, and stories to follow along with my journey",
-  url: `${baseUrl}/logs`,
-  author: {
-    "@type": "Person",
-    name: "Sandev Abeykoon",
+export const metadata: Metadata = pageMetadata({
+  ...copy.logs,
+  path: routes.logs,
+});
+
+const blogSchema = graph(
+  {
+    "@type": "Blog",
+    "@id": `${url}#blog`,
+    name: copy.logs.title,
+    description: copy.logs.description,
+    url,
+    author: personRef,
   },
-};
+  breadcrumb(`${url}#breadcrumb`, [
+    { name: "Home", url: baseUrl },
+    { name: "Logs" },
+  ]),
+);
 
 export default function Page() {
   return (
     <section>
-      <script
-        type="application/ld+json"
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
-      />
+      <JsonLd schema={blogSchema} />
       <h1 className="font-semibold text-xl mb-8 tracking-tighter">{`/logs`}</h1>
       <BlogPosts />
     </section>
