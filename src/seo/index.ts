@@ -21,4 +21,5 @@ export { copy } from "./copy";
 export { pageMetadata } from "./metadata";
 export { graph, breadcrumb, ref, pageRef } from "./schema";
 export { person, personRef, personId, personName } from "./person";
+export { website, siteId } from "./site";
 export { JsonLd } from "./json-ld";

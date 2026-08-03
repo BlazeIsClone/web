@@ -65,6 +65,21 @@ export function getBlogPosts() {
   return getAllBlogPosts().filter((post) => !post.metadata.draft);
 }
 
+/**
+ * Published posts, newest first, optionally capped. Both the rendered listing
+ * and the homepage `ItemList` schema read from here so the two can never
+ * disagree about which posts are shown or in what order.
+ */
+export function getRecentPosts(limit?: number) {
+  const posts = getBlogPosts().sort(
+    (a, b) =>
+      new Date(b.metadata.publishedAt).getTime() -
+      new Date(a.metadata.publishedAt).getTime(),
+  );
+
+  return limit ? posts.slice(0, limit) : posts;
+}
+
 export function formatDate(date: string, includeRelative = false) {
   const currentDate = new Date();
   if (!date.includes("T")) {

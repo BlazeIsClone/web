@@ -1,25 +1,14 @@
 import Link from "next/link";
-import { formatDate, getBlogPosts } from "@/app/logs/utils";
+import { formatDate, getRecentPosts } from "@/app/logs/utils";
 
 interface Props {
   maxPosts?: number;
 }
 
 export function BlogPosts({ maxPosts }: Props) {
-  const allBlogs = getBlogPosts();
-
   return (
     <div>
-      {allBlogs
-        .sort((a, b) => {
-          if (
-            new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)
-          ) {
-            return -1;
-          }
-          return 1;
-        })
-        .slice(0, maxPosts ?? allBlogs.length)
+      {getRecentPosts(maxPosts)
         .map((post) => (
           <Link
             key={post.slug}
