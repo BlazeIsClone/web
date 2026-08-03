@@ -37,7 +37,7 @@ const config: Config = {
               fontSize: "15px",
             },
             h2: {
-              fontSize: "20px",
+              fontSize: "18px",
             },
             h3: {
               fontSize: "17px",
