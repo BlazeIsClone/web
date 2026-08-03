@@ -1,6 +1,7 @@
 ---
 title: "Local First PWA with IndexedDB & SSE"
 publishedAt: "2026-06-25"
+updatedAt: "2026-08-03"
 summary: "Designing a Dealership Inventory Catalog with IndexedDB and TanStack Start"
 ---
 
@@ -77,21 +78,62 @@ Local first browsing creates a freshness problem. If inventory is cached for per
 
 The naive answer was polling, ask the server every few seconds or minutes whether anything changed. But we saw that this would create unnecessary network hops and burn our Server Less Cloud budget.
 
-Instead, the catalog uses a lightweight Server Sent Events channel.
+Instead, the catalog uses a lightweight Server Sent Events channel. The interesting part is not the transport, it is what sits behind it.
+
+Inventory does not really change in the browser. It changes in the Dealer Management System, when a vehicle is sold, repriced, marked in transit, or pulled from the floor. Our API server watches that, and we model it with RxJS. Every DMS change is pushed into a subject, and one shared pipeline turns that noisy source into a clean signal.
+
+```ts
+const inventoryChanges$ = new Subject<InventoryChange>();
+
+export const publishInventoryChange = (change: InventoryChange) =>
+  inventoryChanges$.next(change);
+
+const feed$ = inventoryChanges$.pipe(
+  debounceTime(300),
+  map(() => currentInventoryHash()),
+  distinctUntilChanged(),
+  share(),
+);
+```
+
+`debounceTime` collapses a burst of changes, an overnight sync or a batch status update, into one signal instead of forty. `distinctUntilChanged` drops anything that did not actually move the inventory hash. `share()` is the one that matters for cost, the pipeline runs once no matter how many iPads are connected, and every subscriber reads from the same stream.
+
+Each open SSE connection is just a subscription to that shared feed:
+
+```ts
+app.get("/v1/vehicles/events", (req, res) => {
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    Connection: "keep-alive",
+  });
+
+  const subscription = feed$.subscribe((hash) => {
+    res.write(`data: ${JSON.stringify({ hash })}\n\n`);
+  });
+
+  req.on("close", () => subscription.unsubscribe());
+});
+```
+
+**RxJS is what lets the server do the watching once and tell everyone at the same time, instead of every device asking the same question on its own schedule.**
+
+That keeps the client thin. It listens, compares the hash to the last one it saw, and does nothing until that hash changes:
 
 ```ts
 const es = new EventSource(`${API_BASE}/v1/vehicles/events`);
 
 es.onmessage = (event) => {
-  const { updates } = JSON.parse(event.data);
+  const { hash } = JSON.parse(event.data);
 
-  if (updates.length()) {
+  if (hash !== lastHash) {
+    lastHash = hash;
     queryClient.invalidateQueries({ queryKey: ["inventory"] });
   }
 };
 ```
 
-The client keeps track of the last hash it saw for each feed. If a new event contains the same hash, nothing happens. If a hash changes, the client invalidates the inventory query and lets TanStack Query handle the refetch.
+When the hash changes, the client invalidates the inventory query and lets TanStack Query handle the refetch.
 
 TanStack Query handles fetching, caching, deduping, updating the UI, and reconciling the new inventory.
 
