@@ -43,6 +43,7 @@ export const person: Person = {
   sameAs: [
     "https://github.com/BlazeIsClone",
     "https://www.linkedin.com/in/sandev-abeykoon/",
+    "https://lk.linkedin.com/in/sandev-abeykoon",
     "https://stackoverflow.com/users/13940160/sandev-abeykoon",
   ],
   knowsAbout: [
@@ -56,7 +57,6 @@ export const person: Person = {
   alumniOf: {
     "@type": "CollegeOrUniversity",
     name: "NIBM School of Design, National Innovation Centre",
-    // nibm.lk 301s here — use the post-redirect canonical.
     url: "https://nibm.ac.lk",
   },
   hasCredential: {

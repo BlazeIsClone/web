@@ -26,7 +26,7 @@ export default function Footer() {
         <li>
           <a
             className="flex items-center transition-all"
-            rel="noopener noreferrer"
+            rel="me noopener noreferrer"
             target="_blank"
             href="https://github.com/BlazeIsClone"
             onClick={() =>

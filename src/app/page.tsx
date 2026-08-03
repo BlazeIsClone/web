@@ -16,11 +16,6 @@ const url = pageUrl(routes.home);
 
 const MAX_POSTS = 10;
 
-/**
- * The homepage is a hub, not a profile — it describes the site and lists the
- * logs, and points at `/whoami#person` for the author rather than restating
- * the Person node that page owns.
- */
 const homeSchema = graph(website, {
   "@type": "CollectionPage",
   "@id": `${url}#webpage`,

@@ -156,7 +156,7 @@ export default function About() {
           <a
             href="https://github.com/BlazeIsClone"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="me noopener noreferrer"
           >
             GitHub
           </a>
@@ -164,7 +164,7 @@ export default function About() {
           <a
             href="https://www.linkedin.com/in/sandev-abeykoon/"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="me noopener noreferrer"
           >
             LinkedIn
           </a>
@@ -172,7 +172,7 @@ export default function About() {
           <a
             href="https://stackoverflow.com/users/13940160/sandev-abeykoon"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="me noopener noreferrer"
           >
             Stack Overflow
           </a>

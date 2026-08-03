@@ -65,11 +65,7 @@ export function getBlogPosts() {
   return getAllBlogPosts().filter((post) => !post.metadata.draft);
 }
 
-/**
- * Published posts, newest first, optionally capped. Both the rendered listing
- * and the homepage `ItemList` schema read from here so the two can never
- * disagree about which posts are shown or in what order.
- */
+/** Shared by the rendered listing and the homepage `ItemList` so the two can't drift. */
 export function getRecentPosts(limit?: number) {
   const posts = getBlogPosts().sort(
     (a, b) =>
