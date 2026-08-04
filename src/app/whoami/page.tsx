@@ -14,6 +14,7 @@ import {
   personName,
   ref,
   routes,
+  skillGroups,
 } from "@/seo";
 
 const url = pageUrl(routes.whoami);
@@ -118,6 +119,16 @@ export default function About() {
           Ubuntu is my favourite operating system but at the moment I&apos;m
           stuck with Windows. I have a desktop PC with a dual monitor setup.
         </p>
+        <p>
+          I keep this list current with the tech I build and ship day to day:
+        </p>
+        <ul>
+          {skillGroups.map((group) => (
+            <li key={group.name}>
+              <strong>{group.name}:</strong> {group.items.join(", ")}
+            </li>
+          ))}
+        </ul>
 
         <h2>what i&apos;m learning now</h2>
         <p>
