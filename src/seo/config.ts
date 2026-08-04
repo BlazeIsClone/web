@@ -25,7 +25,7 @@ export const routes = {
  * `lastmod` so the two can never disagree.
  */
 export const lastUpdated = {
-  whoami: "2026-07-31",
+  whoami: "2026-08-04",
 } as const;
 
 /** Route path -> absolute URL. Root collapses to a bare origin, no trailing slash. */

@@ -40,6 +40,8 @@ A self-contained module — everything outside `src/seo/` imports only from `@/s
 
 `src/app/sitemap.ts`, `src/app/robots.ts`, and `src/app/llms.txt/route.ts` all derive their content from `getBlogPosts()` at request/build time, so they self-maintain as posts are added, edited, or drafted/published — don't hand-maintain lists in these files.
 
+`llms.txt` additionally summarizes the author for LLM grounding (role, employer, certification, skills, profile links). Those facts come from the plain-data constants in `src/seo/person.ts` (`currentEmployer`, `credential`, `personProfiles`, `skillGroups`, `personSkills`, `personJobTitle`, `personEmail`, `personDescription`) — the same constants the `Person` JSON-LD is built from, so the schema and `llms.txt` can't disagree. Change the fact in `person.ts`, not in the route. `skillGroups` is the full stack list and renders on `/whoami` as well; `personSkills` is the deliberately shorter `knowsAbout` subset — keep it a subset rather than mirroring the whole list. Prose-only facts on `/whoami` (employment history before the current role, education, current learning focus) are summarized in the route itself and must be kept in step with the page by hand.
+
 ### Analytics (PostHog)
 
 - `instrumentation-client.ts` initializes `posthog-js` client-side.
