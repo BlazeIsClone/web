@@ -46,8 +46,31 @@ function CustomLink(props: any) {
   return <a target="_blank" rel="noopener noreferrer" {...props} />;
 }
 
-function RoundedImage(props: any) {
-  return <Image alt={props.alt} className="rounded-lg" {...props} />;
+// 672px is the `max-w-2xl` post column.
+const IMAGE_SIZES = "(max-width: 768px) 100vw, 672px";
+
+function MdxImage({ src, alt = "" }: { src: string; alt?: string }) {
+  if (!src.startsWith("/")) {
+    // Optimising a remote image would need a `remotePatterns` entry.
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={src} alt={alt} loading="lazy" className="rounded-lg" />;
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      // Markdown carries no dimensions and `next/image` only infers them from a
+      // static import, which the runtime MDX pipeline can't produce. Nominal
+      // width, unreserved height: costs layout shift, buys srcset and lazyload.
+      width={1344}
+      height={0}
+      sizes={IMAGE_SIZES}
+      style={{ width: "100%", height: "auto" }}
+      loading="eager"
+      className="rounded-lg"
+    />
+  );
 }
 
 function Code({ children, ...props }: any) {
@@ -91,7 +114,7 @@ const components = {
   h4: createHeading(4),
   h5: createHeading(5),
   h6: createHeading(6),
-  Image: RoundedImage,
+  img: MdxImage,
   a: CustomLink,
   code: Code,
   Table,
