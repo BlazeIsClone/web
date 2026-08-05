@@ -53,6 +53,12 @@ A self-contained module — everything outside `src/seo/` imports only from `@/s
 
 Tailwind CSS v3 with `@tailwindcss/typography`. Roboto Mono is the site font. Path alias `@/*` maps to `./src/*`.
 
+### Comments
+
+Write a comment only when the **why** isn't recoverable from the code. Default to none.
+
+Not warranted: restating what the line does, narrating structure (`// now the headers`), explaining what _isn't_ there, or noting facts that go stale (how many callers a branch has today). Prefer a clearer name or an extracted function over a comment explaining an unclear one.
+
 ## Other repo context
 
 - `docs/seo-audit-report.md` is a point-in-time SEO audit with a tracked status per finding (most are resolved) — useful history, not a living doc. One item is intentionally left partial by owner decision (deepening older thin posts) and one is intentionally left as-is (`www` not resolving).
