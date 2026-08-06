@@ -53,7 +53,7 @@ function MdxImage({ src, alt = "" }: { src: string; alt?: string }) {
   if (!src.startsWith("/")) {
     // Optimising a remote image would need a `remotePatterns` entry.
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={src} alt={alt} loading="lazy" className="rounded-lg" />;
+    return <img src={src} alt={alt} loading="lazy" />;
   }
 
   return (
@@ -68,7 +68,6 @@ function MdxImage({ src, alt = "" }: { src: string; alt?: string }) {
       sizes={IMAGE_SIZES}
       style={{ width: "100%", height: "auto" }}
       loading="eager"
-      className="rounded-lg"
     />
   );
 }
