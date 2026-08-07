@@ -38,7 +38,17 @@ A self-contained module — everything outside `src/seo/` imports only from `@/s
 
 ### Dynamic SEO surfaces
 
-`src/app/sitemap.ts`, `src/app/robots.ts`, and `src/app/llms.txt/route.ts` all derive their content from `getBlogPosts()` at request/build time, so they self-maintain as posts are added, edited, or drafted/published — don't hand-maintain lists in these files.
+`src/app/sitemap.ts`, `src/app/robots.ts`, `src/app/llms.txt/route.ts`, and the three feed routes all derive their content from `getBlogPosts()` at request/build time, so they self-maintain as posts are added, edited, or drafted/published — don't hand-maintain lists in these files.
+
+### Feeds
+
+`src/app/feeds.ts` holds `buildFeed()`, the single `feed`-library definition behind all three formats — a sibling of `sitemap.ts`/`robots.ts`, since like them it consumes `logs/utils.ts` rather than belonging to the `/logs` route. The routes (`rss.xml`, `atom.xml`, `feed.json`) are thin — pick a serializer (`rss2()` / `atom1()` / `json1()`), set the content type. Add a field in `buildFeed()`, not in a route, or the formats drift.
+
+- Summary-only by design: items set `description` (the frontmatter `summary`) and never `content`, so readers follow the link back to the post.
+- Items set **both** `published` (from `publishedAt`) and `date` (from `updatedAt ?? publishedAt`). The library maps them to different elements per format — that split is what carries `updatedAt` into `<atom:updated>` and `date_modified` while `pubDate`/`date_published` stay the original date. Setting only one collapses the distinction.
+- Item `id` is required by `json1()` — it has no fallback to `link` the way `rss2()`/`atom1()` do. The cost of setting it is `<guid isPermaLink="false">` in RSS, which is valid and harmless.
+- `rss2()` silently drops the channel-level `author`, so RSS has no `managingEditor`/`webMaster`; Atom and JSON Feed do use it.
+- Channel title/description reuse `copy.logs`. Feed URLs live in `routes.rss` / `routes.atom` / `routes.jsonFeed`, and `pageMetadata()` emits all three as `<link rel="alternate">` autodiscovery tags on every page.
 
 `llms.txt` additionally summarizes the author for LLM grounding (role, employer, certification, skills, profile links). Those facts come from the plain-data constants in `src/seo/person.ts` (`currentEmployer`, `credential`, `personProfiles`, `skillGroups`, `personSkills`, `personJobTitle`, `personEmail`, `personDescription`) — the same constants the `Person` JSON-LD is built from, so the schema and `llms.txt` can't disagree. Change the fact in `person.ts`, not in the route. `skillGroups` is the full stack list and renders on `/whoami` as well; `personSkills` is the deliberately shorter `knowsAbout` subset — keep it a subset rather than mirroring the whole list. Prose-only facts on `/whoami` (employment history before the current role, education, current learning focus) are summarized in the route itself and must be kept in step with the page by hand.
 
