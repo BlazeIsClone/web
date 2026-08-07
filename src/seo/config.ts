@@ -16,6 +16,9 @@ export const routes = {
   home: "/",
   logs: "/logs",
   whoami: "/whoami",
+  rss: "/rss.xml",
+  atom: "/atom.xml",
+  jsonFeed: "/feed.json",
   post: (slug: string) => `/logs/${slug}`,
 } as const;
 
@@ -33,4 +36,5 @@ export const pageUrl = (path: string) =>
   `${baseUrl}${path === routes.home ? "" : path}`;
 
 /** Site-relative image path -> absolute URL, falling back to the site card. */
-export const imageUrl = (image?: string) => `${baseUrl}${image ?? defaultImage}`;
+export const imageUrl = (image?: string) =>
+  `${baseUrl}${image ?? defaultImage}`;

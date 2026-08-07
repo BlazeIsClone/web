@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { imageUrl, locale, pageUrl, siteName } from "./config";
+import { imageUrl, locale, pageUrl, routes, siteName } from "./config";
+import { copy } from "./copy";
 
 type PageMeta = {
   title: string;
@@ -46,6 +47,17 @@ export function pageMetadata({
     robots,
     alternates: {
       canonical: path,
+      types: {
+        "application/rss+xml": [
+          { url: routes.rss, title: `${copy.logs.title} (RSS)` },
+        ],
+        "application/atom+xml": [
+          { url: routes.atom, title: `${copy.logs.title} (Atom)` },
+        ],
+        "application/feed+json": [
+          { url: routes.jsonFeed, title: `${copy.logs.title} (JSON Feed)` },
+        ],
+      },
     },
     openGraph: {
       title,
