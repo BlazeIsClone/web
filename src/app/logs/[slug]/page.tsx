@@ -34,6 +34,7 @@ export async function generateMetadata({ params }: any) {
 
   const {
     title,
+    metaTitle,
     publishedAt: publishedTime,
     updatedAt: modifiedTime,
     summary: description,
@@ -42,7 +43,7 @@ export async function generateMetadata({ params }: any) {
   } = post.metadata;
 
   return pageMetadata({
-    title,
+    title: metaTitle ?? title,
     description,
     path: routes.post(post.slug),
     image,

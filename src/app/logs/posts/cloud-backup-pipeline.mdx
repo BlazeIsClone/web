@@ -1,7 +1,8 @@
 ---
 title: "Cloud Backup Pipeline"
+metaTitle: "Cloud Backup Pipeline with Reusable GitHub Actions Workflows"
 publishedAt: "2026-01-04"
-summary: "Cloud backup pipeline using reusable GitHub workflows."
+summary: "Automating MySQL and filesystem backups to S3-compatible object storage with reusable GitHub Actions workflows, retention limits and scrapeable metrics."
 ---
 
 Uses AWS-compatible S3 storage to store application databases and filesystem backup snapshots and retains only a specified count of backups to prevent storage overflow. The pipeline pushes metrics to a MySQL database which can be scaped for monitoring.
