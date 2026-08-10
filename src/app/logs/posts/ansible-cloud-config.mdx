@@ -6,7 +6,7 @@ summary: "Replacing manual SSH server setup with Ansible playbooks: provisioning
 ---
 
 ## Why We Still Love the VPS
-Deploying on a VPS gives us total control over the kernel, the networking stack, and the filesystem. It’s predictable, cost-effective, and when managed correctly it's incredibly performant. However, the downside of a VPS has always been the "manual labor" of keeping it online. That’s exactly why Cloud Config exists.
+Deploying on a VPS gives us total control over the kernel, the networking stack, and the filesystem. It’s predictable, cost-effective, and when managed correctly it's incredibly performant. Unlike a [bare-metal homelab server](/logs/building-on-premise-server), a VPS trades hands-on hardware control for managed compute. However, the downside of a VPS has always been the "manual labor" of keeping it online. That’s exactly why Cloud Config exists.
 
 ## The Cloud Config
 Instead of SSH ing into a box and running commands by hand, we use Infrastructure as Code (IaC).
@@ -21,7 +21,7 @@ What started as a way to automate server setups has evolved into a concrete arch
 Why move? While Ubuntu is great, Debian’s community-driven nature and longer release cycles offer the kind of "boring stability" that web servers crave.
 
 ## The Cloud Philosophy
-On paper, any compute provider works. In practice, I’m leaning toward DigitalOcean and AWS EC2. I’ve noted some IPv6 quirks with Google Compute Engine, so for now, the path of least resistance is the priority.
+On paper, any compute provider works. In practice, I’m leaning toward DigitalOcean and [AWS EC2](/logs/aws-cloud). I’ve noted some IPv6 quirks with Google Compute Engine, so for now, the path of least resistance is the priority.
 
 ## Ansible
 In 2026 Ansible is adopted by many Fortune 500 companies, Uber operates across five global regions, their infrastructure encompasses around 5,000 devices.
@@ -44,6 +44,7 @@ We take security very seriously and ensure that we do everything we can to prote
 
 We emulate project or application level isolation via multiple layers of security practices, this includes user groups, ACLs and AppArmor.
 During a attack or a malware infection this architecture ensures that the treat is contained within the bounds of the application and will not potentially impact any other applications or even the system at large.
+Hardened servers like this still need the [monitoring system](/logs/monitoring-system) to catch anomalies and the [cloud backup pipeline](/logs/cloud-backup-pipeline) to protect data.
 
 ![filesystem permissions](/images/filesystem-permissions.webp)
 
