@@ -5,17 +5,19 @@ publishedAt: "2026-01-04"
 summary: "Automating MySQL and filesystem backups to S3-compatible object storage with reusable GitHub Actions workflows, retention limits and scrapeable metrics."
 ---
 
-Uses AWS-compatible S3 storage to store application databases and filesystem backup snapshots and retains only a specified count of backups to prevent storage overflow. The pipeline pushes metrics to a MySQL database which can be scaped for monitoring.
+Uses AWS-compatible S3 storage to store application databases and filesystem backup snapshots and retains only a specified count of backups to prevent storage overflow. The pipeline pushes metrics to a MySQL database which can be scaped for monitoring. This is the scaled-up cousin of the [earlier backup CLI](/logs/backup-cli) for automated cloud-native backups.
 
 ## Capabilities
 - MySQL database backups via mysqldump.
 - File system backups using UNIX zip.
-- AWS S3 Compatible Object Storage backups.
+- AWS S3 Compatible Object Storage backups, leveraging the [storage reliability](/logs/aws-cloud) AWS provides.
 
 ## Technologies
 - GitHub Actions: handles workflow exceution and automation steps.
 - AWS CLI: Used to access and manage the cloud object storage.
 - AWS S3 Compatible Object Storage: Storage warehouse for archiving the backups and can hold years of storage.
+
+The metrics it pushes feed into the [monitoring system](/logs/monitoring-system) so backup health is part of your observability layer.
 
 [https://github.com/maya-hive/cloud-backup-pipeline](https://github.com/maya-hive/cloud-backup-pipeline)
 

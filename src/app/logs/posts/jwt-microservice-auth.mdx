@@ -20,13 +20,17 @@ One of the key architectural decisions was using two separate RSA key pairs, eac
 
 ## The API Gateway Pattern
 
-But here's the thing: if every internal service validates JWTs independently, you're duplicating a lot of logic. This is where an API Gateway comes in. The API Gateway sits between the frontend client and the API servers, acting as a checkpoint. It caches the JWK from the IDP endpoint and validates all incoming requests, meaning features like JWK validation, rate-limiting, and SSL termination only need to be implemented once at the gateway level rather than across every internal service. I leaned on [this Stack Overflow thread](https://stackoverflow.com/questions/56147281/use-jwt-to-authenticate-separate-api-microservice) while working through this part — the idea of caching the JWK at the gateway instead of hitting the IDP on every request came directly from that discussion.
+But here's the thing: if every internal service validates JWTs independently, you're duplicating a lot of logic. This is where an API Gateway comes in. The API Gateway sits between the frontend client and the API servers, acting as a checkpoint. It caches the JWK from the IDP endpoint and validates all incoming requests, meaning features like JWK validation, rate-limiting, and SSL termination only need to be implemented once at the gateway level rather than across every internal service. This is a concrete instantiation of the [distributed systems](/logs/distributed-architecture) principle of establishing trust boundaries at the network edge.
+
+I leaned on [this Stack Overflow thread](https://stackoverflow.com/questions/56147281/use-jwt-to-authenticate-separate-api-microservice) while working through this part — the idea of caching the JWK at the gateway instead of hitting the IDP on every request came directly from that discussion.
 
 An added improvement is to have the API Gateway decode the JWT and forward the claims as headers — for example, `x-jwt-email: person@email.com` — so internal services can consume user data without needing to touch the token themselves. This turns the gateway into a trust boundary: if the request made it past the gateway, the downstream service knows it's legitimate.
 
 ## Consuming the IDP
 
-On the frontend side, every service in the Anthane ecosystem talks to the IDP through a shared package, [`@anthane/core-services`](https://github.com/anthane-git/core-services) — an Axios wrapper published to npm rather than reimplemented per project. The client instance itself is simple:
+On the frontend side, every service in the Anthane ecosystem talks to the IDP through a shared package, [`@anthane/core-services`](https://github.com/anthane-git/core-services) — an Axios wrapper published to npm rather than reimplemented per project. This pattern mirrors the approach in [local-first PWAs](/logs/local-first-pwa) where client-side architecture decisions hinge on trust and sync with the server.
+
+The client instance itself is simple:
 
 ```ts
 export const client = axios.create({
@@ -67,3 +71,5 @@ Worth flagging as-is rather than as a mistake I caught later: the retry guard in
 ## Identity Provider
 
 The Identity and Access Management provider (IDP for short) acts as a gatekeeper between Anthane's services to regulate access to only authorized users. One of its primary goals is to be a Single Sign-On (SSO) service where users wouldn't have to go through the login screen each time they try to access services. The IDP sits upstream of everything — it's the source of truth for who can access what, and every downstream service trusts the tokens it issues (verified through the cached public key). This architecture means authentication logic lives in one place, token expiration is enforced consistently, and revocation becomes a gateway-level concern rather than something each service needs to handle independently.
+
+Other realtime projects in the ecosystem, like the [hive bug tracker](/logs/hive-bug-tracker), operate in the same TypeScript/React architectural space with similar trust and sync concerns.

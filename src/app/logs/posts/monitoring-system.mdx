@@ -7,6 +7,8 @@ summary: "Building an observability stack with Prometheus and Grafana: dashboard
 
 Logs are our paper trail. When something goes wrong, we need them to be accessible and simple to search, they turn guesswork into evidence and speed resolution.
 
+Whether it's the [on-premise server](/logs/building-on-premise-server), a [hardened VPS](/logs/ansible-cloud-config), or any deployed application, observability is what turns silent failures into actionable alerts.
+
 Here are some some hard-learned lessons building and running our observability mesh, also known as the "Observatory".
 
 ![Car Crash](/images/family-guy-car-crash.gif)
@@ -15,7 +17,7 @@ If anything’s bound to crash, it’s production at 5 PM on a friday.
 
 ## Blind spots exposed: no resource monitoring, no alerts, just vibes
 We learned the hard way that running services without proper monitoring is like arguing a
-case without evidence. Everything looks fine until it doesn’t.
+case without evidence. Everything looks fine until it doesn’t. Observability matters even more in [distributed systems](/logs/distributed-architecture) where partial failures can hide inside complexity.
 
 ## Prometheus + Grafana dashboards
 That’s when we brought in Prometheus and Grafana. Suddenly, dashboards became our exhibits,
@@ -36,4 +38,4 @@ One of our earliest mistakes was throwing hardware at every problem.
 
 ## Closing the case
 Every incident leaves behind a paper trail, and with observability,
-we’re finally keeping it organized. Logs, metrics, and alerts work together as our evidence.
+we’re finally keeping it organized. Logs, metrics, and alerts work together as our evidence. The [cloud backup pipeline](/logs/cloud-backup-pipeline) even feeds scrapeable metrics into this same observability layer to track backup health.

@@ -8,6 +8,7 @@ summary: "Escaping Kubernetes cloud bills with a bare metal home server: spare-p
 I wanted to venture into Kubernetes, so I kicked off on Google Kubernetes Engine (GKE) and the 300 USD credits they give you as a head start.
 Well two months in I happen to run out of it all, naturally during the learning process I happened to abuse their node autoscaler with a
 multi region cluster but nonetheless It soon got me to realize how expensive it was to run even a couple node cluster with a little spec.
+Self-hosting as a bare-metal homelab felt like a better path than going all-in on [AWS or the cloud](/logs/aws-cloud).
 
 ### Hardware
 
@@ -57,6 +58,7 @@ it’s a double edged sword anyways since they need to readout our data to make 
 
 First application I hosted was a NextJS starter, cloned it onto one of my VM’s slapped on with [PM2](https://pm2.keymetrics.io/) which takes care of running the NodeJS process.
 And too soon enough we were live after configuring the port binding on Cloudflare Tunnel Config from their dashboard.
+This manual setup contrasts with the [hardened VPS config](/logs/ansible-cloud-config) where all of this gets automated.
 
 ### Full Anonymity
 
@@ -66,3 +68,5 @@ Again it’s exposing a virtual machine running on our hypervisor which means no
 There is one possible entry point via the local network which can be infiltrated through but this will require that person to be in proximity to our server location.
 The next is the domain, Iceland has domain registrars which hold domain leases on their behalf so we can technically get them to reserve us a domain for this they accept crypto currencies.
 For all of this we’ll need an email address with an inbox for that we’ll have to stick with disposable email provider.
+
+Once deployed, the [monitoring system](/logs/monitoring-system) ensures the server stays healthy and visible when issues arise.
