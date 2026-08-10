@@ -25,7 +25,7 @@ So we designed the catalog around a simple architectural:
 ## Performance as sales infrastructure
 Traditional inventory websites often assume the network sits in the middle of every interaction. The user selects a filter, the client sends a request, the server applies the filter, and the UI updates when the response comes back.
 
-That model is reasonable for many public websites. It is less reasonable for a sales tool used throughout the day on shared showroom iPads.
+That model is reasonable for many public websites. It is less reasonable for a sales tool used throughout the day on shared showroom iPads. The challenge mirrors what [API auth boundaries](/logs/jwt-microservice-auth) face: deciding what the client can trust locally versus what requires a server roundtrip.
 
 A sales agent does not experience filtering as a backend query. They experience it as part of a conversation. If the customer asks to see available Bentleys under a certain price range, the agent needs to answer immediately. If the customer changes their mind and asks for Rolls Royce instead, the catalog should respond at the pace of speech, not the pace of Wi-Fi.
 
@@ -143,7 +143,9 @@ TanStack Query handles fetching, caching, deduping, updating the UI, and reconci
 ## What changed
 The takeaway is that architecture should always thrive to match the environment where the product is used.
 
-That is why the catalog is built around a local first browsing experience. Load the inventory once. Keep it on the device. Filter it locally. Cache as much as possible. Use a server signal to refresh when something changes.
+That is why the catalog is built around a local first browsing experience. Load the inventory once. Keep it on the device. Filter it locally. Cache as much as possible. Use a server signal to refresh when something changes. The cache-invalidation and consistency tradeoffs here echo the [distributed systems theory](/logs/distributed-architecture) behind CAP and PACELC.
+
+The [hive bug tracker](/logs/hive-bug-tracker) uses the same TanStack ecosystem to solve realtime sync in a different domain.
 
 - For the agent, the catalog opens quickly, responds immediately, and keeps up with the speed of the conversation.
 - For the business, that means fewer interruptions, more confident sales agents.

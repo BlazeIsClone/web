@@ -51,6 +51,8 @@ The following two patterns are the "how to" for managing data across multiple no
 
 2PC is a blocking protocol used to achieve atomic transactions across multiple resources.
 
+A concrete example of this tradeoff is the [microservice auth with JWTs](/logs/jwt-microservice-auth) where an API Gateway acts as a trust boundary and validation checkpoint.
+
 #### 2. Saga Pattern — The "AP" Approach
 
 A Saga manages a distributed transaction as a sequence of local transactions. Each step updates its own database and triggers the next step.
@@ -68,3 +70,5 @@ ACID Compliance with service to service interactions.
 Transactional Outbox pattern in event driven design.
 
 Why adpot domain driven design and package by component coding styles.
+
+The [AWS high availability architecture](/logs/aws-cloud) applies these tradeoffs in practice, while [local-first PWAs](/logs/local-first-pwa) show how cache invalidation and consistency decisions shape client-side architecture.

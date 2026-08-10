@@ -11,8 +11,8 @@ But soon we wanted more and that was a place to keep everything organized and st
 ![chamilion slideshow](/images/chamilion-slideshow.webp)
 
 ## 12 months of progress
-The first version was bootstrapped in no time, and we onboarded our first client right away. Built on Laravel with no fancy libraries or frontend frameworks, just a sturdy backend we could rely on.
-It’s been a year since that initial release. Since then, we’ve gone through a few lifecycle shifts, and today you can create quotations, manage recurring invoices, and preview revenue analytics.
+The first version was bootstrapped in no time, and we onboarded our first client right away. Built on Laravel with no fancy libraries or frontend frameworks, just a sturdy backend we could rely on. Production SaaS like this typically runs on [hardened Nginx/PHP servers](/logs/ansible-cloud-config) where every layer is locked down.
+It’s been a year since that initial release. Since then, we’ve gone through a few lifecycle shifts, and today you can create quotations, manage recurring invoices, and preview revenue analytics. A production database driving an invoicing platform needs the [cloud backup pipeline](/logs/cloud-backup-pipeline) to stay safe, and the [monitoring system](/logs/monitoring-system) to stay healthy.
 
 ![chamilion commits](/images/chamilion-commits.webp)
 
