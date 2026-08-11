@@ -1,0 +1,1006 @@
+[
+ {
+  "file": "home.html",
+  "title": "Sandev Abeykoon \u2013 Full Stack Engineer",
+  "tlen": 37,
+  "desc": "Field notes from Sandev Abeykoon, a full-stack engineer covering cloud infrastructure, distributed systems, and whatever else breaks along the way.",
+  "dlen": 147,
+  "canon": "https://blaze64.dev",
+  "robots": null,
+  "ogtype": "website",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Sandev Abeykoon \u2013 Full Stack Engineer",
+  "ogd": "Field notes from Sandev Abeykoon, a full-stack engineer covering cloud infrastructure, distributed systems, and whatever else breaks along the way.",
+  "h": [
+   [
+    "1",
+    "$ hello!, I&#x27;m Sandev Abeykoon"
+   ]
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "jsonld": [
+   "WebSite",
+   "CollectionPage"
+  ],
+  "words": 297,
+  "nint": 14,
+  "next_": 1,
+  "bytes": 27151
+ },
+ {
+  "file": "logs.html",
+  "title": "Sandev Abeykoon \u2013 Field Logs",
+  "tlen": 28,
+  "desc": "Insights, experiments, and stories to follow along with my journey",
+  "dlen": 66,
+  "canon": "https://blaze64.dev/logs",
+  "robots": null,
+  "ogtype": "website",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Sandev Abeykoon \u2013 Field Logs",
+  "ogd": "Insights, experiments, and stories to follow along with my journey",
+  "h": [
+   [
+    "1",
+    "/logs"
+   ]
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "jsonld": [
+   "Blog",
+   "BreadcrumbList"
+  ],
+  "words": 161,
+  "nint": 22,
+  "next_": 1,
+  "bytes": 25844
+ },
+ {
+  "file": "logs_a41sl-bot.html",
+  "title": "A41SL Discord Bot: Building an Open-Source discord.js Bot",
+  "tlen": 57,
+  "desc": "How a Discord bot for a gaming community became my first real backend project. Building A41SL with discord.js and Node.js, 1,000 commits deep.",
+  "dlen": 142,
+  "canon": "https://blaze64.dev/logs/a41sl-bot",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "A41SL Discord Bot: Building an Open-Source discord.js Bot",
+  "ogd": "How a Discord bot for a gaming community became my first real backend project. Building A41SL with discord.js and Node.js, 1,000 commits deep.",
+  "h": [
+   [
+    "1",
+    "A41SL Discord Bot"
+   ],
+   [
+    "2",
+    "Context: A41SL Discord Server"
+   ]
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 429,
+  "nint": 5,
+  "next_": 2,
+  "bytes": 73364
+ },
+ {
+  "file": "logs_ansible-cloud-config.html",
+  "title": "Automating VPS Setup with Ansible: IaC for Hardened Servers",
+  "tlen": 59,
+  "desc": "Replacing manual SSH server setup with Ansible playbooks: provisioning hardened Debian and Nginx VPS environments with UFW, Fail2Ban and AppArmor.",
+  "dlen": 146,
+  "canon": "https://blaze64.dev/logs/ansible-cloud-config",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Automating VPS Setup with Ansible: IaC for Hardened Servers",
+  "ogd": "Replacing manual SSH server setup with Ansible playbooks: provisioning hardened Debian and Nginx VPS environments with UFW, Fail2Ban and AppArmor.",
+  "h": [
+   [
+    "1",
+    "Automating VPS with Ansible"
+   ],
+   [
+    "2",
+    "Why We Still Love the VPS"
+   ],
+   [
+    "2",
+    "The Cloud Config"
+   ],
+   [
+    "2",
+    "The Beginning"
+   ],
+   [
+    "2",
+    "The Cloud Philosophy"
+   ],
+   [
+    "2",
+    "Ansible"
+   ],
+   [
+    "2",
+    "The Network &amp; Security Layer"
+   ],
+   [
+    "2",
+    "Swapping MySQL for MariaDB"
+   ],
+   [
+    "2",
+    "Developer Experience (DX)"
+   ]
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 721,
+  "nint": 9,
+  "next_": 2,
+  "bytes": 39494
+ },
+ {
+  "file": "logs_aws-cloud.html",
+  "title": "Falling Down the AWS Rabbit Hole: Solutions Architect Notes",
+  "tlen": 59,
+  "desc": "What actually justifies AWS complexity: high availability, EC2 pricing models, shared responsibility and Global Accelerator, from earning the SAA cert.",
+  "dlen": 151,
+  "canon": "https://blaze64.dev/logs/aws-cloud",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Falling Down the AWS Rabbit Hole: Solutions Architect Notes",
+  "ogd": "What actually justifies AWS complexity: high availability, EC2 pricing models, shared responsibility and Global Accelerator, from earning the SAA cert.",
+  "h": [
+   [
+    "1",
+    "Falling Down the AWS Rabbit Hole"
+   ],
+   [
+    "2",
+    "Why AWS Looked Overbuilt"
+   ],
+   [
+    "2",
+    "High Availability"
+   ],
+   [
+    "2",
+    "How AWS Prices Compute"
+   ],
+   [
+    "2",
+    "Compliance and Shared Responsibility"
+   ],
+   [
+    "2",
+    "Global Infrastructure and Latency"
+   ],
+   [
+    "2",
+    "The Credential"
+   ]
+  ],
+  "imgs": 2,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 682,
+  "nint": 8,
+  "next_": 4,
+  "bytes": 34707
+ },
+ {
+  "file": "logs_backup-cli.html",
+  "title": "Backup CLI: MySQL and Filesystem Backups over SFTP in Rust",
+  "tlen": 58,
+  "desc": "An interactive Rust CLI that snapshots MySQL databases and application files, then transfers them to local storage over SFTP. No flags to memorise.",
+  "dlen": 147,
+  "canon": "https://blaze64.dev/logs/backup-cli",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Backup CLI: MySQL and Filesystem Backups over SFTP in Rust",
+  "ogd": "An interactive Rust CLI that snapshots MySQL databases and application files, then transfers them to local storage over SFTP. No flags to memorise.",
+  "h": [
+   [
+    "1",
+    "Backup CLI"
+   ]
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 134,
+  "nint": 7,
+  "next_": 2,
+  "bytes": 20522
+ },
+ {
+  "file": "logs_building-chamilion-2025.html",
+  "title": "Building Chamilion: A Year Running a Laravel Invoicing SaaS",
+  "tlen": 59,
+  "desc": "Twelve months building Chamilion, a Laravel invoicing platform, from a static HTML invoice template to recurring invoices, quotations and revenue analytics.",
+  "dlen": 156,
+  "canon": "https://blaze64.dev/logs/building-chamilion-2025",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Building Chamilion: A Year Running a Laravel Invoicing SaaS",
+  "ogd": "Twelve months building Chamilion, a Laravel invoicing platform, from a static HTML invoice template to recurring invoices, quotations and revenue analytics.",
+  "h": [
+   [
+    "1",
+    "Building Chamilion 2025"
+   ],
+   [
+    "2",
+    "12 months of progress"
+   ],
+   [
+    "2",
+    "Shaping the brand"
+   ],
+   [
+    "2",
+    "The technical and the not-so-technical bits"
+   ],
+   [
+    "2",
+    "What\u2019s Ahead"
+   ]
+  ],
+  "imgs": 3,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 290,
+  "nint": 8,
+  "next_": 3,
+  "bytes": 29766
+ },
+ {
+  "file": "logs_building-on-premise-server.html",
+  "title": "Building an On-Premise Server: Bare Metal to Proxmox Homelab",
+  "tlen": 60,
+  "desc": "Escaping Kubernetes cloud bills with a bare metal home server: spare-parts hardware, Debian, a Proxmox hypervisor with LXC, and Cloudflare Argo Tunnels.",
+  "dlen": 152,
+  "canon": "https://blaze64.dev/logs/building-on-premise-server",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Building an On-Premise Server: Bare Metal to Proxmox Homelab",
+  "ogd": "Escaping Kubernetes cloud bills with a bare metal home server: spare-parts hardware, Debian, a Proxmox hypervisor with LXC, and Cloudflare Argo Tunnels.",
+  "h": [
+   [
+    "1",
+    "Building an On-Premise Server"
+   ],
+   [
+    "3",
+    "Hardware"
+   ],
+   [
+    "2",
+    "v1.0 (blaze-alpha)"
+   ],
+   [
+    "2",
+    "v2.0 (blaze-nova)"
+   ],
+   [
+    "3",
+    "Deploying a Web App"
+   ],
+   [
+    "3",
+    "Full Anonymity"
+   ]
+  ],
+  "imgs": 3,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 743,
+  "nint": 8,
+  "next_": 7,
+  "bytes": 36502
+ },
+ {
+  "file": "logs_cloud-backup-pipeline.html",
+  "title": "Cloud Backup Pipeline with Reusable GitHub Actions Workflows",
+  "tlen": 60,
+  "desc": "Automating MySQL and filesystem backups to S3-compatible object storage with reusable GitHub Actions workflows, retention limits and scrapeable metrics.",
+  "dlen": 152,
+  "canon": "https://blaze64.dev/logs/cloud-backup-pipeline",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Cloud Backup Pipeline with Reusable GitHub Actions Workflows",
+  "ogd": "Automating MySQL and filesystem backups to S3-compatible object storage with reusable GitHub Actions workflows, retention limits and scrapeable metrics.",
+  "h": [
+   [
+    "1",
+    "Cloud Backup Pipeline"
+   ],
+   [
+    "2",
+    "Capabilities"
+   ],
+   [
+    "2",
+    "Technologies"
+   ]
+  ],
+  "imgs": 1,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 132,
+  "nint": 8,
+  "next_": 2,
+  "bytes": 23677
+ },
+ {
+  "file": "logs_cost-to-make-a-website.html",
+  "title": "How Much Does a Website Cost? What to Budget and Why",
+  "tlen": 52,
+  "desc": "What a website actually costs: landing pages, templates, custom builds and e-commerce, plus domain, hosting and maintenance, and where the money really goes.",
+  "dlen": 157,
+  "canon": "https://blaze64.dev/logs/cost-to-make-a-website",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "How Much Does a Website Cost? What to Budget and Why",
+  "ogd": "What a website actually costs: landing pages, templates, custom builds and e-commerce, plus domain, hosting and maintenance, and where the money really goes.",
+  "h": [
+   [
+    "1",
+    "Cost to Have a Website"
+   ],
+   [
+    "2",
+    "Choosing the right website type and complexity"
+   ],
+   [
+    "2",
+    "DIY No-code solutions"
+   ],
+   [
+    "2",
+    "Domain Name &amp; Hosting"
+   ],
+   [
+    "2",
+    "Maintenance"
+   ]
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 362,
+  "nint": 5,
+  "next_": 1,
+  "bytes": 24885
+ },
+ {
+  "file": "logs_distributed-architecture.html",
+  "title": "Distributed Systems: CAP, PACELC, 2PC and the Saga Pattern",
+  "tlen": 58,
+  "desc": "Field notes on distributed architecture: the CAP and PACELC theorems, two-phase commit versus the Saga pattern, and the trade-offs behind each choice.",
+  "dlen": 150,
+  "canon": "https://blaze64.dev/logs/distributed-architecture",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Distributed Systems: CAP, PACELC, 2PC and the Saga Pattern",
+  "ogd": "Field notes on distributed architecture: the CAP and PACELC theorems, two-phase commit versus the Saga pattern, and the trade-offs behind each choice.",
+  "h": [
+   [
+    "1",
+    "Distributed Systems"
+   ],
+   [
+    "2",
+    "The Foundations"
+   ],
+   [
+    "3",
+    "1. CAP Theorem"
+   ],
+   [
+    "3",
+    "2. PACELC Theorem"
+   ],
+   [
+    "2",
+    "Implementation Patterns"
+   ],
+   [
+    "4",
+    "1. Two-Phase Commit (2PC) \u2014 The &quot;CP&quot; Approach"
+   ],
+   [
+    "4",
+    "2. Saga Pattern \u2014 The &quot;AP&quot; Approach"
+   ],
+   [
+    "5",
+    "1. Choreography (Event-Based)"
+   ],
+   [
+    "5",
+    "2. Orchestration (Command-Based)"
+   ],
+   [
+    "2",
+    "Notes"
+   ]
+  ],
+  "imgs": 1,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 454,
+  "nint": 8,
+  "next_": 1,
+  "bytes": 32243
+ },
+ {
+  "file": "logs_dsa-notes.html",
+  "title": "Data Structures and Algorithms: Working Notes in Python",
+  "tlen": 55,
+  "desc": "Working notes on data structures and algorithms: arrays, linked lists, queues, stacks, ring buffers, binary search, quicksort and recursive path finding.",
+  "dlen": 153,
+  "canon": "https://blaze64.dev/logs/dsa-notes",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Data Structures and Algorithms: Working Notes in Python",
+  "ogd": "Working notes on data structures and algorithms: arrays, linked lists, queues, stacks, ring buffers, binary search, quicksort and recursive path finding.",
+  "h": [
+   [
+    "1",
+    "Data Structures and Algorithms"
+   ],
+   [
+    "2",
+    "Data Structures"
+   ],
+   [
+    "3",
+    "Primitive Data Structures"
+   ],
+   [
+    "3",
+    "Abstract Data Structures"
+   ],
+   [
+    "4",
+    "1. Arrays"
+   ],
+   [
+    "4",
+    "2. Linked List"
+   ],
+   [
+    "4",
+    "3. Queue"
+   ],
+   [
+    "4",
+    "4. Stack"
+   ],
+   [
+    "4",
+    "5. Array List"
+   ],
+   [
+    "4",
+    "6. Ring Buffer"
+   ],
+   [
+    "2",
+    "Algorithms"
+   ],
+   [
+    "3",
+    "Searching Algorithms"
+   ],
+   [
+    "4",
+    "1. Linear Search"
+   ],
+   [
+    "4",
+    "2. Binary Search"
+   ],
+   [
+    "4",
+    "3. Two Crystal Balls"
+   ],
+   [
+    "3",
+    "Sorting Algorithms"
+   ],
+   [
+    "4",
+    "1. Bubble Sort"
+   ],
+   [
+    "4",
+    "1. Quick Sort"
+   ],
+   [
+    "3",
+    "Recursion"
+   ],
+   [
+    "4",
+    "1. Path Finding"
+   ]
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 3339,
+  "nint": 5,
+  "next_": 1,
+  "bytes": 683681
+ },
+ {
+  "file": "logs_game-design.html",
+  "title": "Exploring Game Design: What Goes Into Building a Video Game",
+  "tlen": 59,
+  "desc": "What actually goes into a video game: art, design, engineering, audio, writing and testing, plus why game engines exist and what they handle for you.",
+  "dlen": 149,
+  "canon": "https://blaze64.dev/logs/game-design",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Exploring Game Design: What Goes Into Building a Video Game",
+  "ogd": "What actually goes into a video game: art, design, engineering, audio, writing and testing, plus why game engines exist and what they handle for you.",
+  "h": [
+   [
+    "1",
+    "Exploring Game Design"
+   ],
+   [
+    "2",
+    "Love for Video Games"
+   ],
+   [
+    "2",
+    "What Goes Into A Video Game"
+   ],
+   [
+    "3",
+    "Interesting Facts"
+   ],
+   [
+    "3",
+    "Game Engines"
+   ]
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 188,
+  "nint": 5,
+  "next_": 3,
+  "bytes": 22864
+ },
+ {
+  "file": "logs_hive-bug-tracker.html",
+  "title": "Hive Bug Tracker: A Realtime QA Tool on Convex and TanStack",
+  "tlen": 59,
+  "desc": "Replacing a spreadsheet QA process with a realtime bug tracker on Convex, TanStack Start and React: role-based access, WebSocket sync, Cloudflare Pages edge.",
+  "dlen": 157,
+  "canon": "https://blaze64.dev/logs/hive-bug-tracker",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Hive Bug Tracker: A Realtime QA Tool on Convex and TanStack",
+  "ogd": "Replacing a spreadsheet QA process with a realtime bug tracker on Convex, TanStack Start and React: role-based access, WebSocket sync, Cloudflare Pages edge.",
+  "h": [
+   [
+    "1",
+    "Hive Bug Tracker"
+   ]
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 172,
+  "nint": 8,
+  "next_": 2,
+  "bytes": 21235
+ },
+ {
+  "file": "logs_init.html",
+  "title": "Initial Release v1.0.0: Shipping blaze64.dev on Next.js",
+  "tlen": 55,
+  "desc": "After a decade of abandoned rewrites, finally shipping something that works: this site, built on a Next.js blog starter and deployed to Vercel in an evening.",
+  "dlen": 157,
+  "canon": "https://blaze64.dev/logs/init",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Initial Release v1.0.0: Shipping blaze64.dev on Next.js",
+  "ogd": "After a decade of abandoned rewrites, finally shipping something that works: this site, built on a Next.js blog starter and deployed to Vercel in an evening.",
+  "h": [
+   [
+    "1",
+    "Initial Release v1.0.0"
+   ],
+   [
+    "2",
+    "The New Beginning"
+   ]
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 83,
+  "nint": 5,
+  "next_": 3,
+  "bytes": 19634
+ },
+ {
+  "file": "logs_jwt-microservice-auth.html",
+  "title": "Microservice Auth with JWTs: RS256, JWKs and an API Gateway",
+  "tlen": 59,
+  "desc": "Building a NestJS identity provider that signs RS256 JWTs and exposes a JWK endpoint, so an API Gateway validates requests once instead of in every service.",
+  "dlen": 156,
+  "canon": "https://blaze64.dev/logs/jwt-microservice-auth",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Microservice Auth with JWTs: RS256, JWKs and an API Gateway",
+  "ogd": "Building a NestJS identity provider that signs RS256 JWTs and exposes a JWK endpoint, so an API Gateway validates requests once instead of in every service.",
+  "h": [
+   [
+    "1",
+    "Microservice Auth with JWTs"
+   ],
+   [
+    "2",
+    "JSON Web Tokens"
+   ],
+   [
+    "2",
+    "The API Gateway Pattern"
+   ],
+   [
+    "2",
+    "Consuming the IDP"
+   ],
+   [
+    "2",
+    "Identity Provider"
+   ]
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 1113,
+  "nint": 8,
+  "next_": 4,
+  "bytes": 84652
+ },
+ {
+  "file": "logs_local-first-pwa.html",
+  "title": "Local-First PWA: IndexedDB and SSE for Instant Filtering",
+  "tlen": 56,
+  "desc": "Designing a dealership inventory catalog as a local-first PWA: load once into IndexedDB, filter in memory, and let Server-Sent Events push only what changed.",
+  "dlen": 157,
+  "canon": "https://blaze64.dev/logs/local-first-pwa",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Local-First PWA: IndexedDB and SSE for Instant Filtering",
+  "ogd": "Designing a dealership inventory catalog as a local-first PWA: load once into IndexedDB, filter in memory, and let Server-Sent Events push only what changed.",
+  "h": [
+   [
+    "1",
+    "Local First PWA with IndexedDB &amp; SSE"
+   ],
+   [
+    "2",
+    "Performance as sales infrastructure"
+   ],
+   [
+    "2",
+    "Thinking Local First"
+   ],
+   [
+    "2",
+    "Making repeat visits immediate"
+   ],
+   [
+    "2",
+    "Streaming realtime inventory updates"
+   ],
+   [
+    "2",
+    "What changed"
+   ]
+  ],
+  "imgs": 1,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 1406,
+  "nint": 8,
+  "next_": 1,
+  "bytes": 120463
+ },
+ {
+  "file": "logs_monitoring-system.html",
+  "title": "The Hive Observatory: Prometheus and Grafana Monitoring",
+  "tlen": 55,
+  "desc": "Building an observability stack with Prometheus and Grafana: dashboards, alerting rules that catch spikes before an outage, and why more RAM is not the fix.",
+  "dlen": 156,
+  "canon": "https://blaze64.dev/logs/monitoring-system",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "The Hive Observatory: Prometheus and Grafana Monitoring",
+  "ogd": "Building an observability stack with Prometheus and Grafana: dashboards, alerting rules that catch spikes before an outage, and why more RAM is not the fix.",
+  "h": [
+   [
+    "1",
+    "The Hive Observatory"
+   ],
+   [
+    "2",
+    "Blind spots exposed: no resource monitoring, no alerts, just vibes"
+   ],
+   [
+    "2",
+    "Prometheus + Grafana dashboards"
+   ],
+   [
+    "2",
+    "Alerting the right way: catching the spike before the crash"
+   ],
+   [
+    "2",
+    "When \u201cjust increase RAM\u201d isn\u2019t the solution"
+   ],
+   [
+    "2",
+    "Closing the case"
+   ]
+  ],
+  "imgs": 3,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 271,
+  "nint": 9,
+  "next_": 1,
+  "bytes": 30130
+ },
+ {
+  "file": "logs_wordpress-survival-guide.html",
+  "title": "WordPress Survival Guide: Hardening After a Malware Hack",
+  "tlen": 56,
+  "desc": "A Japanese SEO spam hack spread across a whole VPS through one outdated plugin. How we rebuilt it: per-site isolation, AppArmor, Fail2Ban and tested backups.",
+  "dlen": 157,
+  "canon": "https://blaze64.dev/logs/wordpress-survival-guide",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "WordPress Survival Guide: Hardening After a Malware Hack",
+  "ogd": "A Japanese SEO spam hack spread across a whole VPS through one outdated plugin. How we rebuilt it: per-site isolation, AppArmor, Fail2Ban and tested backups.",
+  "h": [
+   [
+    "1",
+    "WordPress Survival Guide"
+   ],
+   [
+    "3",
+    "1. Network Hardening"
+   ],
+   [
+    "3",
+    "2. Application Isolation"
+   ],
+   [
+    "2",
+    "Remote Code Execution: The Real Threat"
+   ],
+   [
+    "2",
+    "The Takeaway"
+   ]
+  ],
+  "imgs": 3,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 472,
+  "nint": 5,
+  "next_": 1,
+  "bytes": 32507
+ },
+ {
+  "file": "logs_work-and-contribution.html",
+  "title": "Work and Contribution: Build for Your Team and Yourself",
+  "tlen": 55,
+  "desc": "Great work for your employer and building something that's yours aren't competing goals: side projects, portable skills, and why the best engineers do both.",
+  "dlen": 156,
+  "canon": "https://blaze64.dev/logs/work-and-contribution",
+  "robots": null,
+  "ogtype": "article",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "Work and Contribution: Build for Your Team and Yourself",
+  "ogd": "Great work for your employer and building something that's yours aren't competing goals: side projects, portable skills, and why the best engineers do both.",
+  "h": [
+   [
+    "1",
+    "Work and Contribution"
+   ]
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "jsonld": [
+   "BlogPosting",
+   "BreadcrumbList"
+  ],
+  "words": 340,
+  "nint": 5,
+  "next_": 1,
+  "bytes": 22649
+ },
+ {
+  "file": "whoami.html",
+  "title": "About Sandev Abeykoon \u2013 Full Stack Engineer",
+  "tlen": 43,
+  "desc": "Sandev Abeykoon is a full-stack engineer and AWS Certified Solutions Architect \u2013 Associate, working across DevOps, cloud infrastructure and product engineering.",
+  "dlen": 160,
+  "canon": "https://blaze64.dev/whoami",
+  "robots": null,
+  "ogtype": "profile",
+  "ogi": "https://blaze64.dev/og-image.jpg",
+  "twc": "summary_large_image",
+  "twi": "https://blaze64.dev/og-image.jpg",
+  "ogt": "About Sandev Abeykoon \u2013 Full Stack Engineer",
+  "ogd": "Sandev Abeykoon is a full-stack engineer and AWS Certified Solutions Architect \u2013 Associate, working across DevOps, cloud infrastructure and product engineering.",
+  "h": [
+   [
+    "1",
+    "/whoami"
+   ],
+   [
+    "2",
+    "full-time work experience"
+   ],
+   [
+    "2",
+    "how i got into code"
+   ],
+   [
+    "2",
+    "my tech stack"
+   ],
+   [
+    "2",
+    "what i&#x27;m learning now"
+   ],
+   [
+    "2",
+    "certified on AWS"
+   ],
+   [
+    "2",
+    "field journal"
+   ],
+   [
+    "2",
+    "getting in touch"
+   ]
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "jsonld": [
+   "ProfilePage",
+   "Person",
+   "BreadcrumbList"
+  ],
+  "words": 461,
+  "nint": 5,
+  "next_": 6,
+  "bytes": 29053
+ }
+]

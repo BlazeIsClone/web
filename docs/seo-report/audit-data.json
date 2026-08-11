@@ -1,0 +1,318 @@
+{
+  "summary": {
+    "health_score": 78,
+    "business_type": "Personal technical blog / engineer portfolio (single-author field journal, non-commercial)",
+    "audit_date": "2026-08-11",
+    "previous_score": 69,
+    "pages_crawled": 21,
+    "top_findings": [
+      "height={0} on every MDX image causes CLS 0.370 on mobile (poor band) at /logs/wordpress-survival-guide",
+      "Three animated GIFs total 6.0 MB and are served unoptimized; a 2.68 MB GIF is the mobile LCP element",
+      "loading=\"eager\" is hardcoded in mdx.tsx, disabling lazy loading site-wide",
+      "Seven posts have zero contextual internal links; the two topic clusters connect via a single link",
+      "Domain is absent from the Common Crawl web graph — no referring domains found"
+    ],
+    "quick_wins": [
+      "Rewrite the /logs description in src/seo/copy.ts (66-char starter boilerplate; feeds page meta, Blog schema and all three feeds)",
+      "Fix the homepage/whoami DevOps timeline contradiction (\"two of them in DevOps\" vs 4y2m in schema and llms.txt)",
+      "Add LinkedIn and Stack Overflow to the footer with rel=\"me\"",
+      "Extend the /images/:path* cache header rule to cover /og-image.jpg",
+      "Fix heading skips in building-on-premise-server, wordpress-survival-guide and distributed-architecture"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 94,
+      "weight": 22,
+      "what_works": [
+        "All 21 sitemap URLs return 200 with no redirect hops",
+        "Self-referencing canonicals on every page, no conflicts",
+        "HSTS, X-Content-Type-Options, X-Frame-Options: DENY, Referrer-Policy all present",
+        "http->https 308, www->apex 301, /about->/whoami 308, real 404s on unknown paths",
+        "Both draft posts serve noindex,nofollow and are excluded from sitemap and llms.txt",
+        "TTFB 36-139 ms desktop on Vercel edge cache hits",
+        "RSS, Atom and JSON Feed all valid with correct content types and autodiscovery tags"
+      ],
+      "findings": [
+        {
+          "title": "og-image.jpg served with no cache lifetime",
+          "severity": "Low",
+          "description": "/images/* gets cache-control: public, max-age=31536000, immutable, but /og-image.jpg gets max-age=0, must-revalidate. Every social and AI crawler refetch is a full round trip for a file that changes only when the design does.",
+          "recommendation": "Extend the next.config.mjs headers() rule covering /images/:path* to include /og-image.jpg, or move the file into public/images/."
+        },
+        {
+          "title": "Legacy /og route still returns 404",
+          "severity": "Info",
+          "description": "Dynamic OG route from before the static card. Verified unreferenced by any rendered page, sitemap or feed.",
+          "recommendation": "No action; left deliberately per the July audit."
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 68,
+      "weight": 23,
+      "what_works": [
+        "Named real author with verifiable AWS Certified Solutions Architect - Associate credential linked to Credly",
+        "Current employer with a live URL; prior roles documented in prose",
+        "Every post is a first-hand build with repos, screenshots or incident detail",
+        "All 21 titles, descriptions, h1s and bodies are unique - no duplicate or near-duplicate content",
+        "No index bloat: no pagination, tag archives or parameterised URLs"
+      ],
+      "findings": [
+        {
+          "title": "Homepage contradicts /whoami, Person schema and llms.txt on the DevOps timeline",
+          "severity": "Medium",
+          "description": "Homepage copy says 'about 5 years now, two of them in DevOps and the rest in full-stack development'. /whoami, person.ts and llms.txt all state DevOps Jan 2022 - Mar 2026 (about 4y2m) and full-stack from Apr 2026 (about 4 months). The homepage inverts the split, and it is the page most likely to be retrieved when an assistant is asked about the author.",
+          "recommendation": "Amend the homepage sentence to 'about 5 years now, four of them in DevOps before moving into full-stack development.'"
+        },
+        {
+          "title": "Ten of 18 published posts are under 400 words",
+          "severity": "Medium",
+          "description": "init (86 w), backup-cli (134 w), cloud-backup-pipeline (141 w), hive-bug-tracker (175 w), game-design (203 w), monitoring-system (280 w), building-chamilion-2025 (300 w), a41sl-bot (306 w), work-and-contribution (338 w), cost-to-make-a-website (369 w). Four have no subheadings at all.",
+          "recommendation": "OWNER-ACCEPTED as of 2026-07-20 - expansion was deliberately stopped after jwt-microservice-auth and aws-cloud. No action recommended unless reopened. If reopened, cost-to-make-a-website targets the only real commercial-intent volume on the site."
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 76,
+      "weight": 20,
+      "what_works": [
+        "21 unique titles, all 28-60 chars",
+        "21 unique descriptions, 20 of them at 142-160 chars",
+        "Exactly one unique h1 per page across the whole site",
+        "The metaTitle / summary frontmatter convention keeps page h1 and SERP title independently optimised"
+      ],
+      "findings": [
+        {
+          "title": "/logs description is 66 chars of Vercel starter boilerplate",
+          "severity": "Medium",
+          "description": "'Insights, experiments, and stories to follow along with my journey' in src/seo/copy.ts:12-14 names no entity and no topic. It also supplies the Blog JSON-LD description and the channel description of all three feeds, so one weak string reaches four surfaces. Every post description on the site is better written than the hub page's.",
+          "recommendation": "Rewrite at 140-160 chars in copy.ts, e.g. 'Field logs from Sandev Abeykoon - first-hand write-ups on cloud infrastructure, DevOps, distributed systems and the projects that broke along the way.'"
+        },
+        {
+          "title": "Seven posts have zero contextual internal links in either direction",
+          "severity": "Medium",
+          "description": "Excluding site nav, the archive forms two clusters - infrastructure (ansible-cloud-config, aws-cloud, cloud-backup-pipeline, monitoring-system, building-on-premise-server, backup-cli, building-chamilion-2025) and applications (distributed-architecture, jwt-microservice-auth, local-first-pwa, hive-bug-tracker) - joined by a single link. Outside both: wordpress-survival-guide, cost-to-make-a-website, dsa-notes, game-design, init, work-and-contribution, a41sl-bot.",
+          "recommendation": "Add 2-3 in-prose contextual links per isolated post in both directions, matching the existing house style. wordpress-survival-guide is the highest priority - it is the most link-worthy asset on the site and has no internal links pointing at it."
+        },
+        {
+          "title": "Three posts skip heading levels",
+          "severity": "Low",
+          "description": "building-on-premise-server (h1 -> h3 'Hardware'), wordpress-survival-guide (h1 -> h3 '1. Network Hardening'), distributed-architecture (h2 'Implementation Patterns' -> h4). Headings are what get extracted as standalone passages for AI answers, so a broken ladder weakens retrieval.",
+          "recommendation": "Mechanical heading-level shifts in the MDX source."
+        },
+        {
+          "title": "Four posts have no subheadings at all",
+          "severity": "Medium",
+          "description": "backup-cli, hive-bug-tracker and work-and-contribution render as a bare h1 plus an unbroken block; a41sl-bot has a single h2. No structure means no extractable passages and no anchor targets.",
+          "recommendation": "Add h2s to break the existing prose into sections - no new copy required."
+        },
+        {
+          "title": "No title template, so post titles carry no brand",
+          "severity": "Low",
+          "description": "Root layout.tsx has no title.template. A SERP entry reads 'Backup CLI: MySQL and Filesystem Backups over SFTP in Rust' with nothing tying it to the site or author.",
+          "recommendation": "Optional. Most metaTitle values are already 52-60 chars and a suffix would truncate - shorten them first or skip."
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 92,
+      "weight": 10,
+      "what_works": [
+        "Every JSON-LD block parses; every @id reference resolves; no orphan nodes",
+        "One canonical Person at /whoami#person referenced by @id from WebSite.author, WebSite.publisher, CollectionPage.about, Blog.author and all 18 BlogPosting.author nodes",
+        "@context on graphs only, never on member nodes",
+        "All 18 BlogPosting nodes carry headline, datePublished, dateModified, description, image, url, mainEntityOfPage, author and isPartOf with no field missing",
+        "BreadcrumbList correctly emitted as a sibling node on BlogPosting pages rather than as an invalid breadcrumb property",
+        "Person carries jobTitle, email, sameAs, knowsAbout, alumniOf, hasCredential and worksFor as an EmployeeRole with startDate"
+      ],
+      "findings": [
+        {
+          "title": "All 18 posts share one generic BlogPosting.image",
+          "severity": "Low",
+          "description": "Every BlogPosting.image is https://blaze64.dev/og-image.jpg. Valid, but it conveys nothing about the individual post, so it adds no discriminating signal in rich results or AI previews. The per-post image frontmatter field already exists and is unused.",
+          "recommendation": "Reference the existing WebP diagram for the 11 posts that have one."
+        },
+        {
+          "title": "keywords, about, articleSection and wordCount unused",
+          "severity": "Low",
+          "description": "None affect rich-result eligibility. 'about', referencing a Thing or DefinedTerm per post, is the only one with real AI-grounding value.",
+          "recommendation": "Optional; worth it for the six substantial posts only."
+        },
+        {
+          "title": "No publisher on BlogPosting",
+          "severity": "Info",
+          "description": "Google dropped the publisher requirement for Article types, so this is not an error.",
+          "recommendation": "Add \"publisher\": personRef - one line, closes a validator warning."
+        }
+      ]
+    },
+    {
+      "name": "Performance (CWV)",
+      "score": 62,
+      "weight": 10,
+      "what_works": [
+        "19 of 21 pages measure LCP 84-492 ms with CLS 0 and 22-444 KB transfer",
+        "TTFB 36-139 ms desktop on Vercel edge cache hits",
+        "JS payload ~257 KB compressed across 9 chunks including PostHog - normal for Next.js App Router",
+        "/logs/dsa-notes is 667 KB of HTML but 23.5 KB over the wire and renders in 136-180 ms"
+      ],
+      "findings": [
+        {
+          "title": "CLS 0.370 on mobile - every image renders with height={0}",
+          "severity": "High",
+          "description": "src/components/mdx.tsx:66-67 passes width={1344} height={0} to next/image. With no intrinsic aspect ratio the browser reserves no vertical space until each image decodes. Measured 0.370 mobile (Google's poor band, >0.25) and 0.207 desktop on /logs/wordpress-survival-guide.",
+          "recommendation": "Read real dimensions at render time - images are local files under public/ and MdxImage renders on the server. sharp is already a project dependency; sharp(path).metadata() returns width and height. Cache per path; post pages are statically generated."
+        },
+        {
+          "title": "loading=\"eager\" hardcoded, disabling lazy loading site-wide",
+          "severity": "High",
+          "description": "src/components/mdx.tsx:70 forces eager loading, which disables the lazy loading the adjacent code comment claims the approach buys. On /logs/wordpress-survival-guide all three images including a 2.68 MB GIF are fetched during initial load regardless of viewport.",
+          "recommendation": "Eager-load only the first image in a post as the plausible LCP candidate; lazy-load the rest. Or drop the prop and take next/image's lazy default."
+        },
+        {
+          "title": "Three animated GIFs total 6.0 MB and are served unoptimized",
+          "severity": "High",
+          "description": "next/image passes animated GIFs through untouched - /_next/image?url=%2Fimages%2Fgodzilla-dance.gif&w=828&q=75 returns the full 2 678 977 B original, confirmed by response size. That GIF is the mobile LCP element at 1452 ms unthrottled; on a real 4G link 2.68 MB alone is roughly 13 s of transfer.",
+          "recommendation": "Re-encode to animated WebP with sharp ({ animated: true }) - typically 80-90% smaller. Lower friction than <video>, which would need a component override since the MDX pipeline maps img: to MdxImage."
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness",
+      "score": 82,
+      "weight": 10,
+      "what_works": [
+        "robots.txt fully open to every AI crawler; content server-rendered so non-JS agents receive complete text",
+        "llms.txt is self-contained: author profile, all three site pages, six grouped skill categories, all 18 posts with dates and full summaries, labelled profile links",
+        "llms.txt is generated from the same src/seo/person.ts constants that build the Person schema, so the two cannot drift",
+        "Three feed formats with correct updated / date_modified semantics distinct from publish dates",
+        "Substantial posts open with a concrete problem and use descriptive h2s that read like real questions"
+      ],
+      "findings": [
+        {
+          "title": "Domain absent from the Common Crawl web graph - no referring domains",
+          "severity": "High",
+          "description": "cc-main-2026-jan-feb-mar returns no referring domains and no PageRank or harmonic-centrality entry for blaze64.dev. This is one source rather than three (no Moz or Bing credentials configured), but absence from the host graph entirely means the domain is not linked from anywhere the crawl reached. LLM answers preferentially cite entities corroborated across independent sources.",
+          "recommendation": "Reciprocal profile links first (blaze64.dev in the GitHub website field, LinkedIn contact info and Stack Overflow about-me), then employer corroboration from bespokemotorgroup.com, then distribute the two link-worthy assets - the wordpress-survival-guide incident write-up and the jwt-microservice-auth RS256/JWK walkthrough."
+        },
+        {
+          "title": "sameAs claims outrun crawlable links",
+          "severity": "Medium",
+          "description": "Person.sameAs asserts GitHub, LinkedIn and Stack Overflow, but the footer links only GitHub (correctly with rel=\"me\") and email. LinkedIn and Stack Overflow are reachable only from /whoami.",
+          "recommendation": "Add LinkedIn and Stack Overflow to the footer with rel=\"me\" so every page carries a crawlable identity link. Note LinkedIn returns HTTP 999 to automated requests - anti-bot behaviour, not a broken link."
+        },
+        {
+          "title": "Thin posts leave little to cite",
+          "severity": "Low",
+          "description": "Roughly half the indexable surface is under 400 words, and four posts have no subheadings for passage-level retrieval to anchor to.",
+          "recommendation": "Owner-accepted trade-off; noted because it caps the GEO score independently of anything technical."
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 55,
+      "weight": 5,
+      "what_works": [
+        "100% alt-text coverage across all 21 rendered img elements, several genuinely descriptive",
+        "20 of 23 files in public/images/ are WebP at 4-135 KB",
+        "og-image.jpg is now 25 KB, down from the 581 KB flagged in the July audit",
+        "Responsive srcset generated across 8 breakpoints with sizes matching the max-w-2xl post column"
+      ],
+      "findings": [
+        {
+          "title": "Three animated GIFs total 6.0 MB",
+          "severity": "High",
+          "description": "godzilla-dance.gif (2 678 977 B, wordpress-survival-guide.mdx:8), family-guy-car-crash.gif (2 040 477 B, monitoring-system.mdx:14), dark-souls.gif (1 285 453 B, socials.mdx:16, draft). 20x the largest WebP on the site and not re-encodable by next/image.",
+          "recommendation": "Re-encode to animated WebP with sharp, or convert to a muted looping video."
+        },
+        {
+          "title": "No image dimensions - every image ships height=\"0\"",
+          "severity": "High",
+          "description": "src/components/mdx.tsx:66-67. No intrinsic aspect ratio means guaranteed layout shift on every image-bearing post.",
+          "recommendation": "Read real dimensions via sharp in the server-rendered MdxImage component."
+        },
+        {
+          "title": "Lazy loading disabled site-wide",
+          "severity": "High",
+          "description": "loading=\"eager\" hardcoded at src/components/mdx.tsx:70 means a 2.04 MB GIF on monitoring-system loads before the reader scrolls to it.",
+          "recommendation": "Eager-load the first image per post only."
+        },
+        {
+          "title": "Fallback src requests the 3840px variant",
+          "severity": "Low",
+          "description": "Every image's src attribute is ...&w=3840&q=75. Modern browsers use srcset and ignore it, so real-world impact is minimal.",
+          "recommendation": "No dedicated fix needed; resolves once real dimensions are passed."
+        }
+      ]
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Image pipeline (one component + asset pass)",
+        "timeframe": "Week 1",
+        "items": [
+          "H1: Give MDX images real dimensions via sharp metadata in MdxImage - fixes CLS 0.370 mobile / 0.207 desktop",
+          "H2: Restore lazy loading - eager for the first image per post only",
+          "H3: Re-encode godzilla-dance.gif, family-guy-car-crash.gif and dark-souls.gif to animated WebP (6.0 MB -> ~0.6-1.2 MB expected)"
+        ]
+      },
+      {
+        "name": "Phase 2: Structure and copy",
+        "timeframe": "Weeks 2-3",
+        "items": [
+          "H4: Add contextual internal links to the seven isolated posts and bridge the infra and application clusters",
+          "M1: Rewrite the /logs description in src/seo/copy.ts (fixes page meta, Blog schema and all three feeds at once)",
+          "M2: Fix the homepage DevOps timeline to match /whoami, the Person schema and llms.txt",
+          "M3: Add LinkedIn and Stack Overflow to the footer with rel=\"me\", and add blaze64.dev to those profiles"
+        ]
+      },
+      {
+        "name": "Phase 3: Polish",
+        "timeframe": "Month 2",
+        "items": [
+          "L1: Fix heading skips in building-on-premise-server, wordpress-survival-guide and distributed-architecture",
+          "L2: Add subheadings to backup-cli, hive-bug-tracker, work-and-contribution and a41sl-bot",
+          "L3: Extend the /images/:path* cache header rule to cover /og-image.jpg",
+          "L4: Consider a title.template for brand suffixing (shorten metaTitle values first)",
+          "L5: Per-post BlogPosting.image for the 11 posts with an existing WebP diagram",
+          "L6: Add publisher: personRef to BlogPosting"
+        ]
+      },
+      {
+        "name": "Phase 4: Authority and measurement",
+        "timeframe": "Ongoing",
+        "items": [
+          "O1: External corroboration - reciprocal profile links, employer link from bespokemotorgroup.com, distribute the wordpress-survival-guide and jwt-microservice-auth posts to HN / r/selfhosted / r/devops / lobste.rs",
+          "O2: Configure Google API credentials (CrUX, Search Console, GA4) and backlink APIs (Moz, Bing Webmaster) so the next audit uses field data instead of lab estimates",
+          "O3: Content depth remains owner-declined as of 2026-07-20 - no action unless reopened"
+        ]
+      }
+    ]
+  },
+  "measurements": {
+    "cwv_method": "Playwright headless Chromium 1228, PerformanceObserver, unthrottled, 390x844 mobile @2x and 1440x900 desktop. No CrUX field data available.",
+    "worst_cls": {"url": "/logs/wordpress-survival-guide", "device": "mobile", "value": 0.3703},
+    "worst_lcp": {"url": "/logs/wordpress-survival-guide", "device": "mobile", "value_ms": 1452, "element": "godzilla-dance.gif"},
+    "heaviest_page_kb": {"url": "/logs/wordpress-survival-guide", "transfer_kb": 2683},
+    "backlinks": {"source": "Common Crawl cc-main-2026-jan-feb-mar", "referring_domains": 0, "pagerank": null}
+  },
+  "unavailable_data": [
+    "CrUX field Core Web Vitals (no Google API key)",
+    "Search Console indexation and query data (no OAuth)",
+    "GA4 organic traffic (no OAuth)",
+    "Moz DA/PA and spam score (no API key)",
+    "Bing Webmaster link data (no API key)"
+  ],
+  "artifacts": {
+    "findings_dir": "findings/",
+    "screenshots_dir": "screenshots/",
+    "raw_dir": "raw/"
+  }
+}
