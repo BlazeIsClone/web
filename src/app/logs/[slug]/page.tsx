@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { CustomMDX } from "@/components/mdx";
 import { formatDate, getAllBlogPosts } from "@/app/logs/utils";
 import {
   baseUrl,
@@ -65,6 +64,8 @@ export default async function Blog({ params }: any) {
     notFound();
   }
 
+  const { default: Post } = await import(`../posts/${post.slug}/index.mdx`);
+
   const postUrl = pageUrl(routes.post(post.slug));
 
   const postSchema = graph(
@@ -105,7 +106,7 @@ export default async function Blog({ params }: any) {
         </p>
       </div>
       <article className="prose">
-        <CustomMDX source={post.content} />
+        <Post />
       </article>
       <p className="mt-8 text-sm">
         by <Link href="/whoami">{personName}</Link>

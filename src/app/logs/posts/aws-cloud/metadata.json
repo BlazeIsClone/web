@@ -1,0 +1,7 @@
+{
+  "title": "Falling Down the AWS Rabbit Hole",
+  "metaTitle": "Falling Down the AWS Rabbit Hole: Solutions Architect Notes",
+  "publishedAt": "2026-04-02",
+  "updatedAt": "2026-07-20",
+  "summary": "What actually justifies AWS complexity: high availability, EC2 pricing models, shared responsibility and Global Accelerator, from earning the SAA cert."
+}

@@ -1,0 +1,7 @@
+{
+  "title": "Microservice Auth with JWTs",
+  "metaTitle": "Microservice Auth with JWTs: RS256, JWKs and an API Gateway",
+  "publishedAt": "2026-04-11",
+  "updatedAt": "2026-07-20",
+  "summary": "Building a NestJS identity provider that signs RS256 JWTs and exposes a JWK endpoint, so an API Gateway validates requests once instead of in every service."
+}

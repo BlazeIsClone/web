@@ -1,0 +1,6 @@
+{
+  "title": "Building an On-Premise Server",
+  "metaTitle": "Building an On-Premise Server: Bare Metal to Proxmox Homelab",
+  "publishedAt": "2025-03-16",
+  "summary": "Escaping Kubernetes cloud bills with a bare metal home server: spare-parts hardware, Debian, a Proxmox hypervisor with LXC, and Cloudflare Argo Tunnels."
+}

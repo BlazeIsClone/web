@@ -1,0 +1,6 @@
+{
+  "title": "Distributed Systems",
+  "metaTitle": "Distributed Systems: CAP, PACELC, 2PC and the Saga Pattern",
+  "publishedAt": "2026-05-02",
+  "summary": "Field notes on distributed architecture: the CAP and PACELC theorems, two-phase commit versus the Saga pattern, and the trade-offs behind each choice."
+}

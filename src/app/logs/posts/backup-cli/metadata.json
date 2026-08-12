@@ -1,0 +1,6 @@
+{
+  "title": "Backup CLI",
+  "metaTitle": "Backup CLI: MySQL and Filesystem Backups over SFTP in Rust",
+  "publishedAt": "2025-03-15",
+  "summary": "An interactive Rust CLI that snapshots MySQL databases and application files, then transfers them to local storage over SFTP. No flags to memorise."
+}

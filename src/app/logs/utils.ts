@@ -11,55 +11,25 @@ type Metadata = {
   draft?: boolean;
 };
 
-function parseFrontmatter(fileContent: string) {
-  const frontmatterRegex = /---\s*([\s\S]*?)\s*---/;
-  const match = frontmatterRegex.exec(fileContent);
-  const frontMatterBlock = match![1];
-  const content = fileContent.replace(frontmatterRegex, "").trim();
-  const frontMatterLines = frontMatterBlock.trim().split("\n");
-  const metadata: Partial<Metadata> = {};
-
-  frontMatterLines.forEach((line) => {
-    const [key, ...valueArr] = line.split(": ");
-    let value = valueArr.join(": ").trim();
-    value = value.replace(/^['"](.*)['"]$/, "$1"); // Remove quotes
-
-    if (key.trim() === "draft") {
-      metadata.draft = value === "true";
-      return;
-    }
-
-    metadata[key.trim() as keyof Omit<Metadata, "draft">] = value;
-  });
-
-  return { metadata: metadata as Metadata, content };
+function getPostDirs(dir: string) {
+  return fs
+    .readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name);
 }
 
-function getMDXFiles(dir: string) {
-  return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx");
-}
-
-function readMDXFile(filePath: string) {
-  const rawContent = fs.readFileSync(filePath, "utf-8");
-  return parseFrontmatter(rawContent);
-}
-
-function getMDXData(dir: string) {
-  const mdxFiles = getMDXFiles(dir);
-  return mdxFiles.map((file) => {
-    const { metadata, content } = readMDXFile(path.join(dir, file));
-    const slug = path.basename(file, path.extname(file));
-
-    return {
-      metadata,
-      slug,
-      content,
-    };
-  });
+function readMetadata(dir: string, slug: string): Metadata {
+  const filePath = path.join(dir, slug, "metadata.json");
+  return JSON.parse(fs.readFileSync(filePath, "utf-8"));
 }
 
 export function getAllBlogPosts() {
-  return getMDXData(path.join(process.cwd(), "src", "app", "logs", "posts"));
+  const dir = path.join(process.cwd(), "src", "app", "logs", "posts");
+
+  return getPostDirs(dir).map((slug) => ({
+    metadata: readMetadata(dir, slug),
+    slug,
+  }));
 }
 
 export function getBlogPosts() {

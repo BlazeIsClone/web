@@ -1,0 +1,63 @@
+import { PostImage } from "@/components/post-image";
+import cloudConfigModules from "./cloud-config-modules.webp";
+import vpsSecurity from "./vps-security.webp";
+import filesystemPermissions from "./filesystem-permissions.webp";
+import cloudConfigGuide from "./cloud-config-guide.webp";
+
+## Why We Still Love the VPS
+Deploying on a VPS gives us total control over the kernel, the networking stack, and the filesystem. It’s predictable, cost-effective, and when managed correctly it's incredibly performant. Unlike a [bare-metal homelab server](/logs/building-on-premise-server), a VPS trades hands-on hardware control for managed compute. However, the downside of a VPS has always been the "manual labor" of keeping it online. That’s exactly why Cloud Config exists.
+
+## The Cloud Config
+Instead of SSH ing into a box and running commands by hand, we use Infrastructure as Code (IaC).
+
+Built on top of Ansible, Cloud Config treats our servers like software. We define the state we want, firewalls, PHP versions, and Nginx configs and Ansible makes it a reality. This transforms a standard Linux box into a standardized, hardened production environment in minutes.
+
+<PostImage src={cloudConfigModules} alt="cloud config modules" />
+
+## The Beginning
+What started as a way to automate server setups has evolved into a concrete architectural standard. We officially migrated the base from Ubuntu 22.04 to Debian 13 (Trixie).
+
+Why move? While Ubuntu is great, Debian’s community-driven nature and longer release cycles offer the kind of "boring stability" that web servers crave.
+
+## The Cloud Philosophy
+On paper, any compute provider works. In practice, I’m leaning toward DigitalOcean and [AWS EC2](/logs/aws-cloud). I’ve noted some IPv6 quirks with Google Compute Engine, so for now, the path of least resistance is the priority.
+
+## Ansible
+In 2026 Ansible is adopted by many Fortune 500 companies, Uber operates across five global regions, their infrastructure encompasses around 5,000 devices.
+They use Ansible automation to manage critical segments and standardize configuration management for everything from generic switches to external gateways, and firewalls from different vendors, among others.
+
+[How Ansible® Automation Powers the Uber Corporate Network at a Global Scale](https://www.uber.com/lk/en/blog/ansible-automation-powers)
+
+## The Network & Security Layer
+We swapped out Apache for Nginx. It’s faster, scales better, and configured it to be "stealthy." By default, Nginx blabs its version number in headers—I've masked that to show a generic ID like hive-production-websrv-apollo-23.
+
+The Security Checklist:
+
+- SSL: A+ rating on Qualys. We’re using Let’s Encrypt with CertBot, but added a CAA record in DNS to ensure only Let’s Encrypt can issue certs for our domains.
+- Firewall: UFW is active, and Fail2Ban is standing guard to boot anyone trying to brute-force SSH or MySQL.
+- Isolation: This is the big one. Every site has its own Linux user. Also implemented AppArmor profiles to prevent remote code execution—a lesson learned from a previous malware headache.
+
+We take security very seriously and ensure that we do everything we can to protect data. Below is a brief overview of some of the steps we take to ensure your server's security
+
+<PostImage src={vpsSecurity} alt="vps security diagram" />
+
+We emulate project or application level isolation via multiple layers of security practices, this includes user groups, ACLs and AppArmor.
+During a attack or a malware infection this architecture ensures that the treat is contained within the bounds of the application and will not potentially impact any other applications or even the system at large.
+Hardened servers like this still need the [monitoring system](/logs/monitoring-system) to catch anomalies and the [cloud backup pipeline](/logs/cloud-backup-pipeline) to protect data.
+
+<PostImage src={filesystemPermissions} alt="filesystem permissions" />
+
+SSH key-based authentication is mandatory for any user account, for this, the user is required to set an SSH key onto their GitHub account.
+The user will also be assigned to group developers and will have access to all the sites within the server.
+Previously we encountered an issue where if a user were to edit a file then another user would not be able to read or write to it, this has now been resolved and any files or directories that are created within a site will be kept owned by the developers group so that all the users that are in that group will continue to have their privileges.
+
+## Swapping MySQL for MariaDB
+I’ve officially moved to MariaDB v10. MySQL is fine, but their "Community Edition" feels a bit stripped down compared to the Enterprise version. MariaDB gives us those "enterprise-grade" features (scalability and security) out of the box without the paywall.
+
+## Developer Experience (DX)
+I wanted to fix the "permission denied" nightmare when multiple devs work on the same server.
+
+- SSH: Keys are mandatory. No passwords.
+- Permissions: I’m using ACLs (Access Control Lists). Files created by one dev stay accessible to the developers group. It sounds simple, but it saves hours of troubleshooting.
+
+<PostImage src={cloudConfigGuide} alt="cloud config guide" />
