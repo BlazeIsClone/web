@@ -1,0 +1,6 @@
+{
+  "title": "The Hive Observatory",
+  "metaTitle": "The Hive Observatory: Prometheus and Grafana Monitoring",
+  "publishedAt": "2025-09-10",
+  "summary": "Building an observability stack with Prometheus and Grafana: dashboards, alerting rules that catch spikes before an outage, and why more RAM is not the fix."
+}

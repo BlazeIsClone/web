@@ -1,0 +1,6 @@
+{
+  "title": "WordPress Survival Guide",
+  "metaTitle": "WordPress Survival Guide: Hardening After a Malware Hack",
+  "publishedAt": "2025-08-05",
+  "summary": "A Japanese SEO spam hack spread across a whole VPS through one outdated plugin. How we rebuilt it: per-site isolation, AppArmor, Fail2Ban and tested backups."
+}

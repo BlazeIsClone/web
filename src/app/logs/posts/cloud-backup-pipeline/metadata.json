@@ -1,0 +1,6 @@
+{
+  "title": "Cloud Backup Pipeline",
+  "metaTitle": "Cloud Backup Pipeline with Reusable GitHub Actions Workflows",
+  "publishedAt": "2026-01-04",
+  "summary": "Automating MySQL and filesystem backups to S3-compatible object storage with reusable GitHub Actions workflows, retention limits and scrapeable metrics."
+}

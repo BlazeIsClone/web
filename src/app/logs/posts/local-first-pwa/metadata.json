@@ -1,0 +1,7 @@
+{
+  "title": "Local First PWA with IndexedDB & SSE",
+  "metaTitle": "Local-First PWA: IndexedDB and SSE for Instant Filtering",
+  "publishedAt": "2026-06-25",
+  "updatedAt": "2026-08-03",
+  "summary": "Designing a dealership inventory catalog as a local-first PWA: load once into IndexedDB, filter in memory, and let Server-Sent Events push only what changed."
+}

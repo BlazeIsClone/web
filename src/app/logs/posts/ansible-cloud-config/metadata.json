@@ -1,0 +1,6 @@
+{
+  "title": "Automating VPS with Ansible",
+  "metaTitle": "Automating VPS Setup with Ansible: IaC for Hardened Servers",
+  "publishedAt": "2026-02-08",
+  "summary": "Replacing manual SSH server setup with Ansible playbooks: provisioning hardened Debian and Nginx VPS environments with UFW, Fail2Ban and AppArmor."
+}

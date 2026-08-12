@@ -1,0 +1,6 @@
+{
+  "title": "Hive Bug Tracker",
+  "metaTitle": "Hive Bug Tracker: A Realtime QA Tool on Convex and TanStack",
+  "publishedAt": "2026-02-01",
+  "summary": "Replacing a spreadsheet QA process with a realtime bug tracker on Convex, TanStack Start and React: role-based access, WebSocket sync, Cloudflare Pages edge."
+}

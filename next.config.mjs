@@ -1,3 +1,5 @@
+import createMDX from "@next/mdx";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async rewrites() {
@@ -38,20 +40,13 @@ const nextConfig = {
           { key: "X-Frame-Options", value: "DENY" },
         ],
       },
-      {
-        // `public/` defaults to `max-age=0`. Names are stable, so rename an
-        // image rather than replacing it in place.
-        source: "/images/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
     ];
   },
   skipTrailingSlashRedirect: true,
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  options: { providerImportSource: "../mdx-provider" },
+});
+
+export default withMDX(nextConfig);
