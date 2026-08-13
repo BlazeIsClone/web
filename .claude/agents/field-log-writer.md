@@ -69,10 +69,12 @@ This is a personal engineering log, so its credibility rests on being demonstrab
 import { PostImage } from "@/components/post-image";
 import architecture from "./architecture.webp";
 
-<PostImage src={architecture} alt="Architecture" />
+<PostImage src={architecture} alt="Architecture" priority />
 ```
 
 Width and height are read automatically from the imported file — never hardcode them. The one exception is animated GIFs: Next can't optimize animation, so pass `unoptimized` (`<PostImage src={gif} alt="..." unoptimized />`) to skip the wasted optimization attempt. Always write real descriptive alt text.
+
+**Loading priority**: the *first* `PostImage` in a post — and only the first, regardless of how many images follow — takes `priority`, so it's eager-loaded and preloaded instead of waiting on the default lazy/intersection-observer path. It's the post's likely LCP element, so this is a real Core Web Vitals win, not decoration. Every subsequent `PostImage` in the same post omits `priority` and stays on Next's default lazy loading. This applies regardless of image type — GIFs needing `unoptimized` still take `priority` if they're first (`<PostImage src={gif} alt="..." unoptimized priority />`). A post with only one image still gets `priority` on it, since that one image is both first and last.
 
 ### metadata.json
 
@@ -123,6 +125,7 @@ The object above lists every supported key, not a template to copy: `updatedAt`,
 - Does `metadata.json` match the schema above: required fields present, `updatedAt` only if the revision was substantive, `draft: true` if it isn't finished?
 - Is `metaTitle` present and 50 to 60 characters, and is `summary` 120 to 160 and free of em dashes? Count them rather than eyeballing.
 - Do headings start at `##` with no skipped levels?
+- Does exactly the first `PostImage` in the post have `priority`, with every later one omitting it?
 
 ## Edge Cases
 
