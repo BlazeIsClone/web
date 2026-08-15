@@ -9,6 +9,7 @@ import {
   pageMetadata,
   pageRef,
   pageUrl,
+  personImage,
   personName,
   personRef,
   ref,
@@ -37,7 +38,6 @@ export async function generateMetadata({ params }: any) {
     publishedAt: publishedTime,
     updatedAt: modifiedTime,
     summary: description,
-    image,
     draft,
   } = post.metadata;
 
@@ -45,7 +45,6 @@ export async function generateMetadata({ params }: any) {
     title: metaTitle ?? title,
     description,
     path: routes.post(post.slug),
-    image,
     robots: draft ? { index: false, follow: false } : undefined,
     openGraph: {
       type: "article",
@@ -78,7 +77,7 @@ export default async function Blog({ params }: any) {
       datePublished: post.metadata.publishedAt,
       dateModified: post.metadata.updatedAt ?? post.metadata.publishedAt,
       description: post.metadata.summary,
-      image: imageUrl(post.metadata.image),
+      image: imageUrl(post.metadata.image ?? personImage),
       url: postUrl,
       mainEntityOfPage: pageRef(postUrl),
       author: personRef,

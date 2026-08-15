@@ -10,7 +10,6 @@ export {
   baseUrl,
   siteName,
   locale,
-  defaultImage,
   routes,
   siteCreated,
   lastUpdated,
