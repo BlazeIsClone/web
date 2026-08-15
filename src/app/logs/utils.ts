@@ -36,7 +36,6 @@ export function getBlogPosts() {
   return getAllBlogPosts().filter((post) => !post.metadata.draft);
 }
 
-/** Shared by the rendered listing and the homepage `ItemList` so the two can't drift. */
 export function getRecentPosts(limit?: number) {
   const posts = getBlogPosts().sort(
     (a, b) =>

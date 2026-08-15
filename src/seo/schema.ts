@@ -1,7 +1,7 @@
 import type { BreadcrumbList, Graph, Thing } from "schema-dts";
 
 /**
- * Wraps nodes in a single `@graph`. Only the graph carries `@context` — nodes
+ * Wraps nodes in a single `@graph`. Only the graph carries `@context` - nodes
  * inside it must not repeat it, which is the one thing that stops a schema
  * object from being reused freely between a standalone script and a graph.
  */
