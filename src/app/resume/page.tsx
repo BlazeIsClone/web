@@ -19,7 +19,6 @@ import {
   pageUrl,
   person,
   personId,
-  personName,
   ref,
   routes,
 } from "@/seo";
@@ -29,7 +28,6 @@ const url = pageUrl(routes.resume);
 export const metadata: Metadata = pageMetadata({
   ...copy.resume,
   path: routes.resume,
-  imageAlt: `${personName} – software engineer resume`,
 });
 
 const resumeSchema = graph(
