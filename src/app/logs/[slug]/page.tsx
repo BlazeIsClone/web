@@ -64,7 +64,9 @@ export default async function Blog({ params }: any) {
     notFound();
   }
 
-  const { default: Post } = await import(`../posts/${post.slug}/index.mdx`);
+  const { default: Post } = await import(
+    `../../../posts/${post.slug}/index.mdx`
+  );
 
   const postUrl = pageUrl(routes.post(post.slug));
 

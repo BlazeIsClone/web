@@ -24,7 +24,7 @@ function readMetadata(dir: string, slug: string): Metadata {
 }
 
 export function getAllBlogPosts() {
-  const dir = path.join(process.cwd(), "src", "app", "logs", "posts");
+  const dir = path.join(process.cwd(), "src", "posts");
 
   return getPostDirs(dir).map((slug) => ({
     metadata: readMetadata(dir, slug),
