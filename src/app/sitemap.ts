@@ -1,5 +1,5 @@
 import { getBlogPosts } from "@/app/logs/utils";
-import { baseUrl, lastUpdated, pageUrl, routes } from "@/seo";
+import { lastUpdated, pageUrl, routes } from "@/seo";
 
 export default async function sitemap() {
   const blogs = getBlogPosts().map((post) => ({
@@ -12,14 +12,13 @@ export default async function sitemap() {
     .sort()
     .at(-1);
 
-  const listings = [routes.home, routes.logs].map((route) => ({
-    url: pageUrl(route),
-    lastModified: latestPost,
-  }));
-
+  // `/` and `/resume` track the CV data, not post publication - only `/logs`
+  // changes when a post ships.
   return [
-    ...listings,
-    { url: `${baseUrl}${routes.whoami}`, lastModified: lastUpdated.whoami },
+    { url: pageUrl(routes.home), lastModified: lastUpdated.resume },
+    { url: pageUrl(routes.logs), lastModified: latestPost },
+    { url: pageUrl(routes.resume), lastModified: lastUpdated.resume },
+    { url: pageUrl(routes.whoami), lastModified: lastUpdated.whoami },
     ...blogs,
   ];
 }

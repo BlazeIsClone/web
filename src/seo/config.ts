@@ -1,5 +1,5 @@
 /**
- * Site-wide constants. This is the root of the SEO context — nothing here
+ * Site-wide constants. This is the root of the SEO context - nothing here
  * imports from anywhere else, so every other module can depend on it freely.
  */
 
@@ -15,6 +15,7 @@ export const defaultImage = "/og-image.jpg";
 export const routes = {
   home: "/",
   logs: "/logs",
+  resume: "/resume",
   whoami: "/whoami",
   rss: "/rss.xml",
   atom: "/atom.xml",
@@ -22,13 +23,18 @@ export const routes = {
   post: (slug: string) => `/logs/${slug}`,
 } as const;
 
+/** Initial commit, and the date the homepage has existed at this URL since. */
+export const siteCreated = "2024-09-07";
+
 /**
  * Hand-maintained dates for pages with no natural timestamp. Posts derive
  * theirs from MDX frontmatter instead. Feeds both `dateModified` and sitemap
  * `lastmod` so the two can never disagree.
  */
 export const lastUpdated = {
-  whoami: "2026-08-04",
+  whoami: "2026-08-15",
+  /** Drives both `/` and `/resume` - they render the same CV data. */
+  resume: "2026-08-15",
 } as const;
 
 /** Route path -> absolute URL. Root collapses to a bare origin, no trailing slash. */

@@ -45,7 +45,7 @@ export function buildFeed() {
       link: url,
       description: post.metadata.summary,
       // `published` drives pubDate/date_published, `date` drives the revision
-      // timestamp — splitting them is what carries frontmatter `updatedAt` through.
+      // timestamp - splitting them is what carries frontmatter `updatedAt` through.
       published: new Date(post.metadata.publishedAt),
       date: new Date(post.metadata.updatedAt ?? post.metadata.publishedAt),
     });

@@ -3,18 +3,23 @@ import Link from "next/link";
 import {
   baseUrl,
   breadcrumb,
+  certifications,
   copy,
+  currentPosition,
+  education,
+  formatMonth,
   graph,
   JsonLd,
   lastUpdated,
   pageMetadata,
   pageUrl,
   person,
+  personAnchor,
   personId,
+  personLocation,
   personName,
   ref,
   routes,
-  skillGroups,
 } from "@/seo";
 
 const url = pageUrl(routes.whoami);
@@ -22,7 +27,7 @@ const url = pageUrl(routes.whoami);
 export const metadata: Metadata = pageMetadata({
   ...copy.whoami,
   path: routes.whoami,
-  imageAlt: `${personName} – full-stack engineer`,
+  imageAlt: `${personName} – software engineer`,
   openGraph: {
     type: "profile",
     firstName: "Sandev",
@@ -33,13 +38,14 @@ export const metadata: Metadata = pageMetadata({
 
 const profileSchema = graph(
   {
-    "@type": "ProfilePage",
+    // The homepage is the ProfilePage now; this is the story behind it.
+    "@type": "AboutPage",
     "@id": `${url}#webpage`,
     url,
     name: copy.whoami.title,
     description: copy.whoami.description,
     dateModified: lastUpdated.whoami,
-    mainEntity: ref(personId),
+    about: ref(personId),
     breadcrumb: ref(`${url}#breadcrumb`),
   },
   person,
@@ -54,45 +60,56 @@ export default function About() {
     <section>
       <JsonLd schema={profileSchema} />
       <h1 className="mb-6 text-xl font-semibold tracking-tighter">/whoami</h1>
-      <article className="prose">
+      <article id={personAnchor} className="prose">
         <p>
-          I&apos;m Sandev Abeykoon, and I&apos;m a{" "}
-          <strong>full-stack engineer</strong> writing software for{" "}
-          <strong>5+ years</strong>. I work across the stack and my experience
+          I&apos;m Sandev Abeykoon, and I&apos;m a software engineer writing
+          software for 6 years. I work across the full stack and my experience
           includes DevOps, Backend and Web Development.
         </p>
 
-        <h2>full-time work experience</h2>
+        <h2>Where I&apos;m based</h2>
         <p>
-          I&apos;m a Full Stack Software Engineer at{" "}
+          I live and work in {personLocation.city}, {personLocation.country}, and
+          work remotely across United States and Australian time zones.
+        </p>
+
+        <h2>Where I am now</h2>
+        <p>
+          These days I&apos;m a {currentPosition.position.title} at{" "}
           <a
-            href="https://www.bespokemotorgroup.com"
+            href={currentPosition.employer.url}
             target="_blank"
             rel="noopener noreferrer"
           >
-            Bespoke Motor Group
+            {currentPosition.employer.name}
           </a>
-          , and I&apos;ve been there since <strong>April 2026</strong>.
-        </p>
-        <p>
-          Before that I was at{" "}
+          , building platforms for a luxury dealership group since{" "}
+          {formatMonth(currentPosition.position.startDate)}. The years before
+          that were spent at{" "}
           <a
             href="https://mayahive.com"
             target="_blank"
             rel="noopener noreferrer"
           >
             Maya Hive
-          </a>{" "}
-          from 2021 to 2026. I joined as a web development intern in September
-          2021 and moved into a <strong>DevOps engineer</strong> role that
-          January, which is where a lot of my infra experience comes from.
+          </a>
+          , where I walked in as a web development intern and walked out a
+          DevOps engineer. That is where most of my infra instincts come from.
+        </p>
+        <p>
+          This page is the story. The record lives on my{" "}
+          <Link href={routes.resume}>resume</Link>: every role with dates,
+          highlights, and the full stack.
         </p>
 
-        <h2>how i got into code</h2>
+        <h2>How I got into code</h2>
         <p>
-          Before any of the code, I studied{" "}
-          <strong>Visual Communication</strong> at the NIBM School of Design. I
-          was inspired by User Interface design and that got me into writing
+          Before any of the code, I studied Creative Technology and Design,
+          finishing with a {education[0].qualification} from{" "}
+          <a href={education[0].url} target="_blank" rel="noopener noreferrer">
+            {education[0].institution}
+          </a>
+          . I was inspired by User Interface design and that got me into writing
           code.
         </p>
         <p>
@@ -107,45 +124,36 @@ export default function About() {
           then I&apos;ve worked with some amazing people and teams.
         </p>
 
-        <h2>my tech stack</h2>
+        <h2>My tech stack</h2>
         <p>
-          On the product side I&apos;ve been enjoying building UIs with{" "}
-          <strong>TanStack Start</strong> and <strong>React</strong>, and
-          working with <strong>Go</strong> using domain-driven architecture.
-          Before that, a lot of <strong>Laravel</strong> and{" "}
-          <strong>PHP</strong>.
+          On the product side I&apos;ve been enjoying building UIs with TanStack
+          Start and React, and working with Go using domain-driven architecture.
+          Before that, a lot of Laravel/PHP and NestJS/Node.js.
         </p>
         <p>
           Ubuntu is my favourite operating system but at the moment I&apos;m
           stuck with Windows. I have a desktop PC with a dual monitor setup.
         </p>
         <p>
-          I keep this list current with the tech I build and ship day to day:
+          The full list, grouped and kept current with what I ship day to day,
+          lives on my <Link href={routes.resume}>resume</Link>.
         </p>
-        <ul>
-          {skillGroups.map((group) => (
-            <li key={group.name}>
-              <strong>{group.name}:</strong> {group.items.join(", ")}
-            </li>
-          ))}
-        </ul>
 
-        <h2>what i&apos;m learning now</h2>
+        <h2>What I&apos;m learning now</h2>
         <p>
-          Right now I&apos;m learning <strong>system design</strong>, and how{" "}
-          <strong>AI agentic systems</strong> can solve real business problems
-          and give people back valuable time.
+          Right now I&apos;m learning system design, and how AI agentic systems
+          can solve real business problems and give people back valuable time.
         </p>
 
-        <h2>certified on AWS</h2>
+        <h2>Certified on AWS</h2>
         <p>
           I&apos;m an{" "}
           <a
-            href="https://www.credly.com/badges/9fdfe798-e0db-49d2-9b42-29c6b92a421b/linked_in_profile"
+            href={certifications[0].url}
             target="_blank"
             rel="noopener noreferrer"
           >
-            AWS Certified Solutions Architect – Associate
+            {certifications[0].name}
           </a>
           . I went in sceptical, thinking of AWS as an expensive abstraction
           over compute servers. What changed my mind was seeing how much
@@ -153,13 +161,13 @@ export default function About() {
           actually benefit from without a dedicated Ops team.
         </p>
 
-        <h2>field journal</h2>
+        <h2>Field journal</h2>
         <p>
           My <Link href="/logs">field notes</Link>, are a collection of projects
           I&apos;ve actually built, tried, or failed at.
         </p>
 
-        <h2>getting in touch</h2>
+        <h2>Getting in touch</h2>
         <p>
           The fastest way to reach me is{" "}
           <a href="mailto:sandev@blaze64.dev">sandev@blaze64.dev</a>. My code
@@ -188,6 +196,13 @@ export default function About() {
             Stack Overflow
           </a>
           .
+        </p>
+
+        <h2>Blaze64.dev</h2>
+        <p>
+          My personal field journal. Blaze64.dev is where I publish the logs and
+          keep my <Link href={routes.resume}>resume</Link> current. There is no
+          organization behind the name, it's just me.
         </p>
       </article>
     </section>

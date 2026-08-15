@@ -2,6 +2,8 @@
 
 **Audit date:** 2026-08-11 · **Pages crawled:** 21 (all sitemap URLs) + 2 draft URLs · **Score: 94/100**
 
+**Update — 2026-08-14:** finding #1 (og-image cache lifetime) is still open, but its recommended fix changed underneath it — see the note inline below. Everything else in this file was re-checked against the current repo/live site and is unaffected by the `a6351dd`/`8a58ec6` commits.
+
 ## What works
 
 | Check | Result |
@@ -23,11 +25,13 @@
 
 ## Findings
 
-### 1. `og-image.jpg` is served with no cache lifetime — Low
+### 1. `og-image.jpg` is served with no cache lifetime — Low — **still open, 2026-08-14; recommended fix has changed**
 
-`/images/*` gets `cache-control: public, max-age=31536000, immutable`, but the social card at `/og-image.jpg` gets `cache-control: public, max-age=0, must-revalidate`. Every social/AI crawler refetch is a full round trip for a file that only changes when the design does.
+At audit time, `/images/*` got `cache-control: public, max-age=31536000, immutable` while the social card at `/og-image.jpg` got `cache-control: public, max-age=0, must-revalidate`. Every social/AI crawler refetch was a full round trip for a file that only changes when the design does. Still true, live-verified 2026-08-14 (`curl -I https://blaze64.dev/og-image.jpg` still returns `max-age=0, must-revalidate`).
 
-**Fix:** extend the `next.config.mjs` `headers()` rule that covers `/images/:path*` to cover `/og-image.jpg`, or move the file to `public/images/`.
+**What changed underneath this finding:** `a6351dd` (2026-08-12) removed the `/images/:path*` header rule entirely — not a regression, but cleanup: post images no longer live under `public/images/` (they moved to per-post directories and are imported as static assets), so that rule was dead code. Those images are now served content-hashed from `/_next/static/media/*`, which gets Next's default `public,max-age=31536000,immutable` caching automatically (live-verified) without any custom rule. `public/og-image.jpg` is now the only file left in `public/`, and it still gets no special treatment.
+
+**Fix (updated):** the old "extend the existing rule" fix no longer applies — there's nothing to extend. Add a fresh `next.config.mjs` `headers()` rule scoped to `/og-image.jpg` specifically, or move the file so it picks up Next's static-asset caching the way the post images now do.
 
 ### 2. `/og` still returns 404 — Info, no action
 

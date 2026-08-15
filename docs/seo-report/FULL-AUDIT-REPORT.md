@@ -5,6 +5,12 @@
 **Business type:** Personal technical blog / engineer portfolio — single-author field journal, non-commercial, no local or e-commerce signals
 **Previous audit:** 2026-07-18, health score 69/100 (`docs/seo-audit-report.md`)
 
+**Update — 2026-08-14:** Two of this audit's three "top 5 issues" (#1 CLS, #3 disabled lazy loading) were fixed by commits made *after* this audit ran, before this report had even been read. `a6351dd` ("mdx component library migrated & post structure", 2026-08-12) deleted the `src/components/mdx.tsx` file this report cites throughout and replaced its hand-rolled `<img>` logic with `next/image` static imports via the new `PostImage` component, which derives real `width`/`height` from the imported file automatically instead of the old `width={1344} height={0}`. `8a58ec6` ("priority load post first image", 2026-08-13) then applied this report's own recommended fix for eager-loading — `priority` on exactly the first `PostImage` in each of the 10 image-bearing posts, default lazy for the rest — verified across all 10.
+Confirmed live on production (`curl https://blaze64.dev/logs/wordpress-survival-guide/`): the GIF `<img>` now ships `width="498" height="480"` with no `loading` attribute (priority), and subsequent images ship real dimensions with `loading="lazy"`. Same pattern confirmed on `/logs/monitoring-system/`.
+The Performance (62) and Images (55) scores below, and the CLS 0.370/0.207 measurements, predate this fix and should be treated as **historical** until a fresh lab/PSI run replaces them — Google's PageSpeed Insights API is rate-limited at the time of this update, so no new number is substituted rather than guessing one. Everything else in this report (Content, On-Page, Schema, Technical, AI Search Readiness, and the GIF-weight/internal-linking/heading-skip findings specifically) was independently re-checked against the current repo and live site on 2026-08-14 and remains accurate. Per-finding status notes are inline below and in `findings/performance.md`, `findings/images.md`, and `findings/technical.md`.
+
+**Update — 2026-08-15:** the second of the three clustered problems named in the Executive Summary below — the 6.0 MB of unoptimized GIFs — is also now resolved. All three (`godzilla-dance`, `family-guy-car-crash`, `dark-souls`) were re-encoded to animated WebP via `sharp({ animated: true })` (a transitive dependency of `next/image`, already present in `node_modules`) and swapped into their posts' MDX imports; the `.gif` sources were deleted. Total weight: 6.0 MB → 1.16 MB (-80.7 %) — the mobile LCP element `godzilla-dance` alone went from 2.68 MB to 195 KB. Verified via `npm run build` and the served production HTML: images render from `/_next/static/media/*.webp` with real dimensions, no `/_next/image` proxy hop, matching the pattern the GIFs used before. Of the report's original three clustered problems, only #3 (fragmented internal linking) remains open. The Performance (62) and Images (55) scores above still predate all three fixes and remain historical pending re-measurement. Full detail in `findings/performance.md` and `findings/images.md`.
+
 ---
 
 ## Executive summary
@@ -36,11 +42,11 @@ Everything else is either polish or the owner-accepted decision to stop expandin
 
 | # | Issue | Severity | Evidence |
 |---|---|---|---|
-| 1 | `height={0}` on every MDX image → CLS **0.370** mobile / 0.207 desktop on `/logs/wordpress-survival-guide` | High | `mdx.tsx:66-67`; measured in headless Chromium |
-| 2 | Three animated GIFs total **6.0 MB**, served unoptimized; a 2.68 MB GIF is the mobile LCP element | High | `godzilla-dance.gif` 2 678 977 B via `/_next/image` |
-| 3 | `loading="eager"` hardcoded → lazy loading disabled site-wide, contradicting the code's own comment | High | `mdx.tsx:70` |
-| 4 | Seven posts have zero contextual internal links; the two topic clusters never connect | Medium | Link graph across all 21 crawled pages |
-| 5 | Domain absent from the Common Crawl web graph — no referring domains found | High (external) | `cc-main-2026-jan-feb-mar` |
+| 1 | ~~`height={0}` on every MDX image → CLS **0.370** mobile / 0.207 desktop~~ — **Resolved 2026-08-12** (`a6351dd`) | ~~High~~ | `mdx.tsx` (deleted) no longer exists; `PostImage` now derives real dimensions from static imports. Live-verified: `width="498" height="480"` on `/logs/wordpress-survival-guide/`. |
+| 2 | ~~Three animated GIFs total **6.0 MB**, served unoptimized; a 2.68 MB GIF is the mobile LCP element~~ — **Resolved 2026-08-15** | ~~High~~ | All three re-encoded to animated WebP (`sharp`); 6.0 MB → 1.16 MB (-80.7 %). `godzilla-dance` (mobile LCP element) 2.68 MB → 195 KB. `.gif` sources deleted, MDX imports updated, `unoptimized` kept (animated WebP still bypasses `next/image` optimization, same as GIF did). |
+| 3 | ~~`loading="eager"` hardcoded → lazy loading disabled site-wide~~ — **Resolved 2026-08-13** (`8a58ec6`) | ~~High~~ | `priority` now set on exactly the first `PostImage` per post (verified all 10 image-bearing posts); rest default to lazy. |
+| 4 | Seven posts have zero contextual internal links; the two topic clusters never connect | Medium | Link graph across all 21 crawled pages — **still open**, re-checked `wordpress-survival-guide` 2026-08-14, no internal links added |
+| 5 | Domain absent from the Common Crawl web graph — no referring domains found | High (external) | `cc-main-2026-jan-feb-mar` — external signal, unaffected by repo changes |
 
 ### Top 5 quick wins
 
@@ -49,7 +55,7 @@ Everything else is either polish or the owner-accepted decision to stop expandin
 | 1 | Rewrite the `/logs` description in `src/seo/copy.ts` — one string, propagates to page meta, OG/Twitter, `Blog` schema and all three feeds | 5 min |
 | 2 | Fix the homepage/`/whoami` DevOps-timeline contradiction ("two of them in DevOps" vs. 4y2m in schema and `llms.txt`) | 5 min |
 | 3 | Add LinkedIn + Stack Overflow to the footer with `rel="me"` — makes the `sameAs` claims crawlable from every page | 15 min |
-| 4 | Extend the `/images/:path*` cache header rule in `next.config.mjs` to cover `/og-image.jpg` | 5 min |
+| 4 | Add a dedicated cache header rule for `/og-image.jpg` in `next.config.mjs` — the `/images/:path*` rule this originally pointed at was removed in `a6351dd` since post images no longer live under `public/images/` (they're colocated per-post and served content-hashed from `/_next/static/media/`, which gets Next's default immutable caching automatically — verified live). `/og-image.jpg` is the one file left in `public/` still serving `max-age=0, must-revalidate` (confirmed live 2026-08-14). | 5 min |
 | 5 | Fix heading skips in 3 posts (`building-on-premise-server`, `wordpress-survival-guide`, `distributed-architecture`) | 15 min |
 
 ---
@@ -96,11 +102,11 @@ Remaining opportunities are all optional: every post shares the same generic `im
 
 → Full detail: [`findings/schema.md`](findings/schema.md)
 
-## Performance (Core Web Vitals) — 62/100
+## Performance (Core Web Vitals) — 62/100 (historical — see update note)
 
-**No field data available** — no Google API key configured, so there is no CrUX. These are lab measurements from headless Chromium on an unthrottled connection and represent a best case.
+**No field data available** — no Google API key configured, so there is no CrUX. These are lab measurements from headless Chromium on an unthrottled connection and represent a best case, captured 2026-08-11, **before** the `a6351dd`/`8a58ec6` image-pipeline fix.
 
-Nineteen of 21 pages are excellent: LCP 84–492 ms, CLS 0, transfer 22–444 KB. Two pages are not, and both trace to the image pipeline:
+Nineteen of 21 pages were excellent even then: LCP 84–492 ms, CLS 0, transfer 22–444 KB. Two pages were not, and both traced to the same root cause — `height={0}` on every MDX image:
 
 | Page | Device | LCP | CLS | Transfer |
 |---|---|---|---|---|
@@ -109,17 +115,19 @@ Nineteen of 21 pages are excellent: LCP 84–492 ms, CLS 0, transfer 22–444 KB
 | `/logs/monitoring-system` | mobile | 720 ms | 0 | 2 092 K |
 | `/logs/monitoring-system` | desktop | 812 ms | 0.062 | 2 086 K |
 
-CLS 0.370 is in Google's *poor* band. On a real 4G connection the 2.68 MB GIF alone is roughly 13 seconds of transfer, so the LCP number above understates the problem substantially.
+**Status as of 2026-08-14:** the `height={0}` cause of the CLS numbers above is fixed (see the update note at the top of this report) — every image now ships real `width`/`height` from a static import, confirmed live in production HTML for both pages. CLS should now read at or near 0 on both, the same as the other 19 pages, but this is not yet re-measured: Google's PageSpeed Insights API returned a rate-limit error when queried for this update (`PSI rate limit exceeded (240 QPM / 25,000 QPD)`), so the score above is left at its pre-fix value rather than replaced with a guess. Re-run `pagespeed_check.py` (or a fresh full audit) once quota resets to get the real number.
+
+**Update 2026-08-15:** the GIF-weight finding referenced below is now also resolved — `godzilla-dance` (the mobile LCP element on `/logs/wordpress-survival-guide`) dropped from 2.68 MB to 195 KB, a swap that on a real 4G connection turns roughly 13 seconds of transfer into a fraction of a second. Combined with the already-resolved CLS fix, both lab blockers for `wordpress-survival-guide` and `monitoring-system` are now addressed on paper; only re-measurement remains to confirm the current numbers.
 
 `/logs/dsa-notes` looks alarming at 667 KB of HTML but compresses to 23.5 KB over the wire and renders in 136–180 ms — no action needed.
 
 → Full detail: [`findings/performance.md`](findings/performance.md)
 
-## Images — 55/100
+## Images — 55/100 (historical — see update note)
 
 Alt text is at 100 % coverage and 20 of 23 files are already WebP at 4–135 KB — the discipline is there. The 581 KB `og-image.jpg` from the July audit is now 25 KB.
 
-The three exceptions are animated GIFs totalling 6.0 MB, which `next/image` cannot re-encode, combined with `height={0}` and `loading="eager"` in `src/components/mdx.tsx`. Together those three facts produce every performance and CLS finding above.
+At audit time, the three GIF exceptions (6.0 MB total, which `next/image` cannot re-encode) combined with `height={0}` and `loading="eager"` in `src/components/mdx.tsx` to produce every performance and CLS finding above. As of 2026-08-15, both halves are fixed: `mdx.tsx` no longer exists (the `height={0}`/`loading="eager"` half, resolved 2026-08-12/13) and all three GIFs are re-encoded to animated WebP (the weight half, resolved 2026-08-15 — 6.0 MB → 1.16 MB, -80.7 %). This score is left unchanged pending re-measurement — see the update note at the top of this report.
 
 → Full detail: [`findings/images.md`](findings/images.md)
 
