@@ -17,7 +17,6 @@ import {
   personAnchor,
   personId,
   personLocation,
-  personName,
   ref,
   routes,
 } from "@/seo";
@@ -27,7 +26,6 @@ const url = pageUrl(routes.whoami);
 export const metadata: Metadata = pageMetadata({
   ...copy.whoami,
   path: routes.whoami,
-  imageAlt: `${personName} – software engineer`,
   openGraph: {
     type: "profile",
     firstName: "Sandev",

@@ -40,7 +40,6 @@ const featuredPosts = FEATURED_SLUGS.map((slug) => {
 export const metadata: Metadata = pageMetadata({
   ...copy.home,
   path: routes.home,
-  imageAlt: `${personName} – software engineer`,
   openGraph: {
     type: "profile",
     firstName: "Sandev",

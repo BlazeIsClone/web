@@ -9,9 +9,6 @@ export const siteName = "Sandev Abeykoon";
 
 export const locale = "en_US";
 
-/** Shared social card, used whenever a page has no image of its own. */
-export const defaultImage = "/og-image.jpg";
-
 export const routes = {
   home: "/",
   logs: "/logs",
@@ -41,6 +38,5 @@ export const lastUpdated = {
 export const pageUrl = (path: string) =>
   `${baseUrl}${path === routes.home ? "" : path}`;
 
-/** Site-relative image path -> absolute URL, falling back to the site card. */
-export const imageUrl = (image?: string) =>
-  `${baseUrl}${image ?? defaultImage}`;
+/** Site-relative image path -> absolute URL. */
+export const imageUrl = (image: string) => `${baseUrl}${image}`;
