@@ -86,7 +86,7 @@ export default function Page() {
         {personName} – {personJobTitle}
       </h1>
       <p className="mb-6 text-sm text-neutral-500">
-        {`${personLocation.city}, ${personLocation.country} · ${personLocation.timeZoneLabel}`}
+        {`${personLocation.city}, ${personLocation.country} | ${personLocation.timeZoneLabel}`}
       </p>
 
       <p className="mb-4 text-md">
@@ -101,10 +101,10 @@ export default function Page() {
         .
       </p>
       <p className="mb-4 text-md">
-        {`Sandev Abeykoon is a software engineer at Bespoke Motor Group, a New York dealership group operating Bentley, Rolls-Royce, Lamborghini and Porsche franchises, where he led the system design of a market intelligence platform processing 50,000+ vehicles weekly. He also builds an AI-powered lead-capture SaaS part-time at BudgetBuy AI in Melbourne. Before that he spent four years at Maya Hive in Colombo, moving from web development intern to DevOps engineer, architecting a multi-tenant CRM handling 6,000+ weekly leads and maintaining a 99.7% uptime SLA with Grafana and Prometheus observability.`}
+        {`I'm a software engineer at Bespoke Motor Group, a New York dealership group operating Bentley, Rolls-Royce, Lamborghini and Porsche franchises, where I led the system design of an in-house market intelligence platform. I'm also part of the team building an AI-powered lead-capture SaaS at BudgetBuy AI in Melbourne. Before that I spent four years at Maya Hive in Colombo, moving from web development intern to DevOps engineer, where I took over the Linux infrastructure, deployment pipelines and monitoring behind the platforms the team shipped.`}
       </p>
       <p className="mb-8 text-md">
-        {`He has 6 years of experience across DevOps, backend, and web development, and is an AWS Certified Solutions Architect – Associate. He currently builds with React, Next.js, NestJS, TypeScript, Node.js, Go and PostgreSQL, and writes first-hand field logs about the systems he ships. He is based in Colombo, Sri Lanka, and works remotely across time zones.`}
+        {`I have 6 years of experience across DevOps, backend, and web development, and I'm an AWS Certified Solutions Architect – Associate. I currently build with React, Next.js, NestJS, TypeScript, Node.js, Go and PostgreSQL, and write first-hand field logs about the systems I ship. I'm based in Colombo, Sri Lanka, and work remotely across time zones.`}
       </p>
 
       <section className="mb-10">

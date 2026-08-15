@@ -16,6 +16,7 @@ import {
   person,
   personAnchor,
   personId,
+  personLocation,
   personName,
   ref,
   routes,
@@ -61,10 +62,15 @@ export default function About() {
       <h1 className="mb-6 text-xl font-semibold tracking-tighter">/whoami</h1>
       <article id={personAnchor} className="prose">
         <p>
-          I&apos;m Sandev Abeykoon, and I&apos;m a{" "}
-          <strong>software engineer</strong> writing software for{" "}
-          <strong>6 years</strong>. I work across the full stack and my
-          experience includes DevOps, Backend and Web Development.
+          I&apos;m Sandev Abeykoon, and I&apos;m a software engineer writing
+          software for 6 years. I work across the full stack and my experience
+          includes DevOps, Backend and Web Development.
+        </p>
+
+        <h2>Where I&apos;m based</h2>
+        <p>
+          I live and work in {personLocation.city}, {personLocation.country}, and
+          work remotely across United States and Australian time zones.
         </p>
 
         <h2>Where I am now</h2>
@@ -78,8 +84,8 @@ export default function About() {
             {currentPosition.employer.name}
           </a>
           , building platforms for a luxury dealership group since{" "}
-          <strong>{formatMonth(currentPosition.position.startDate)}</strong>.
-          The years before that were spent at{" "}
+          {formatMonth(currentPosition.position.startDate)}. The years before
+          that were spent at{" "}
           <a
             href="https://mayahive.com"
             target="_blank"
@@ -87,9 +93,8 @@ export default function About() {
           >
             Maya Hive
           </a>
-          , where I walked in as a web development intern and walked out a{" "}
-          <strong>DevOps engineer</strong>. That is where most of my infra
-          instincts come from.
+          , where I walked in as a web development intern and walked out a
+          DevOps engineer. That is where most of my infra instincts come from.
         </p>
         <p>
           This page is the story. The record lives on my{" "}
@@ -99,8 +104,7 @@ export default function About() {
 
         <h2>How I got into code</h2>
         <p>
-          Before any of the code, I studied{" "}
-          <strong>{education[0].fieldOfStudy}</strong> at design school,
+          Before any of the code, I studied Creative Technology and Design,
           finishing with a {education[0].qualification} from{" "}
           <a href={education[0].url} target="_blank" rel="noopener noreferrer">
             {education[0].institution}
@@ -122,11 +126,9 @@ export default function About() {
 
         <h2>My tech stack</h2>
         <p>
-          On the product side I&apos;ve been enjoying building UIs with{" "}
-          <strong>TanStack Start</strong> and <strong>React</strong>, and
-          working with <strong>Go</strong> using domain-driven architecture.
-          Before that, a lot of <strong>Laravel/PHP</strong> and{" "}
-          <strong>NestJS/Node.js</strong>.
+          On the product side I&apos;ve been enjoying building UIs with TanStack
+          Start and React, and working with Go using domain-driven architecture.
+          Before that, a lot of Laravel/PHP and NestJS/Node.js.
         </p>
         <p>
           Ubuntu is my favourite operating system but at the moment I&apos;m
@@ -139,9 +141,8 @@ export default function About() {
 
         <h2>What I&apos;m learning now</h2>
         <p>
-          Right now I&apos;m learning <strong>system design</strong>, and how{" "}
-          <strong>AI agentic systems</strong> can solve real business problems
-          and give people back valuable time.
+          Right now I&apos;m learning system design, and how AI agentic systems
+          can solve real business problems and give people back valuable time.
         </p>
 
         <h2>Certified on AWS</h2>
@@ -195,6 +196,13 @@ export default function About() {
             Stack Overflow
           </a>
           .
+        </p>
+
+        <h2>Blaze64.dev</h2>
+        <p>
+          My personal field journal. Blaze64.dev is where I publish the logs and
+          keep my <Link href={routes.resume}>resume</Link> current. There is no
+          organization behind the name, it's just me.
         </p>
       </article>
     </section>

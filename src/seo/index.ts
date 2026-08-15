@@ -34,6 +34,7 @@ export {
   personImage,
   personLocation,
   personProfiles,
+  serviceAreas,
   personSkills,
   skillGroups,
   experience,

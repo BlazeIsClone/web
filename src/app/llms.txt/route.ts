@@ -13,6 +13,7 @@ import {
   personName,
   personProfiles,
   routes,
+  serviceAreas,
   siteName,
   skillGroups,
 } from "@/seo";
@@ -38,6 +39,10 @@ export async function GET() {
     `${personName} is a ${personJobTitle} at ${employer.name}${employer.url ? ` (${employer.url})` : ""} since ${formatMonth(position.startDate)}, based in ${personLocation.city}, ${personLocation.country} (${personLocation.timeZoneLabel}), with 6 years of experience across DevOps, backend, and web development. Full role-by-role history is under Experience below.`,
     "",
     `Currently building with Go, React and TanStack Start, after several years of Laravel and PHP. Current focus: system design and AI agentic systems.`,
+    "",
+    // Mirrors Person.address and ContactPoint.areaServed so the machine-readable
+    // surfaces state the same thing.
+    `Location: ${personLocation.city}, ${personLocation.region}, ${personLocation.country} (${personLocation.timeZoneLabel}). Areas served: ${serviceAreas.map((area) => area.name).join(", ")}.`,
     "",
     `The logs are a field journal: projects actually built, tried, or failed at, written up first-hand. Contact: ${personEmail}.`,
     "",

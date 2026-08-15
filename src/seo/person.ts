@@ -1,12 +1,14 @@
 import type {
+  AdministrativeArea,
   CollegeOrUniversity,
   EducationalOccupationalCredential,
   EmployeeRole,
   HighSchool,
   Organization,
   Person,
+  Place,
 } from "schema-dts";
-import { imageUrl, pageUrl, routes } from "./config";
+import { baseUrl, imageUrl, pageUrl, routes } from "./config";
 import { ref } from "./schema";
 
 const homeUrl = pageUrl(routes.home);
@@ -86,7 +88,7 @@ export const experience: readonly Employer[] = [
         title: "Software Engineer",
         employmentType: "Full-time",
         startDate: "2026-04",
-        location: "New York, United States · Remote",
+        location: "New York, United States | Remote",
         summary:
           "Leads platform engineering for a luxury dealership group: a market intelligence ETL platform, a local-first sales PWA, and the brand marketing sites.",
         highlights: [
@@ -107,7 +109,7 @@ export const experience: readonly Employer[] = [
         title: "Software Engineer",
         employmentType: "Part-time",
         startDate: "2026-06",
-        location: "Melbourne, Australia · Remote",
+        location: "Melbourne, Australia | Remote",
         summary:
           "Builds a multi-tenant AI lead-capture SaaS: RAG retrieval, workflow agents, and a hardened API gateway.",
         highlights: [
@@ -130,7 +132,7 @@ export const experience: readonly Employer[] = [
         endDate: "2026-03",
         location: "Colombo, Sri Lanka",
         summary:
-          "Owned platform engineering across a multi-tenant CRM, delivery systems, payment integrations, and the Linux infrastructure underneath them.",
+          "Automated secure Linux server provisioning with Ansible and Docker, with delivery running through GitHub Actions CI/CD pipelines.",
         highlights: [
           "Full-stack delivery and ownership of platform engineering within a seven-person Agile product team.",
           "Architected a multi-tenant CRM with Laravel, PHP and REST APIs supporting 6,000+ weekly leads across client tenants.",
@@ -213,6 +215,45 @@ export const personLocation = {
   timeZone: "Asia/Colombo",
   /** Written out, never derived from the build clock. */
   timeZoneLabel: "UTC+5:30",
+  /** Colombo city centre, for `Place.geo`. Not a residential address. */
+  latitude: 6.9271,
+  longitude: 79.8612,
+};
+
+type AreaScope = "City" | "AdministrativeArea" | "Country";
+
+/**
+ * `ContactPoint.areaServed`: who can hire me, which is a wider claim than
+ * {@link personLocation}'s `address`. Kept at city level and above, so no entry
+ * here narrows the published location past what the postal address already says.
+ */
+export const serviceAreas: readonly { name: string; scope: AreaScope }[] = [
+  { name: "Colombo", scope: "City" },
+  { name: "Western Province", scope: "AdministrativeArea" },
+  { name: "Sri Lanka", scope: "Country" },
+];
+
+/**
+ * The single `Place` behind both `homeLocation` and `workLocation`. The work is
+ * remote, so the two resolve to one node by `@id` rather than repeating.
+ */
+const placeId = `${baseUrl}#colombo`;
+
+const basedIn: Place = {
+  "@type": "Place",
+  "@id": placeId,
+  name: `${personLocation.city}, ${personLocation.country}`,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: personLocation.city,
+    addressRegion: personLocation.region,
+    addressCountry: personLocation.countryCode,
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: personLocation.latitude,
+    longitude: personLocation.longitude,
+  },
 };
 
 const findCurrent = () => {
@@ -391,6 +432,17 @@ export const person: Person = {
     addressLocality: personLocation.city,
     addressRegion: personLocation.region,
     addressCountry: personLocation.countryCode,
+  },
+  homeLocation: basedIn,
+  workLocation: ref(placeId),
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "Professional enquiries",
+    email: personEmail,
+    availableLanguage: "English",
+    areaServed: serviceAreas.map(
+      ({ name, scope }): AdministrativeArea => ({ "@type": scope, name }),
+    ),
   },
   worksFor: experience.flatMap((employer) =>
     employer.positions.map((position) => employeeRole(employer, position)),

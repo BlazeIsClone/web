@@ -5,9 +5,9 @@
  */
 export const copy = {
   home: {
-    title: "Sandev Abeykoon – Software Engineer",
+    title: "Sandev Abeykoon – Software Engineer in Colombo, Sri Lanka",
     description:
-      "Sandev Abeykoon is a software engineer with 6 years across DevOps, backend, and web development. Work experience, certifications, and field notes.",
+      "Sandev Abeykoon is a software engineer in Colombo, Sri Lanka, with 6 years across DevOps, backend, and web development. Experience, certifications, field notes.",
   },
   logs: {
     title: "Field Logs by Sandev Abeykoon – Engineering Notes",
@@ -17,11 +17,11 @@ export const copy = {
   resume: {
     title: "Sandev Abeykoon – Software Engineer Resume",
     description:
-      "Resume of Sandev Abeykoon: work experience at Bespoke Motor Group and Maya Hive, AWS Solutions Architect certification, education, and full tech stack.",
+      "Resume of Sandev Abeykoon, a software engineer in Colombo, Sri Lanka: roles at Bespoke Motor Group and Maya Hive, AWS certification, and full tech stack.",
   },
   whoami: {
-    title: "About Sandev Abeykoon – Software Engineer",
+    title: "About Sandev Abeykoon – Software Engineer in Sri Lanka",
     description:
-      "Sandev Abeykoon is a software engineer and AWS Certified Solutions Architect – Associate, working across DevOps, cloud infrastructure and product engineering.",
+      "Sandev Abeykoon is a software engineer based in Colombo, Sri Lanka, and an AWS Certified Solutions Architect – Associate working across DevOps and cloud.",
   },
 } as const;

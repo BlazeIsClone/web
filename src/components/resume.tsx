@@ -58,7 +58,7 @@ function PositionEntry({
         <span className="tabular-nums">
           {formatRange(position.startDate, position.endDate)}
         </span>
-        {` · ${position.employmentType} · ${position.location}`}
+        {` | ${position.employmentType} | ${position.location}`}
       </p>
       {summaryOnly ? (
         <p className="mt-2 text-md">{position.summary}</p>
@@ -145,7 +145,7 @@ export function CredentialsSection() {
             >
               {certification.name}
             </a>
-            <span className="text-neutral-500">{` · ${certification.issuer.name}`}</span>
+            <span className="text-neutral-500">{` | ${certification.issuer.name}`}</span>
           </li>
         ))}
         {education
@@ -153,7 +153,7 @@ export function CredentialsSection() {
           .map((entry) => (
             <li key={entry.qualification}>
               {entry.qualification}
-              <span className="text-neutral-500">{` · ${entry.institution}`}</span>
+              <span className="text-neutral-500">{` | ${entry.institution}`}</span>
             </li>
           ))}
       </ul>
@@ -178,10 +178,10 @@ export function CertificationsSection({ detailed }: { detailed?: boolean }) {
             </a>
             <p className={metaLine}>
               {certification.issuer.name}
-              {certification.issued && ` · Issued ${certification.issued}`}
+              {certification.issued && ` | Issued ${certification.issued}`}
               {detailed &&
                 certification.credentialId &&
-                ` · ${certification.credentialId}`}
+                ` | ${certification.credentialId}`}
             </p>
           </li>
         ))}
@@ -209,7 +209,7 @@ export function EducationSection({ detailed }: { detailed?: boolean }) {
               </a>
               {detailed && entry.startYear && (
                 <span className="tabular-nums">
-                  {` · ${entry.startYear}–${entry.endYear}`}
+                  {` | ${entry.startYear}–${entry.endYear}`}
                 </span>
               )}
             </p>
@@ -244,7 +244,7 @@ export function AwardsSection() {
           <li key={award.name} className="border-t pt-4">
             <h3 className="text-md font-medium">{award.name}</h3>
             <p className={metaLine}>
-              {award.by} · <span className="tabular-nums">{award.year}</span>
+              {award.by} | <span className="tabular-nums">{award.year}</span>
             </p>
             <p className="mt-1 text-md">{award.detail}</p>
           </li>
@@ -263,7 +263,7 @@ export function ContactCard() {
         </a>
       </p>
       <p className={metaLine}>
-        {`${personLocation.city}, ${personLocation.country} · ${personLocation.timeZoneLabel}`}
+        {`${personLocation.city}, ${personLocation.country} | ${personLocation.timeZoneLabel}`}
       </p>
       <ul className="flex flex-wrap gap-x-4 gap-y-1 pt-1 text-sm">
         {personProfiles.map((profile) => (
