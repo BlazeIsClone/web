@@ -85,3 +85,13 @@ Not warranted: restating what the line does, narrating structure (`// now the he
 ## Other repo context
 
 - `docs/seo-audit-report.md` is a point-in-time SEO audit with a tracked status per finding (most are resolved) - useful history, not a living doc. One item is intentionally left partial by owner decision (deepening older thin posts) and one is intentionally left as-is (`www` not resolving).
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
