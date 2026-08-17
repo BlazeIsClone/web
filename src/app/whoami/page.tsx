@@ -36,7 +36,6 @@ export const metadata: Metadata = pageMetadata({
 
 const profileSchema = graph(
   {
-    // The homepage is the ProfilePage now; this is the story behind it.
     "@type": "AboutPage",
     "@id": `${url}#webpage`,
     url,
@@ -67,8 +66,8 @@ export default function About() {
 
         <h2>Where I&apos;m based</h2>
         <p>
-          I live and work in {personLocation.city}, {personLocation.country}, and
-          work remotely across United States and Australian time zones.
+          I live and work in {personLocation.city}, {personLocation.country},
+          and work remotely across United States and Australian time zones.
         </p>
 
         <h2>Where I am now</h2>

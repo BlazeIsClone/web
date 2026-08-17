@@ -20,18 +20,22 @@ export const routes = {
   post: (slug: string) => `/logs/${slug}`,
 } as const;
 
-/** Initial commit, and the date the homepage has existed at this URL since. */
-export const siteCreated = "2024-09-07";
+/**
+ * Google's Profile page structured data rules
+ * validate that property as a datetime and reject YYYY-MM-DD.
+ */
+export const siteCreated = "2024-09-07T00:00:00Z";
 
 /**
  * Hand-maintained dates for pages with no natural timestamp. Posts derive
  * theirs from MDX frontmatter instead. Feeds both `dateModified` and sitemap
- * `lastmod` so the two can never disagree.
+ * `lastmod` so the two can never disagree. Full ISO 8601 datetime, not a
+ * bare date, for the same reason as `siteCreated` above - the homepage's
+ * ProfilePage `dateModified` reuses `resume`.
  */
 export const lastUpdated = {
-  whoami: "2026-08-15",
-  /** Drives both `/` and `/resume` - they render the same CV data. */
-  resume: "2026-08-15",
+  whoami: "2026-08-15T00:00:00Z",
+  resume: "2026-08-15T00:00:00Z",
 } as const;
 
 /** Route path -> absolute URL. Root collapses to a bare origin, no trailing slash. */
