@@ -98,12 +98,14 @@ export const experience: readonly Employer[] = [
           "Built scalable REST APIs with NestJS, Node.js, and PostgreSQL powering inventory management and inventory syndication across the Dealer Management System, secured via Microsoft Entra ID (SSO).",
           "Developed responsive marketing websites for the Bentley, Rolls-Royce and Lamborghini brands with Next.js, HTML/CSS and Payload CMS, using server-side rendering for page performance and SEO visibility.",
         ],
-        relatedPosts: ["local-first-pwa", "distributed-architecture"],
+        relatedPosts: ["local-first-pwa"],
       },
     ],
   },
   {
     name: "BudgetBuy AI",
+    url: "https://www.budgetbuy.com.au",
+    linkedIn: "https://www.linkedin.com/company/budgetbuy-ai",
     positions: [
       {
         title: "Software Engineer",
@@ -124,6 +126,7 @@ export const experience: readonly Employer[] = [
   {
     name: "Maya Hive",
     url: "https://mayahive.com",
+    linkedIn: "https://www.linkedin.com/company/maya-hive-pvt-ltd",
     positions: [
       {
         title: "DevOps Engineer",
@@ -142,11 +145,7 @@ export const experience: readonly Employer[] = [
           "Architected secure Linux environments using Ansible and Docker, integrated GitHub Actions CI/CD.",
           "Maintained 99.7% uptime SLA and Disaster Recovery (RTO/RPO) via SRE-focused Grafana and Prometheus observability.",
         ],
-        relatedPosts: [
-          "ansible-cloud-config",
-          "monitoring-system",
-          "building-on-premise-server",
-        ],
+        relatedPosts: ["ansible-cloud-config", "monitoring-system"],
       },
       {
         title: "Web Development Intern",
@@ -453,13 +452,11 @@ export const person: Person = {
     ...certifications.map((certification) => certification.url),
   ],
   knowsAbout: personSkills,
-  alumniOf: education.map(
-    (entry): CollegeOrUniversity | HighSchool => ({
-      "@type": entry.organizationType,
-      name: entry.institution,
-      url: entry.url,
-    }),
-  ),
+  alumniOf: education.map((entry): CollegeOrUniversity | HighSchool => ({
+    "@type": entry.organizationType,
+    name: entry.institution,
+    url: entry.url,
+  })),
   hasCredential: [
     ...certifications.map(
       (certification): EducationalOccupationalCredential => ({

@@ -46,14 +46,30 @@ function RelatedPosts({ slugs }: { slugs: readonly string[] }) {
 
 function PositionEntry({
   position,
+  employer,
   summaryOnly,
 }: {
   position: Position;
+  employer: Employer;
   summaryOnly?: boolean;
 }) {
   return (
-    <div>
-      <h3 className="text-md font-medium">{position.title}</h3>
+    <li className="border-t pt-5">
+      <h3 className="text-md font-semibold">
+        {position.title} |{" "}
+        {employer.url ? (
+          <a
+            href={employer.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={linkStyle}
+          >
+            {employer.name}
+          </a>
+        ) : (
+          employer.name
+        )}
+      </h3>
       <p className={metaLine}>
         <span className="tabular-nums">
           {formatRange(position.startDate, position.endDate)}
@@ -70,40 +86,6 @@ function PositionEntry({
         </ul>
       )}
       {position.relatedPosts && <RelatedPosts slugs={position.relatedPosts} />}
-    </div>
-  );
-}
-
-function EmployerEntry({
-  employer,
-  summaryOnly,
-}: {
-  employer: Employer;
-  summaryOnly?: boolean;
-}) {
-  return (
-    <li className="border-t pt-5">
-      {employer.url ? (
-        <a
-          href={employer.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`text-md font-semibold ${linkStyle}`}
-        >
-          {employer.name}
-        </a>
-      ) : (
-        <span className="text-md font-semibold">{employer.name}</span>
-      )}
-      <div className="mt-3 space-y-5 border-l pl-4">
-        {employer.positions.map((position) => (
-          <PositionEntry
-            key={`${position.title}-${position.startDate}`}
-            position={position}
-            summaryOnly={summaryOnly}
-          />
-        ))}
-      </div>
     </li>
   );
 }
@@ -113,13 +95,18 @@ interface ExperienceProps {
 }
 
 export function ExperienceSection({ summaryOnly }: ExperienceProps) {
+  const positions = experience.flatMap((employer) =>
+    employer.positions.map((position) => ({ employer, position })),
+  );
+
   return (
     <section className="mb-10">
       <h2 className={sectionHeading}>Experience</h2>
-      <ul className="space-y-6">
-        {experience.map((employer) => (
-          <EmployerEntry
-            key={employer.name}
+      <ul className="space-y-5">
+        {positions.map(({ employer, position }) => (
+          <PositionEntry
+            key={`${position.title}-${position.startDate}`}
+            position={position}
             employer={employer}
             summaryOnly={summaryOnly}
           />
@@ -194,9 +181,9 @@ export function EducationSection({ detailed }: { detailed?: boolean }) {
   return (
     <section className="mb-10">
       <h2 className={sectionHeading}>Education</h2>
-      <ul className="space-y-3">
+      <ul className="space-y-3 border-t">
         {education.map((entry) => (
-          <li key={entry.qualification} className="border-t pt-4">
+          <li key={entry.qualification} className="pt-4">
             <h3 className="text-md font-medium">{entry.qualification}</h3>
             <p className={metaLine}>
               <a
@@ -239,9 +226,9 @@ export function AwardsSection() {
   return (
     <section className="mb-10">
       <h2 className={sectionHeading}>Awards</h2>
-      <ul className="space-y-3">
+      <ul className="space-y-3 border-t">
         {awards.map((award) => (
-          <li key={award.name} className="border-t pt-4">
+          <li key={award.name} className="pt-4">
             <h3 className="text-md font-medium">{award.name}</h3>
             <p className={metaLine}>
               {award.by} | <span className="tabular-nums">{award.year}</span>

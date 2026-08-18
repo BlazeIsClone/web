@@ -94,9 +94,9 @@ export default function About() {
           DevOps engineer. That is where most of my infra instincts come from.
         </p>
         <p>
-          This page is the story. The record lives on my{" "}
-          <Link href={routes.resume}>resume</Link>: every role with dates,
-          highlights, and the full stack.
+          This page is the story. The complete record lives on my{" "}
+          <Link href={routes.resume}>resume</Link> including every role with
+          dates, highlights, and the tech stack.
         </p>
 
         <h2>How I got into code</h2>
