@@ -127,7 +127,7 @@ export default function Page() {
             href={routes.logs}
             className="text-sm text-neutral-500 underline underline-offset-4"
           >
-            All field logs
+            /logs
           </Link>
         </div>
       </section>
@@ -139,10 +139,9 @@ export default function Page() {
         <h2 className={sectionHeading}>Current focus</h2>
         <p className="border-t pt-4 text-md">
           System design, and how AI agentic systems can take real work off
-          people&apos;s plates. On the tooling side that means
-          TanStack Start with React on the frontend, and Go with domain-driven
-          architecture on the backend. The full detail behind every role above
-          sits on the{" "}
+          people&apos;s plates. On the tooling side that means TanStack Start
+          with React on the frontend, and Go with domain-driven architecture on
+          the backend. The full detail behind every role above sits on the{" "}
           <Link href={routes.resume} className="underline underline-offset-4">
             resume
           </Link>
