@@ -1,0 +1,6 @@
+{
+  "title": "Leaving WordPress for Payload",
+  "metaTitle": "Why Developers Are Switching From WordPress to Payload",
+  "publishedAt": "2026-08-20",
+  "summary": "After years maintaining WordPress sites, I switched to Payload for schema-in-code, end-to-end type safety, and a single Next.js app. No plugin hell."
+}
