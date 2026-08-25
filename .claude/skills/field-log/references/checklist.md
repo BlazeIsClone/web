@@ -35,6 +35,15 @@ grep -niE "here's the kicker|here's the thing|plot twist|let me break this down|
 - [ ] Uncertain details flagged, not smoothed over
 - [ ] Sources the post rests on are linked inline, with descriptive anchor text
 
+## Trade-offs
+
+- [ ] Every decision the post makes names what it cost, inline, at the decision
+- [ ] Costs are stated as an exchange with conditions ("X for Y, until Z"), not a verdict
+- [ ] Abandoned approaches, constraints, and live workarounds are still in the post, not trimmed for a cleaner arc
+- [ ] Anything known to be fragile in the shipped code is named as a present cost, not as a lesson caught later
+- [ ] Unknown costs are stated as unknown
+- [ ] No manufactured balance, and no invented downside to look even-handed
+
 ## Headings
 
 - [ ] Read top to bottom on their own, they trace the post's arc

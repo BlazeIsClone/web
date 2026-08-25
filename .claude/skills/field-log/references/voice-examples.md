@@ -85,3 +85,29 @@ What actually separates them is register, and you have to read for it:
 - **Is it explaining to a peer or to a beginner?** "To understand distributed systems we need to move away from the single computer mindset" is teaching a class. The log talks to someone who already knows what a distributed system is.
 
 Read the first three sentences out loud. If they sound like a README, a landing page, or a textbook, rewrite them before going further. Everything downstream inherits the register of the opener.
+
+## Trade-offs, by example
+
+Framed, with the cost and the condition attached:
+
+> That's a real trade-off worth naming: the access token never sits in JS-reachable memory or localStorage, which shrinks what an XSS payload could steal, at the cost of an extra round trip to the IDP before every API call.
+
+The gain and the price are in one sentence, and the price is specific enough to argue with.
+
+> Worth flagging as-is rather than as a mistake I caught later: the retry guard in that response interceptor (`let refresh = false`) is scoped inside the function, so it resets on every call [...] Small detail, but the kind of thing that matters more once there's real concurrent traffic instead of a single tab making one request at a time.
+
+A live defect, named in the present tense, with the condition that makes it bite. No invented arc where the author heroically catches it.
+
+> Unlike a [bare-metal homelab server](/logs/building-on-premise-server), a VPS trades hands-on hardware control for managed compute.
+
+"Trades X for Y" against a named alternative. The reader can place themselves on either side of it.
+
+> Spot Instances are there for workloads that can tolerate interruption in exchange for a steep discount.
+
+The condition ("can tolerate interruption") is what makes this useful instead of a feature blurb.
+
+Silently dropped, the failure mode:
+
+> Backup CLI is an interactive CLI tool for capturing database snapshots and application files, then securely transfers them to your local storage via SFTP. Perfect for developers looking for a lightweight, no-nonsense backup strategy.
+
+SFTP to local storage was a choice over an object store, and it cost something: a box you have to keep alive and back up yourself. The post doesn't say, so the reader can't tell whether it fits them. Pure upside reads as marketing even when the tool is good.

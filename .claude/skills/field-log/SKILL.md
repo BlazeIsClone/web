@@ -1,6 +1,6 @@
 ---
 name: field-log
-description: Draft, review, or refine field log posts for blaze64.dev (src/posts/<slug>/index.mdx). Encodes the site's voice, the banned-word list, heading rules, E-E-A-T requirements, and the metadata.json schema. Use when writing a new post, turning raw notes or a debugging session into a post, reviewing a draft for tone, tightening prose that reads as machine-written, or checking a post before publishing.
+description: Draft, review, or refine field log posts for blaze64.dev (src/posts/<slug>/index.mdx). Encodes the site's voice, the banned-word list, heading rules, trade-off framing, E-E-A-T requirements, and the metadata.json schema. Use when writing a new post, turning raw notes or a debugging session into a post, reviewing a draft for tone, tightening prose that reads as machine-written, or checking a post before publishing.
 ---
 
 # Field log writing
@@ -70,13 +70,29 @@ If a detail is uncertain, say so in the draft or ask. Don't write something plau
 
 **Write to be useful, not to rank.** No padding to hit a length. A tight 400-word post that fully answers its question beats 1,200 words of scaffolding.
 
+## Name the trade-offs
+
+Every choice in the post cost something. Say what.
+
+A post that lists only what a decision bought reads like a vendor page, and the reader can't do the one thing they came to do: work out whether the same call fits their situation. Naming the cost is also the strongest credibility signal in the post. Someone who only saw the upside hasn't run the thing.
+
+- **State the exchange, not the verdict.** "Short-lived tokens in exchange for an extra round trip before every API call." The reader weighs it. `jwt-microservice-auth` and `ansible-cloud-config` both do this well, read them.
+- **Say when it flips.** A trade-off is only real with the conditions attached. Cheap at one tab, expensive at real concurrency. Fine for a solo box, wrong for a team.
+- **Keep the thing that didn't work.** The approach that got abandoned, the constraint that forced the design, the workaround still sitting in the code. That is the post. Cutting it for a cleaner narrative is the exact failure this rule exists to stop.
+- **Flag the known-imperfect as known.** If something in the shipped code is wrong or fragile, name it in the present tense as a live cost, not as a lesson learned later. `jwt-microservice-auth` calls out a broken retry guard this way, without dressing it up as a catch.
+- **Say when you don't know the cost.** "I haven't run this past a few hundred users, so I don't know where it falls over" is a real sentence. Silence reads as a claim.
+- **Don't manufacture balance.** If the choice was obvious and cost nothing worth naming, say that and move on. Bolting an "on the other hand" onto every paragraph is padding, and inventing a downside is fabrication, same rule as above.
+
+Trade-offs belong inline, at the decision. A "Trade-offs" section at the bottom is where they go to be skipped.
+
 ## Process
 
 1. **Find the story.** What happened? What broke, what got built, what surprised you?
 2. **Find the hook.** Open on the surprising result, the frustrating moment, or the bold claim. Not on context-setting.
 3. **Structure for flow.** Problem, exploration, resolution or honest failure. That arc works, but it's not a mold. If the work had no tidy ending, don't manufacture one.
-4. **Cut.** Remove every sentence that adds neither information nor energy.
-5. **Read it aloud in your head.** Stiff or robotic means rewrite.
+4. **Price every decision.** Walk the choices the post makes and check each one names what it cost. Anything that reads as pure upside is either under-reported or was never a decision.
+5. **Cut.** Remove every sentence that adds neither information nor energy.
+6. **Read it aloud in your head.** Stiff or robotic means rewrite.
 
 If the input is too sparse to work with, ask one focused question: the "what happened" or the "so what". Not a questionnaire.
 
