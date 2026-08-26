@@ -46,7 +46,10 @@ const nextConfig = {
 };
 
 const withMDX = createMDX({
-  options: { providerImportSource: "../mdx-provider" },
+  options: {
+    providerImportSource: "../mdx-provider",
+    rehypePlugins: [["rehype-pretty-code"]],
+  },
 });
 
 export default withMDX(nextConfig);
