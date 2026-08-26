@@ -2,7 +2,6 @@
 
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
-import { highlight } from "sugar-high";
 
 function Table({ data }: any) {
   const headers = data.headers.map((header: any, index: number) => (
@@ -45,11 +44,6 @@ function CustomLink(props: any) {
   return <a target="_blank" rel="noopener noreferrer" {...props} />;
 }
 
-function Code({ children, ...props }: any) {
-  const codeHTML = highlight(children);
-  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
-}
-
 function slugify(str: string) {
   return str
     .toString()
@@ -87,7 +81,6 @@ const components = {
   h5: createHeading(5),
   h6: createHeading(6),
   a: CustomLink,
-  code: Code,
   Table,
 };
 
