@@ -1,16 +1,16 @@
-When a software system is successful it keeps earning new work, and every enhancement lands on top of the layers already there. Over time that new work slows down, and the usual answer is to refactor, or to decouple logic into a separate service.
+Three names for the same delivery. The dispatcher sees an internal id. The customer has a tracking number off a confirmation email. The client's own ERP has an order number it invented years ago and will not be changing.
 
-We have all seen complicated code, and pretty often the reason is application logic coupled with database logic. Business rules and queries sharing a method make a system harder to change, harder to test, and harder to hand to somebody else.
+One row, three ways in, none of them going away.
 
-Three-layer architecture, presentation over business logic over data access, and the middle one is [Fowler's Service Layer](https://martinfowler.com/eaaCatalog/serviceLayer.html). Note it counts to three. The model is not a layer, it is what travels through them, which matters later.
+I spent a stretch on a delivery management system, a couple hundred drops a day, dispatchers on a web panel and drivers on a phone. Enterprise systems accumulate identities like that, and the only real question is which file absorbs the mess. Put it in the controller and every controller learns it. Put it in the model and it grows a method per caller.
 
-Mostly it holds.
+Service repository puts it in one place on purpose. Three layers, presentation over business logic over data access, and the middle one is [Fowler's Service Layer](https://martinfowler.com/eaaCatalog/serviceLayer.html). Note it counts to three. The model is not a layer, it is what travels through them, which is a claim I am going to walk back before this section ends.
 
-A delivery company shows where better than a blog does. I spent a stretch on a delivery management system, a couple hundred drops a day, dispatchers on a web panel and drivers on a phone. The code below is Laravel-shaped, and illustrative rather than lifted from it.
+The code below is Laravel-shaped, and illustrative rather than lifted from that system.
 
-## One tracking number, four questions
+## Three names for one row
 
-A customer opens a tracking page. The controller does one thing:
+A customer opens the tracking page. The controller does one thing:
 
 ```php
 class TrackingController extends FrontBaseController
@@ -56,7 +56,7 @@ class DeliveryService extends BaseService
 }
 ```
 
-No SQL. It resolves which identity you meant and delegates. One thing, three names: the dispatcher has an internal id, the customer has a tracking number, and the client's own ERP has an order number it invented years ago and will not be changing. Enterprise systems accumulate identities, and the service is where you absorb that.
+No SQL. Just a decision about which identity you meant, made once, in the one file that knows all three exist.
 
 The repository is the first layer that touches the database:
 
@@ -76,7 +76,7 @@ class DeliveryRepository extends BaseRepository
 
 One place knows a delivery is addressed by its `tracking_number` column, and one place knows a tracking page needs the driver, route and status history loaded with it. Both change here and nowhere else.
 
-Then the model:
+Then the model, and the part I said I would walk back:
 
 ```php
 class Delivery extends Model
@@ -89,7 +89,9 @@ class Delivery extends Model
 }
 ```
 
-This is the part I like. Trackable is a rule the operations team owns rather than a column: dispatched, not cancelled, still inside the window where a customer can see it. The repository calls `trackable()` and never defines it, so when ops decides returns stay visible another 30 days, one scope changes and every query inherits the new meaning.
+`trackable` is not a column. It is a rule the operations team owns: dispatched, not cancelled, still inside the window where a customer is allowed to see it. The repository calls `trackable()` and never defines it, so when ops decides returns stay visible another 30 days, one scope changes and every query inherits the new meaning.
+
+Which means the model is holding business logic while I just finished saying it is not a layer. Both are true and I would still do it this way. The purist move is a query object, or the same `whereIn` copied into each repository method that needs it. The scope costs you a straight answer to "where does the business logic live", and buys you one definition instead of six.
 
 Four questions, no overlap. What do I render, which identity did you mean, what query answers that, what does trackable mean.
 
@@ -157,6 +159,12 @@ class DeliveryService extends BaseService
 
 This is where the business actually lives. The controller does not know a vehicle can be grounded for service. The repository does not know a customer gets an SMS.
 
+Two things in that method are worth flagging as they stand, not as lessons I caught later.
+
+`array $attributes` crosses two boundaries with nothing enforcing its shape, and `$attributes['driver_id']` is a runtime lookup into an array that a form request happens to fill today. Rename the field in `DeliveryDispatchRequest` and nothing breaks until a dispatcher clicks the button. A DTO fixes it and costs another class per use case, which is a real argument at three use cases and an obvious yes at thirty.
+
+And `DeliveryService` reaches into `DriverService`. Services calling services is where the layering starts to sag, because nothing in the pattern stops `DriverService` from calling back and Laravel's container will happily resolve the cycle until it cannot.
+
 Then the repository, where one dispatch becomes four writes:
 
 ```php
@@ -189,14 +197,24 @@ The row, the stops pivot, the status history entry, and a transaction around all
 
 Each layer adds or removes something, and nothing downstream trusts anything upstream. That is the strongest argument the pattern has.
 
+## When it starts paying
+
+Four files to change one behaviour is a tax, and for a long stretch of a project's life it is a tax on nothing.
+
+On a CRUD admin panel where the controller is `Model::create($request->validated())` and always will be, this buys you three indirections and a repository whose every method wraps a single Eloquent call. That is a file you maintain for free.
+
+It starts paying the moment a second entry point wants the same read. Once the driver app and an ERP webhook both need to resolve a delivery, `getByTrackingNumber` stops being a wrapper and becomes the definition. It pays again the first time a write touches more than one table, because the transaction has to live somewhere and a controller is the worst option on the list.
+
+If neither of those is true yet, write the fat controller. It is easier to extract a service from a controller that works than to guess the seams up front.
+
 ## Where this shape goes next
 
 All of this is one arrangement of a much older idea, and the older idea is better documented than the arrangement. If these boundaries are doing something for you, these are the doors I would open next.
 
-**The catalog it came from.** [Fowler's enterprise patterns catalog](https://martinfowler.com/eaaCatalog/) is where Service Layer and [Repository](https://martinfowler.com/eaaCatalog/repository.html) are actually specified, a page each. But read [Transaction Script](https://martinfowler.com/eaaCatalog/transactionScript.html) against [Domain Model](https://martinfowler.com/eaaCatalog/domainModel.html) first, because that is the fork this post is standing on. A service running one procedure per use case is a transaction script, a legitimate choice rather than a lesser one, and knowing which you are writing settles most arguments about where a rule belongs. [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html) is worth the page too, since that `DB::transaction` call is a hand-rolled corner of it.
+**The catalog it came from.** [Fowler's enterprise patterns catalog](https://martinfowler.com/eaaCatalog/) is where Service Layer and [Repository](https://martinfowler.com/eaaCatalog/repository.html) are actually specified, a page each. Read [Transaction Script](https://martinfowler.com/eaaCatalog/transactionScript.html) against [Domain Model](https://martinfowler.com/eaaCatalog/domainModel.html) first, because that is the fork this post is standing on. A service running one procedure per use case is a transaction script, a legitimate choice rather than a lesser one, and knowing which you are writing settles most arguments about where a rule belongs. [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html) is worth the page too, since that `DB::transaction` call is a hand-rolled corner of it.
 
 **Pointing the dependencies inward.** The layering here is vertical, which quietly makes the database the thing everything else is arranged around. [Hexagonal architecture](https://alistair.cockburn.us/hexagonal-architecture/), also called ports and adapters, turns that inside out: the domain sits in the middle and the database becomes one more adapter, no more privileged than the HTTP layer. [Clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) is the same instinct with different diagrams. Both are a bigger commitment than what this post describes.
 
-**Letting reads and writes diverge.** The tracking page needs three relations eager loaded; the dispatch panel needs rules enforced and four writes in a transaction. Same table, opposite needs. [CQRS](https://martinfowler.com/bliki/CQRS.html) is what happens when you stop making those two share a model, and Fowler is refreshingly blunt about when it is overkill.
+**Letting reads and writes diverge.** The tracking page needs three relations eager loaded. The dispatch panel needs rules enforced and four writes in a transaction. Same table, opposite needs, one `Delivery` model serving both. [CQRS](https://martinfowler.com/bliki/CQRS.html) is what happens when you stop making them share, and Fowler is refreshingly blunt about when that is overkill.
 
-**Announcing instead of calling.** `dispatchDelivery` names a notification service, so the dispatch rule now knows SMS exists. A [domain event](https://martinfowler.com/eaaDev/DomainEvent.html) inverts that: the service announces a delivery was dispatched and stops caring who listens. Laravel ships events in the box, which makes it the cheapest experiment here.
+**Announcing instead of calling.** `dispatchDelivery` names a notification service, so the dispatch rule now knows SMS exists. A [domain event](https://martinfowler.com/eaaDev/DomainEvent.html) inverts that: the service announces a delivery was dispatched and stops caring who listens. Laravel ships events in the box, which makes it the cheapest of these to try on a Tuesday.
