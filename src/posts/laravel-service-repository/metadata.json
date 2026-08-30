@@ -1,0 +1,6 @@
+{
+  "title": "Laravel Service Repository Pattern",
+  "metaTitle": "Laravel Service Repository Pattern, and What It Buys",
+  "publishedAt": "2026-08-30",
+  "summary": "A delivery system traced through the service repository pattern in Laravel: what each layer buys, when it starts paying for itself, and where to take it next."
+}
