@@ -1,62 +1,97 @@
-My `Post` model builds URLs. Not the controller, not a view helper. The model, calling `url('posts/'.$this->slug)` from the bottom of the stack.
+When a software system is successful it keeps earning new work, and every enhancement lands on top of the layers already there. Over time that new work slows down, and the usual answer is to refactor, or to decouple logic into a separate service.
 
-I found it reading back a Laravel base I've been building on since May 2024. Ninety-four commits, twelve models, every resource wired the same way: Controller, Service, Repository, Model, strictly in that order.
+We have all seen complicated code, and pretty often the reason is application logic coupled with database logic. Business rules and queries sharing a method make a system harder to change, harder to test, and harder to hand to somebody else.
 
-Laravel people call this the service repository pattern. The older name is a three-layer architecture, presentation over business logic over data access, and the middle one is [Fowler's Service Layer](https://martinfowler.com/eaaCatalog/serviceLayer.html). Note it counts to three. The model is not a layer, it is what travels through them, which matters later.
+Three-layer architecture, presentation over business logic over data access, and the middle one is [Fowler's Service Layer](https://martinfowler.com/eaaCatalog/serviceLayer.html). Note it counts to three. The model is not a layer, it is what travels through them, which matters later.
 
 Mostly it holds.
 
-## One slug, four questions
+A delivery company shows where better than a blog does. I spent a stretch on a delivery management system, a couple hundred drops a day, dispatchers on a web panel and drivers on a phone. The code below is Laravel-shaped, and illustrative rather than lifted from it.
 
-A request hits `/posts/my-post`. The controller does one thing:
+## One tracking number, four questions
+
+A customer opens a tracking page. The controller does one thing:
 
 ```php
-$post = $this->postService->getPost(slug: $slug);
+class TrackingController extends FrontBaseController
+{
+    public function show(string $trackingNumber): View|RedirectResponse
+    {
+        $delivery = $this->deliveryService->getDelivery(trackingNumber: $trackingNumber);
+
+        if (! $delivery) {
+            return redirect()->route($this->trackingRoutePath::INDEX)
+                ->withErrors($this->deliveryMessage->notFound());
+        }
+
+        return view($this->trackingRoutePath::SHOW, [
+            'delivery' => $delivery,
+        ]);
+    }
+}
 ```
 
-That is the entire data access in `Front\Post\PostController::show()`. It has no idea whether a slug lookup is one query or six. It asked for a post, it got a post or null.
+That is the entire data access in the tracking controller. It has no idea whether resolving a tracking number is one query or six.
 
 The service answers a different question:
 
 ```php
-public function getPost(?int $postId = null, ?string $slug = null): ?Post
+class DeliveryService extends BaseService
 {
-    if ($slug) {
-        return $this->postRepository->getBySlug($slug);
-    }
+    public function getDelivery(
+        ?int $deliveryId = null,
+        ?string $trackingNumber = null,
+        ?string $orderNumber = null,
+    ): ?Delivery {
+        if ($trackingNumber) {
+            return $this->deliveryRepository->getByTrackingNumber($trackingNumber);
+        }
 
-    return $this->postRepository->getById($postId);
+        if ($orderNumber) {
+            return $this->deliveryRepository->getByOrderNumber($orderNumber);
+        }
+
+        return $this->deliveryRepository->getById($deliveryId);
+    }
 }
 ```
 
-No SQL. It resolves which identity you meant and delegates. Admin calls it with an id, the front end with a slug, and neither learns those are different queries.
+No SQL. It resolves which identity you meant and delegates. One thing, three names: the dispatcher has an internal id, the customer has a tracking number, and the client's own ERP has an order number it invented years ago and will not be changing. Enterprise systems accumulate identities, and the service is where you absorb that.
 
 The repository is the first layer that touches the database:
 
 ```php
-public function getBySlug(string $slug): ?Post
+class DeliveryRepository extends BaseRepository
 {
-    return $this->post
-        ->where('slug', $slug)
-        ->active()
-        ->first();
+    public function getByTrackingNumber(string $trackingNumber): ?Delivery
+    {
+        return $this->delivery
+            ->where('tracking_number', $trackingNumber)
+            ->trackable()
+            ->with(['driver', 'route', 'statusHistory'])
+            ->first();
+    }
 }
 ```
 
-One place in the app knows a post is addressed by its `slug` column. Swap to a ULID and this method changes. Nothing above it moves.
+One place knows a delivery is addressed by its `tracking_number` column, and one place knows a tracking page needs the driver, route and status history loaded with it. Both change here and nowhere else.
 
 Then the model:
 
 ```php
-public function scopeActive(Builder $query): void
+class Delivery extends Model
 {
-    $query->where('status', PostStatus::ACTIVE);
+    public function scopeTrackable(Builder $query): void
+    {
+        $query->whereIn('status', DeliveryStatus::trackable())
+            ->where('dispatched_at', '<=', now());
+    }
 }
 ```
 
-This is the part I like. The repository calls `active()` but never defines it, and never writes `where('status', 1)`. The meaning of active sits on the thing it describes.
+This is the part I like. Trackable is a rule the operations team owns rather than a column: dispatched, not cancelled, still inside the window where a customer can see it. The repository calls `trackable()` and never defines it, so when ops decides returns stay visible another 30 days, one scope changes and every query inherits the new meaning.
 
-Four questions, no overlap. What do I render, which identity did you mean, what query answers that, what does active mean.
+Four questions, no overlap. What do I render, which identity did you mean, what query answers that, what does trackable mean.
 
 The cost is a jump-to-definition chain. Answering "what does this page query" means opening four files in sequence, and the answer is never on one screen. Cheap while the query is stable. Less cheap at 11pm chasing an N+1.
 
@@ -64,93 +99,104 @@ The cost is a jump-to-definition chain. Answering "what does this page query" me
 
 The write path earns more than the read.
 
-The controller hands over a payload and leaves:
+A dispatcher assigns a delivery to a driver. The controller hands over a payload and leaves:
 
 ```php
-$created = $this->postService->createPost($request->getAttributes());
+class DeliveryDispatchController extends AdminBaseController
+{
+    public function store(Delivery $delivery, DeliveryDispatchRequest $request): RedirectResponse
+    {
+        $dispatched = $this->deliveryService->dispatchDelivery(
+            $delivery,
+            $request->getAttributes(),
+        );
 
-throw_if(! $created, RedirectResponseException::class, $this->postMessage->createFailed());
+        throw_if(! $dispatched, RedirectResponseException::class, $this->deliveryMessage->dispatchFailed());
+
+        return redirect()->route($this->deliveryRoutePath::SHOW, $delivery)->with([
+            'message' => $this->deliveryMessage->dispatchSuccess(),
+            'status' => true,
+        ]);
+    }
+}
 ```
 
 It never reads an attribute or names a column.
 
-The service adds the one thing only it knows:
+The service adds the things only it knows:
 
 ```php
-public function createPost(array $attributes): Post
+class DeliveryService extends BaseService
 {
-    return $this->postRepository->create([
-        ...$attributes,
-        'created_by' => $this->getAdminAuthUser()->id,
-    ]);
-}
-```
+    public function dispatchDelivery(Delivery $delivery, array $attributes): bool
+    {
+        $driver = $this->driverService->getAvailableDriver(
+            driverId: $attributes['driver_id'],
+            scheduledFor: $delivery->scheduled_for,
+        );
 
-Identity is a service concern here. A seeder calls `$postRepository->create()` directly and skips the stamp, a web request goes through the service and gets it, and neither caller has to remember which.
+        if (! $driver || $driver->vehicle->isGrounded()) {
+            return false;
+        }
 
-Then the repository, where one create becomes four writes:
+        $dispatched = $this->deliveryRepository->dispatch($delivery, [
+            ...$attributes,
+            'driver_id' => $driver->id,
+            'dispatched_by' => $this->getAuthUser()->id,
+            'dispatched_at' => now(),
+        ]);
 
-```php
-public function create(array $attributes): Post
-{
-    $categories = Arr::pull($attributes, 'post_categories', []);
-    $featuredImage = Arr::pull($attributes, 'featured_image');
-    $listingImage = Arr::pull($attributes, 'listing_image');
+        if ($dispatched) {
+            $this->notificationService->deliveryDispatched($delivery, $driver);
+        }
 
-    $post = $this->post::create($attributes);
-
-    $this->syncMedia($post, 'featured_image', $featuredImage);
-    $this->syncMedia($post, 'listing_image', $listingImage);
-
-    if ($post) {
-        $post->categories()->sync($categories);
+        return $dispatched;
     }
-
-    return $post;
 }
 ```
 
-Three `Arr::pull` calls strip everything that is not a column on `posts`. Then the row, the media, the pivot. The service handed down a flat array and never learns that posts have a pivot table. `$fillable` gates whatever is left.
+This is where the business actually lives. The controller does not know a vehicle can be grounded for service. The repository does not know a customer gets an SMS.
+
+Then the repository, where one dispatch becomes four writes:
+
+```php
+class DeliveryRepository extends BaseRepository
+{
+    public function dispatch(Delivery $delivery, array $attributes): bool
+    {
+        return DB::transaction(function () use ($delivery, $attributes) {
+            $stops = Arr::pull($attributes, 'route_stops', []);
+
+            $saved = $delivery->fill([
+                ...$attributes,
+                'status' => DeliveryStatus::DISPATCHED,
+            ])->save();
+
+            $delivery->stops()->sync($stops);
+
+            $delivery->statusHistory()->create([
+                'status' => DeliveryStatus::DISPATCHED,
+                'actor_id' => $attributes['dispatched_by'],
+            ]);
+
+            return $saved;
+        });
+    }
+}
+```
+
+The row, the stops pivot, the status history entry, and a transaction around all of it so a half-dispatched delivery never exists. The service handed down a flat array and never learns that stops live in a pivot table.
 
 Each layer adds or removes something, and nothing downstream trusts anything upstream. That is the strongest argument the pattern has.
 
-The cost is the payload itself. `post_categories`, `featured_image`, and `listing_image` are keys the repository knows to pull, and nothing types or documents that contract. Spell one wrong in a new caller and it sails through the service, misses the `Arr::pull`, reaches `Post::create()`, and `$fillable` drops it. You get a post with no categories and no exception to tell you why. Array-shaped contracts between layers buy flexibility at the price of every mistake being quiet.
+## Where this shape goes next
 
-## Repositories that call services
+All of this is one arrangement of a much older idea, and the older idea is better documented than the arrangement. If these boundaries are doing something for you, these are the doors I would open next.
 
-Four repositories inject a service. `PostRepository`, `CustomerRepository`, `PostCategoryRepository`, and `SettingRepository` all take `MediaService`.
+**The catalog it came from.** [Fowler's enterprise patterns catalog](https://martinfowler.com/eaaCatalog/) is where Service Layer and [Repository](https://martinfowler.com/eaaCatalog/repository.html) are actually specified, a page each. But read [Transaction Script](https://martinfowler.com/eaaCatalog/transactionScript.html) against [Domain Model](https://martinfowler.com/eaaCatalog/domainModel.html) first, because that is the fork this post is standing on. A service running one procedure per use case is a transaction script, a legitimate choice rather than a lesser one, and knowing which you are writing settles most arguments about where a rule belongs. [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html) is worth the page too, since that `DB::transaction` call is a hand-rolled corner of it.
 
-The reason is in the create method above. `syncMedia()` has to run in the same operation as the write, because the media rows attach to the model that was just created. Splitting it would mean a two-phase write in the service, worse in a different way.
+**Pointing the dependencies inward.** The layering here is vertical, which quietly makes the database the thing everything else is arranged around. [Hexagonal architecture](https://alistair.cockburn.us/hexagonal-architecture/), also called ports and adapters, turns that inside out: the domain sits in the middle and the database becomes one more adapter, no more privileged than the HTTP layer. [Clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) is the same instinct with different diagrams. Both are a bigger commitment than what this post describes.
 
-The cost is that the stack stops having a direction. Once a repository depends on a service, "which way does this call go" is no longer answerable from the layer names, and that is most of what layer names are for.
+**Letting reads and writes diverge.** The tracking page needs three relations eager loaded; the dispatch panel needs rules enforced and four writes in a transaction. Same table, opposite needs. [CQRS](https://martinfowler.com/bliki/CQRS.html) is what happens when you stop making those two share a model, and Fowler is refreshingly blunt about when it is overkill.
 
-It also produced dead code no boundary caught. `HandlesMedia` declares its own constructor, every repository using the trait declares one too, and a class method beats a trait method in PHP without so much as a warning. The trait constructor is discarded in all four cases, which is exactly why each repository re-declares `private MediaService $mediaService` itself. Two base class accessors have the same shape: `BaseMessage::modelName()` and `FrontBaseController::settingService()` both call themselves forever, and neither has blown a stack because all ten `Message` subclasses override the first and nothing calls the second.
-
-## The model knows too much
-
-Back to the URL that started this.
-
-```php
-public function getUrlAttribute(): string
-{
-    return url('posts/'.$this->slug);
-}
-```
-
-`PostCategory` does the same. `Invoice` goes further, minting an encrypted session id with `Crypt::encryptString($this->id)` before returning `route(CheckoutRoutePath::SHOW, ...)`. Three of twelve models reach up into HTTP this way.
-
-It buys real convenience. `$post->url` works in any Blade view with no helper, no presenter, nothing passed down. It costs having the front end route shape encoded in the model, so moving posts means editing the model layer, and `Post` stops being something you can reason about without knowing what the router does. The `Invoice` one is sharper, since reading a property now has an encryption side effect. That belongs in a service.
-
-Not every blur is worth fixing. `scopeActive()` defines what active means, `PostRepository::getActive()` wraps it, `PostService::getActivePosts()` wraps that, and three layers touch one filter. I would keep that one. The definition sits in the right place and the wrappers cost a file jump rather than a duplicated `where`.
-
-Which puts me on an odd side of the usual argument. The standing critique of this pattern family is [the anemic domain model](https://martinfowler.com/bliki/AnemicDomainModel.html), Fowler's name for services absorbing all the behavior while models decay into data bags. My services are thin enough to qualify. My models never went hollow, because scopes, casts, accessors, and media collections all stayed on them. So I did not end up anemic, I ended up with the opposite leak. Both are failures of the same boundary from different sides, and only one of them has a famous name.
-
-## What I would keep
-
-The service layer, without hesitation. It made `created_by` stamping one line instead of something every controller has to remember.
-
-The repository, but as a query home rather than a substitution seam. Naming the layer stops queries scattering into controllers and traits, and that alone paid for itself. Nothing was ever swapped in twenty-one months, and the per-model interfaces I skipped have cost me nothing I have felt. The bill for that is testing, since with no interface there is no seam to hang a fake on, and `tests/` currently holds Breeze auth scaffolding and nothing else.
-
-What I would actually change is smaller: get `url` and `checkout_link` out of the models before a second front end makes those routes wrong.
-
-If you are adding this shape to a Laravel app, add the service first and run without the repository for a while. You will find out quickly whether you miss it, and if you do, you will know what you actually want it to do.
+**Announcing instead of calling.** `dispatchDelivery` names a notification service, so the dispatch rule now knows SMS exists. A [domain event](https://martinfowler.com/eaaDev/DomainEvent.html) inverts that: the service announces a delivery was dispatched and stops caring who listens. Laravel ships events in the box, which makes it the cheapest experiment here.
