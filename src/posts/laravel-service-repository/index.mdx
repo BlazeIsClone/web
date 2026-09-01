@@ -1,12 +1,10 @@
-Three names for the same delivery. The dispatcher sees an internal id. The customer has a tracking number off a confirmation email. The client's own ERP has an order number it invented years ago and will not be changing.
-
-One row, three ways in, none of them going away.
+When a software system is successful, there is always a need to keep enhancing it, to fix problems and add new features as demand expand.
 
 I spent a stretch on a delivery management system, a couple hundred drops a day, dispatchers on a web panel and drivers on a phone. Enterprise systems accumulate identities like that, and the only real question is which file absorbs the mess. Put it in the controller and every controller learns it. Put it in the model and it grows a method per caller.
 
 Service repository puts it in one place on purpose. Three layers, presentation over business logic over data access, and the middle one is [Fowler's Service Layer](https://martinfowler.com/eaaCatalog/serviceLayer.html). Note it counts to three. The model is not a layer, it is what travels through them, which is a claim I am going to walk back before this section ends.
 
-The code below is Laravel-shaped, and illustrative rather than lifted from that system.
+The code below is Laravel, and illustrative rather than too verbose.
 
 ## Three names for one row
 
@@ -97,115 +95,7 @@ Four questions, no overlap. What do I render, which identity did you mean, what 
 
 The cost is a jump-to-definition chain. Answering "what does this page query" means opening four files in sequence, and the answer is never on one screen. Cheap while the query is stable. Less cheap at 11pm chasing an N+1.
 
-## Every layer subtracts
-
-The write path earns more than the read.
-
-A dispatcher assigns a delivery to a driver. The controller hands over a payload and leaves:
-
-```php
-class DeliveryDispatchController extends AdminBaseController
-{
-    public function store(Delivery $delivery, DeliveryDispatchRequest $request): RedirectResponse
-    {
-        $dispatched = $this->deliveryService->dispatchDelivery(
-            $delivery,
-            $request->getAttributes(),
-        );
-
-        throw_if(! $dispatched, RedirectResponseException::class, $this->deliveryMessage->dispatchFailed());
-
-        return redirect()->route($this->deliveryRoutePath::SHOW, $delivery)->with([
-            'message' => $this->deliveryMessage->dispatchSuccess(),
-            'status' => true,
-        ]);
-    }
-}
-```
-
-It never reads an attribute or names a column.
-
-The service adds the things only it knows:
-
-```php
-class DeliveryService extends BaseService
-{
-    public function dispatchDelivery(Delivery $delivery, array $attributes): bool
-    {
-        $driver = $this->driverService->getAvailableDriver(
-            driverId: $attributes['driver_id'],
-            scheduledFor: $delivery->scheduled_for,
-        );
-
-        if (! $driver || $driver->vehicle->isGrounded()) {
-            return false;
-        }
-
-        $dispatched = $this->deliveryRepository->dispatch($delivery, [
-            ...$attributes,
-            'driver_id' => $driver->id,
-            'dispatched_by' => $this->getAuthUser()->id,
-            'dispatched_at' => now(),
-        ]);
-
-        if ($dispatched) {
-            $this->notificationService->deliveryDispatched($delivery, $driver);
-        }
-
-        return $dispatched;
-    }
-}
-```
-
-This is where the business actually lives. The controller does not know a vehicle can be grounded for service. The repository does not know a customer gets an SMS.
-
-Two things in that method are worth flagging as they stand, not as lessons I caught later.
-
-`array $attributes` crosses two boundaries with nothing enforcing its shape, and `$attributes['driver_id']` is a runtime lookup into an array that a form request happens to fill today. Rename the field in `DeliveryDispatchRequest` and nothing breaks until a dispatcher clicks the button. A DTO fixes it and costs another class per use case, which is a real argument at three use cases and an obvious yes at thirty.
-
-And `DeliveryService` reaches into `DriverService`. Services calling services is where the layering starts to sag, because nothing in the pattern stops `DriverService` from calling back and Laravel's container will happily resolve the cycle until it cannot.
-
-Then the repository, where one dispatch becomes four writes:
-
-```php
-class DeliveryRepository extends BaseRepository
-{
-    public function dispatch(Delivery $delivery, array $attributes): bool
-    {
-        return DB::transaction(function () use ($delivery, $attributes) {
-            $stops = Arr::pull($attributes, 'route_stops', []);
-
-            $saved = $delivery->fill([
-                ...$attributes,
-                'status' => DeliveryStatus::DISPATCHED,
-            ])->save();
-
-            $delivery->stops()->sync($stops);
-
-            $delivery->statusHistory()->create([
-                'status' => DeliveryStatus::DISPATCHED,
-                'actor_id' => $attributes['dispatched_by'],
-            ]);
-
-            return $saved;
-        });
-    }
-}
-```
-
-The row, the stops pivot, the status history entry, and a transaction around all of it so a half-dispatched delivery never exists. The service handed down a flat array and never learns that stops live in a pivot table.
-
 Each layer adds or removes something, and nothing downstream trusts anything upstream. That is the strongest argument the pattern has.
-
-## When it starts paying
-
-Four files to change one behaviour is a tax, and for a long stretch of a project's life it is a tax on nothing.
-
-On a CRUD admin panel where the controller is `Model::create($request->validated())` and always will be, this buys you three indirections and a repository whose every method wraps a single Eloquent call. That is a file you maintain for free.
-
-It starts paying the moment a second entry point wants the same read. Once the driver app and an ERP webhook both need to resolve a delivery, `getByTrackingNumber` stops being a wrapper and becomes the definition. It pays again the first time a write touches more than one table, because the transaction has to live somewhere and a controller is the worst option on the list.
-
-If neither of those is true yet, write the fat controller. It is easier to extract a service from a controller that works than to guess the seams up front.
 
 ## Where this shape goes next
 
