@@ -1,10 +1,35 @@
-When a software system is successful, there is always a need to keep enhancing it, to fix problems and add new features as demand expand.
+import { PostImage } from "@/components/post-image";
+import cleanArchitecture from "./clean-architecture-layers.webp";
+import deliverySystemModules from "./delivery-management-system-modules.webp";
 
-I spent a stretch on a delivery management system, a couple hundred drops a day, dispatchers on a web panel and drivers on a phone. Enterprise systems accumulate identities like that, and the only real question is which file absorbs the mess. Put it in the controller and every controller learns it. Put it in the model and it grows a method per caller.
+When a software system is successful, there is always a need to keep enhancing it, to fix problems and add new features as demand keeps growing. While thriving software propels a business forward, the stakes increase and every subtle failure of code becomes a more fetal blow to all the people relying on it.
 
-Service repository puts it in one place on purpose. Three layers, presentation over business logic over data access, and the middle one is [Fowler's Service Layer](https://martinfowler.com/eaaCatalog/serviceLayer.html). Note it counts to three. The model is not a layer, it is what travels through them, which is a claim I am going to walk back before this section ends.
+A year ago, our team was building a delivery management system.
 
-The code below is Laravel, and illustrative rather than too verbose.
+One of Sri Lanka’s largest paint manufacturers required a high-precision distribution network. Their primary challenge was a heavy reliance on manual dispatching, where routing expertise was localized within a single manager.
+This person dependency created a fragile workflow that hindered delivery agents and limited scalability. To modernize, we collaborated and transitioned to a unified, automated system capable of 100+ daily bulk deliveries. This shift to a data-driven model eliminated fragmented workflows, increased delivery accuracy, and established the scalable infrastructure necessary to maintain their market leadership.
+
+- Backoffice: Fully integrated process of managing distributors, customers, fleet and delivery agents.
+- Auto Route Optimization: Google Maps Fleet API for delivery sequencing, reducing fuel and trip durations.
+- Third-Party Integration: Developed a Multi-Vendor Order API for external organizations to sync orders instantly.
+- GPS Tracking: Live vehicle tracking via Wialon API and reporting to provide analytics of the operation.
+- Agent App: Mobile app provides agents with delivery routes, QR codes for pickup and proof-of-delivery.
+
+<PostImage
+  src={deliverySystemModules}
+  alt="Delivery Management System Modules"
+  priority
+/>
+
+## Building The Modular Monolith
+
+We wanted separation of concerns and started with a simple layered approach. Service repository pattern! Three layers, presentation over business logic over data access, and the middle one is [Fowler's Service Layer](https://martinfowler.com/eaaCatalog/serviceLayer.html). Note it counts to three. The model is not a layer, it is what travels through them, which is a claim I am going to walk back before this section ends.
+
+It's quite philosophical that this image gets rendered in our brain:
+
+<PostImage src={cleanArchitecture} alt="Clean Architecture Layers" />
+
+The code below is Laravel, trimmed to the lines that make the point.
 
 ## Three names for one row
 
@@ -89,22 +114,39 @@ class Delivery extends Model
 
 `trackable` is not a column. It is a rule the operations team owns: dispatched, not cancelled, still inside the window where a customer is allowed to see it. The repository calls `trackable()` and never defines it, so when ops decides returns stay visible another 30 days, one scope changes and every query inherits the new meaning.
 
-Which means the model is holding business logic while I just finished saying it is not a layer. Both are true and I would still do it this way. The purist move is a query object, or the same `whereIn` copied into each repository method that needs it. The scope costs you a straight answer to "where does the business logic live", and buys you one definition instead of six.
+Which means the model is holding business logic while I just finished saying it is not a layer. Both are true and I would still do it this way.
 
-Four questions, no overlap. What do I render, which identity did you mean, what query answers that, what does trackable mean.
+**The cost is a jump to definition chain (gd in vim). Answering "what does this page query" means opening four files in sequence, and the answer is never on one screen. Cheap while the query is stable. Less cheap at 11pm chasing an N+1.**
 
-The cost is a jump-to-definition chain. Answering "what does this page query" means opening four files in sequence, and the answer is never on one screen. Cheap while the query is stable. Less cheap at 11pm chasing an N+1.
+Each layer adds or removes something, and nothing downstream trusts anything upstream. That explicitness is the strongest argument the pattern has.
 
-Each layer adds or removes something, and nothing downstream trusts anything upstream. That is the strongest argument the pattern has.
+One thing I wished for in Laravel is **Package by Feature** where a module would look like this:
+
+```bash
+📁 Orders/
+├── OrderController.php
+├── OrderService.php
+├── OrderRepository.php
+├── OrderEnums.php
+├── OrderModel.php
+```
+
+I guess with some architecture tweaking we can achieve this but for the moment we are stuck with Package by Layer.
+
+## Celebrating 21 Years of Symfony
+
+In their words "Symfony delivers elegance through a blend of explicit architecture, reusable decoupled components, and modern PHP features like attributes".
+
+While designing our architecture, we were moved by ecosystems that solved these decoupling challenges years ago—specifically Symfony PHP.
+
+Read more about Symfony PHP: [Symfony at a Glance](https://symfony.com/at-a-glance)
 
 ## Where this shape goes next
 
 All of this is one arrangement of a much older idea, and the older idea is better documented than the arrangement. If these boundaries are doing something for you, these are the doors I would open next.
 
-**The catalog it came from.** [Fowler's enterprise patterns catalog](https://martinfowler.com/eaaCatalog/) is where Service Layer and [Repository](https://martinfowler.com/eaaCatalog/repository.html) are actually specified, a page each. Read [Transaction Script](https://martinfowler.com/eaaCatalog/transactionScript.html) against [Domain Model](https://martinfowler.com/eaaCatalog/domainModel.html) first, because that is the fork this post is standing on. A service running one procedure per use case is a transaction script, a legitimate choice rather than a lesser one, and knowing which you are writing settles most arguments about where a rule belongs. [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html) is worth the page too, since that `DB::transaction` call is a hand-rolled corner of it.
+**The catalog it came from.** [Fowler's enterprise patterns catalog](https://martinfowler.com/eaaCatalog/) is where Service Layer and [Repository](https://martinfowler.com/eaaCatalog/repository.html) are actually specified, a page each. Read [Transaction Script](https://martinfowler.com/eaaCatalog/transactionScript.html) against [Domain Model](https://martinfowler.com/eaaCatalog/domainModel.html) first, because that is the fork this post is standing on. A service running one procedure per use case is a transaction script, a legitimate choice rather than a lesser one, and knowing which you are writing settles most arguments about where a rule belongs.
 
 **Pointing the dependencies inward.** The layering here is vertical, which quietly makes the database the thing everything else is arranged around. [Hexagonal architecture](https://alistair.cockburn.us/hexagonal-architecture/), also called ports and adapters, turns that inside out: the domain sits in the middle and the database becomes one more adapter, no more privileged than the HTTP layer. [Clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) is the same instinct with different diagrams. Both are a bigger commitment than what this post describes.
 
-**Letting reads and writes diverge.** The tracking page needs three relations eager loaded. The dispatch panel needs rules enforced and four writes in a transaction. Same table, opposite needs, one `Delivery` model serving both. [CQRS](https://martinfowler.com/bliki/CQRS.html) is what happens when you stop making them share, and Fowler is refreshingly blunt about when that is overkill.
-
-**Announcing instead of calling.** `dispatchDelivery` names a notification service, so the dispatch rule now knows SMS exists. A [domain event](https://martinfowler.com/eaaDev/DomainEvent.html) inverts that: the service announces a delivery was dispatched and stops caring who listens. Laravel ships events in the box, which makes it the cheapest of these to try on a Tuesday.
+**Announcing instead of calling.** A [domain event](https://martinfowler.com/eaaDev/DomainEvent.html) announces a delivery was dispatched and stops caring who listens. Laravel ships events in the box, which makes it the cheapest of these to try on a Tuesday.
