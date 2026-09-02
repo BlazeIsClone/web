@@ -2,9 +2,15 @@ import { PostImage } from "@/components/post-image";
 import cleanArchitecture from "./clean-architecture-layers.webp";
 import deliverySystemModules from "./delivery-management-system-modules.webp";
 
-When a software system is successful, there is always a need to keep enhancing it, to fix problems and add new features as demand keeps growing. While thriving software propels a business forward, the stakes increase and every subtle failure of code becomes a more fetal blow to all the people relying on it.
+When a software system is successful, there is always a need to keep enhancing it, to fix problems and add new features as demand keeps growing. While thriving software propels a business forward, the stakes increase and every subtle failure of code becomes a more fatal blow to all the people relying on it.
 
 A year ago, our team was building a delivery management system.
+
+<PostImage
+  src={deliverySystemModules}
+  alt="Delivery Management System Modules"
+  priority
+/>
 
 One of Sri Lanka’s largest paint manufacturers required a high-precision distribution network. Their primary challenge was a heavy reliance on manual dispatching, where routing expertise was localized within a single manager.
 This person dependency created a fragile workflow that hindered delivery agents and limited scalability. To modernize, we collaborated and transitioned to a unified, automated system capable of 100+ daily bulk deliveries. This shift to a data-driven model eliminated fragmented workflows, increased delivery accuracy, and established the scalable infrastructure necessary to maintain their market leadership.
@@ -15,15 +21,9 @@ This person dependency created a fragile workflow that hindered delivery agents 
 - GPS Tracking: Live vehicle tracking via Wialon API and reporting to provide analytics of the operation.
 - Agent App: Mobile app provides agents with delivery routes, QR codes for pickup and proof-of-delivery.
 
-<PostImage
-  src={deliverySystemModules}
-  alt="Delivery Management System Modules"
-  priority
-/>
-
 ## Building The Modular Monolith
 
-We wanted separation of concerns and started with a simple layered approach. Service repository pattern! Three layers, presentation over business logic over data access, and the middle one is [Fowler's Service Layer](https://martinfowler.com/eaaCatalog/serviceLayer.html). Note it counts to three. The model is not a layer, it is what travels through them, which is a claim I am going to walk back before this section ends.
+We wanted separation of concerns and started with a simple layered approach. Service repository pattern! Three layers, presentation over business logic over data access, and the middle one is [Fowler's Service Layer](https://martinfowler.com/eaaCatalog/serviceLayer.html). Note it counts to three. The model is not a layer, it is what travels through them, which is a claim I walk back a few sections down.
 
 It's quite philosophical that this image gets rendered in our brain:
 
@@ -31,94 +31,200 @@ It's quite philosophical that this image gets rendered in our brain:
 
 The code below is Laravel, trimmed to the lines that make the point.
 
-## Three names for one row
+## What a dispatch has to be sure of
 
-A customer opens the tracking page. The controller does one thing:
+Before a run leaves the depot, five things have to be true at the same moment. The run is still a draft. Every order on it is released and belongs to that depot. The load fits the truck. The truck is not in the workshop and not already out on another run that day. The driver holds the licence class for it.
+
+That was the manager's job. Five checks, in his head, 100+ times a day.
+
+Our first version put all five in the controller, because that is where the request already was.
 
 ```php
-class TrackingController extends FrontBaseController
+class DispatchController extends Controller
 {
-    public function show(string $trackingNumber): View|RedirectResponse
+    public function store(Request $request, int $runId): RedirectResponse
     {
-        $delivery = $this->deliveryService->getDelivery(trackingNumber: $trackingNumber);
+        $run = DeliveryRun::with('orders.items')->findOrFail($runId);
+        $vehicle = Vehicle::findOrFail($request->integer('vehicle_id'));
 
-        if (! $delivery) {
-            return redirect()->route($this->trackingRoutePath::INDEX)
-                ->withErrors($this->deliveryMessage->notFound());
+        if ($run->status !== 'draft') {
+            return back()->withErrors('Run has already gone out.');
         }
 
-        return view($this->trackingRoutePath::SHOW, [
-            'delivery' => $delivery,
+        $load = 0;
+
+        foreach ($run->orders as $order) {
+            if ($order->status !== 'released' || $order->depot_id !== $run->depot_id) {
+                return back()->withErrors("Order {$order->number} is not ready.");
+            }
+
+            $load += $order->items->sum(fn ($item) => $item->quantity * $item->unit_weight_kg);
+        }
+
+        if ($load > $vehicle->payload_kg) {
+            return back()->withErrors("Load is {$load}kg, {$vehicle->registration} takes {$vehicle->payload_kg}kg.");
+        }
+
+        // maintenance window, run clash, licence class, then the writes
+    }
+}
+```
+
+Nothing wrong with that. For one screen it is the least code that could possibly work, and the half I cut for length is more of the same.
+
+It stops being cheap when a second caller shows up. The Multi-Vendor Order API auto-dispatches synced orders, and the agent app reassigns a run when a truck breaks down mid-route. Same five checks, three entry points. Paint is heavy, so the payload check is the one keeping an axle legal, and three copies of a rule is three chances for one of them to fall behind.
+
+## Four files, one dispatch
+
+Same rules, moved. The controller keeps only the parts that are about HTTP:
+
+```php
+class DispatchController extends BackofficeBaseController
+{
+    public function store(DispatchRunRequest $request, int $runId): RedirectResponse
+    {
+        $result = $this->dispatchService->dispatchRun(
+            runId: $runId,
+            vehicleId: $request->integer('vehicle_id'),
+            driverId: $request->integer('driver_id'),
+        );
+
+        if ($result->rejected()) {
+            return back()->withErrors($result->reason);
+        }
+
+        return redirect()
+            ->route($this->runRoutePath::SHOW, $runId)
+            ->with('success', $this->dispatchMessage->onItsWay($result->stopCount));
+    }
+}
+```
+
+The service hands back a small result object: whether the run went out, and if not, why. That is everything the controller needs, and it is why the same service can answer a backoffice screen, an API call, or a phone in a truck without ever knowing which one it is talking to.
+
+The service is where the five checks live now, ordered cheapest to fail first:
+
+```php
+class DispatchService extends BaseService
+{
+    public function dispatchRun(int $runId, int $vehicleId, int $driverId): DispatchResult
+    {
+        $run = $this->runRepository->getDraftWithLoad($runId);
+
+        if (! $run) {
+            return DispatchResult::reject($this->dispatchMessage->notDraft());
+        }
+
+        $held = $run->orders->reject(fn (Order $order) => $order->isReleasedFrom($run->depot_id));
+
+        if ($held->isNotEmpty()) {
+            return DispatchResult::reject($this->dispatchMessage->ordersHeld($held->pluck('number')));
+        }
+
+        $vehicle = $this->vehicleRepository->getAvailableOn($vehicleId, $run->scheduled_for);
+        $driver = $this->driverRepository->getRosteredOn($driverId, $run->scheduled_for);
+
+        if (! $vehicle || ! $driver) {
+            return DispatchResult::reject($this->dispatchMessage->crewUnavailable());
+        }
+
+        if ($run->payload_kg > $vehicle->payload_kg) {
+            return DispatchResult::reject($this->dispatchMessage->overloaded($run->payload_kg, $vehicle));
+        }
+
+        if (! $driver->licensedFor($vehicle->class)) {
+            return DispatchResult::reject($this->dispatchMessage->wrongLicence($vehicle->class));
+        }
+
+        $stops = $this->routeOptimizer->sequence($run->depot, $run->orders);
+
+        return DB::transaction(function () use ($run, $vehicle, $driver, $stops) {
+            $this->runRepository->replaceStops($run, $stops);
+            $this->runRepository->markDispatched($run, $vehicle, $driver);
+
+            RunDispatched::dispatch($run);
+
+            return DispatchResult::dispatched($stops->count());
+        });
+    }
+}
+```
+
+Read it for what is missing. There is no SQL anywhere in there, and no hint of how expensive any of those lookups are. The method is the rulebook, top to bottom, and the rulebook is the part the business actually argues about. When ops asks why a run was refused, this is the file you open, and you can answer the question without reading a single query.
+
+The repository owns the queries and the writes that come in pairs:
+
+```php
+class DeliveryRunRepository extends BaseRepository
+{
+    public function getDraftWithLoad(int $runId): ?DeliveryRun
+    {
+        return $this->run
+            ->draft()
+            ->with(['depot', 'orders.items', 'orders.address'])
+            ->find($runId);
+    }
+
+    public function markDispatched(DeliveryRun $run, Vehicle $vehicle, Driver $driver): void
+    {
+        $run->fill([
+            'vehicle_id' => $vehicle->id,
+            'driver_id' => $driver->id,
+            'status' => DeliveryRunStatus::Dispatched,
+            'dispatched_at' => now(),
+        ])->save();
+
+        $run->statusHistory()->create([
+            'status' => DeliveryRunStatus::Dispatched,
+            'changed_by' => auth()->id(),
         ]);
     }
 }
 ```
 
-That is the entire data access in the tracking controller. It has no idea whether resolving a tracking number is one query or six.
+Sending a run out and recording that it went out are one fact landing in two tables. The repository is the only place that knows those two writes travel together, so no caller can do half the job. The vehicle repository is thinner still: it asks the fleet for whatever is free that day and picks the truck you named.
 
-The service answers a different question:
-
-```php
-class DeliveryService extends BaseService
-{
-    public function getDelivery(
-        ?int $deliveryId = null,
-        ?string $trackingNumber = null,
-        ?string $orderNumber = null,
-    ): ?Delivery {
-        if ($trackingNumber) {
-            return $this->deliveryRepository->getByTrackingNumber($trackingNumber);
-        }
-
-        if ($orderNumber) {
-            return $this->deliveryRepository->getByOrderNumber($orderNumber);
-        }
-
-        return $this->deliveryRepository->getById($deliveryId);
-    }
-}
-```
-
-No SQL. Just a decision about which identity you meant, made once, in the one file that knows all three exist.
-
-The repository is the first layer that touches the database:
+Then the model, and the part I said I would walk back.
 
 ```php
-class DeliveryRepository extends BaseRepository
+class Vehicle extends Model
 {
-    public function getByTrackingNumber(string $trackingNumber): ?Delivery
+    public function scopeAvailableOn(Builder $query, CarbonInterface $date): void
     {
-        return $this->delivery
-            ->where('tracking_number', $trackingNumber)
-            ->trackable()
-            ->with(['driver', 'route', 'statusHistory'])
-            ->first();
+        $query->where('is_active', true)
+            ->whereDoesntHave('maintenanceWindows', fn (Builder $window) => $window
+                ->whereDate('starts_at', '<=', $date)
+                ->whereDate('ends_at', '>=', $date))
+            ->whereDoesntHave('runs', fn (Builder $run) => $run
+                ->whereDate('scheduled_for', $date)
+                ->whereIn('status', DeliveryRunStatus::occupying()));
     }
 }
 ```
 
-One place knows a delivery is addressed by its `tracking_number` column, and one place knows a tracking page needs the driver, route and status history loaded with it. Both change here and nowhere else.
+Availability is not a column on the vehicles table. It is three rules operations owns: the truck is in service, it is not booked into the workshop that day, and it is not already committed to another run. The repository asks for available trucks by name and never says what available means, so the day ops decides a truck can take a second run after 4pm, one place changes and every caller inherits the new meaning.
 
-Then the model, and the part I said I would walk back:
+The weight of a run is not a column either:
 
 ```php
-class Delivery extends Model
+class DeliveryRun extends Model
 {
-    public function scopeTrackable(Builder $query): void
+    protected function payloadKg(): Attribute
     {
-        $query->whereIn('status', DeliveryStatus::trackable())
-            ->where('dispatched_at', '<=', now());
+        return Attribute::get(fn (): float => $this->orders
+            ->flatMap->items
+            ->sum(fn (OrderItem $item) => $item->quantity * $item->unit_weight_kg));
     }
 }
 ```
-
-`trackable` is not a column. It is a rule the operations team owns: dispatched, not cancelled, still inside the window where a customer is allowed to see it. The repository calls `trackable()` and never defines it, so when ops decides returns stay visible another 30 days, one scope changes and every query inherits the new meaning.
 
 Which means the model is holding business logic while I just finished saying it is not a layer. Both are true and I would still do it this way.
 
-**The cost is a jump to definition chain (gd in vim). Answering "what does this page query" means opening four files in sequence, and the answer is never on one screen. Cheap while the query is stable. Less cheap at 11pm chasing an N+1.**
+**That weight calculation is the seam I trust least.** It only stays cheap because the repository pulls every order and its items in one go, and nothing in either file admits the two are related. Somebody trimming that load to speed up a listing page leaves dispatch working, still correct, now asking the database once per order, until a 40 stop run makes 40 round trips and nobody has any reason to go looking at the model.
 
-Each layer adds or removes something, and nothing downstream trusts anything upstream. That explicitness is the strongest argument the pattern has.
+**The other cost is the jump to definition chain (gd in vim).** Answering "what does dispatch actually query" means opening four files in sequence, and the answer is never on one screen. Cheap while the rules are stable. Less cheap at 11pm chasing an N+1.
+
+What you get for both is that the weight rule exists once. The vendor API and the agent app go through the same service, and neither of them can skip a check, because there is no second copy of the check to skip.
 
 One thing I wished for in Laravel is **Package by Feature** where a module would look like this:
 
@@ -137,7 +243,7 @@ I guess with some architecture tweaking we can achieve this but for the moment w
 
 In their words "Symfony delivers elegance through a blend of explicit architecture, reusable decoupled components, and modern PHP features like attributes".
 
-While designing our architecture, we were moved by ecosystems that solved these decoupling challenges years ago—specifically Symfony PHP.
+While designing our architecture, we were moved by ecosystems that solved these decoupling challenges years ago, specifically Symfony PHP.
 
 Read more about Symfony PHP: [Symfony at a Glance](https://symfony.com/at-a-glance)
 
