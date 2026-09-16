@@ -10,4 +10,3 @@ Field journal of [Sandev Abeykoon](https://blaze64.dev).
 - **Styling:** Tailwind CSS with `@tailwindcss/typography`, Roboto Mono as the site font
 - **SEO:** Hand-assembled JSON-LD (`schema-dts`), sitemap, robots.txt, `llms.txt`, and RSS/Atom/JSON feeds (`feed`)
 - **Analytics:** [PostHog](https://posthog.com), proxied through `/ingest` (configured in `next.config.mjs`) to reduce ad-blocker interference
-- **Linting:** ESLint (`eslint-config-next`)
